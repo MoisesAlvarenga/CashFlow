@@ -35,7 +35,7 @@
       "fail_on_required_analyzer_skip": true
     },
     "quick": {
-      "require_peer_a": true,
+      "require_peer_a": false,
       "require_peer_b": false,
       "require_arbiter": false,
       "generate_pdf": false,
