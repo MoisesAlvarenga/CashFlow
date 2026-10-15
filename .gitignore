@@ -1,0 +1,22 @@
+## Visual Studio / .NET
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+*.DotSettings.user
+
+## OS / IDE
+.DS_Store
+Thumbs.db
+.vscode/
+
+## Test / Coverage
+TestResults/
+*.trx
+coverage/
+*.lcov

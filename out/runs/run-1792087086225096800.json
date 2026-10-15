@@ -1,0 +1,70 @@
+{
+  "schema_version": "1.1.0",
+  "status": "INCOMPLETE",
+  "failed_stage": "AI_ORCHESTRATION",
+  "reason_code": 3,
+  "failure": {
+    "message": "config_invalid: carregar solidify.json"
+  },
+  "run": {
+    "id": "run-1792087086225096800",
+    "profile": "quick",
+    "solidify_version": "",
+    "started_at": "2026-10-15T17:58:06Z",
+    "finished_at": "2026-10-15T17:58:06Z",
+    "config_hash": "",
+    "evidence_hash": "",
+    "project_name": "desafio_tecnico_Verity",
+    "project_path": "C:\\DEV\\desafio_tecnico_Verity"
+  },
+  "git": {
+    "base_ref": "",
+    "base_sha": "",
+    "head_ref": "HEAD",
+    "head_sha": "",
+    "commits": null,
+    "changed_files": null
+  },
+  "components": [],
+  "release_notes": {
+    "executive_summary": "",
+    "groups": null,
+    "breaking_changes": null
+  },
+  "migrations": [],
+  "env_changes": [],
+  "analyzers": [],
+  "solid": {
+    "principles": {}
+  },
+  "ai_review": {
+    "mode": "",
+    "peer_reviewed": false,
+    "actors": null,
+    "independence_degraded": false
+  },
+  "scores": {
+    "quality": null,
+    "grade": "",
+    "confidence": 0,
+    "confidence_level": "",
+    "score_status": "",
+    "pillars": null
+  },
+  "risk": {
+    "level": "",
+    "factors": null
+  },
+  "quality_gate": {
+    "status": "",
+    "rules": null
+  },
+  "final_gate": {
+    "status": "INCOMPLETE",
+    "reason": "AI Provider failure or unhandled exception",
+    "rules": null
+  },
+  "recommendations": [],
+  "limitations": [],
+  "artifacts": []
+}
