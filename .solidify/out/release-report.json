@@ -7,13 +7,13 @@
     "message": "incomplete: gate INCOMPLETE: score schema falhou; re-run necessário"
   },
   "run": {
-    "id": "run-1792093886771016000",
+    "id": "run-1792102405448226000",
     "profile": "quick",
     "solidify_version": "",
-    "started_at": "2026-10-15T19:51:26Z",
-    "finished_at": "2026-10-15T19:51:36Z",
+    "started_at": "2026-10-15T22:13:25Z",
+    "finished_at": "2026-10-15T22:13:35Z",
     "config_hash": "sha256:56802ecdc2c8526056e74ad8aa258362db6a4bd631b095481f486bffd2b9e7ec",
-    "evidence_hash": "309b1d3d7fc26456103fa1dfa560e011ab211c861ebe2c52f2101a2931338878",
+    "evidence_hash": "14b193f07213cbd35ae5c80712273f31b18a697e7f6d9d516c9c8ec8690c66a7",
     "project_name": "desafio_tecnico_Verity",
     "project_path": "C:\\DEV\\desafio_tecnico_Verity"
   },
@@ -23,6 +23,28 @@
     "head_ref": "HEAD",
     "head_sha": "",
     "commits": [
+      {
+        "sha": "87f6a08e0a194fea9b3232fa2df91f49afaa6ed1",
+        "short_sha": "87f6a08",
+        "subject": "docs: add open-browser script and standalone Solidify HTML dashboard",
+        "type": "docs",
+        "breaking": false
+      },
+      {
+        "sha": "d445830fb01c32edf8fce192c035f249f7da0e39",
+        "short_sha": "d445830",
+        "subject": "docs: add comprehensive README.md with links to Archify and Solidify",
+        "type": "docs",
+        "breaking": false
+      },
+      {
+        "sha": "59a52fc30d5706cce1a4f34ebf6920d9e3da127b",
+        "short_sha": "59a52fc",
+        "subject": "feat(solidify): integrate SonarQube measures and automated audit pipeline",
+        "type": "feat",
+        "scope": "solidify",
+        "breaking": false
+      },
       {
         "sha": "6487b8963d29aec491ebd958d5bcc7656f913d26",
         "short_sha": "6487b89",
@@ -59,15 +81,15 @@
       {
         "path": ".gitignore",
         "status": "modified",
-        "added_lines": 6,
+        "added_lines": 8,
         "deleted_lines": 0,
         "binary": false
       },
       {
         "path": ".solidify/out/release-report.json",
         "status": "modified",
-        "added_lines": 154,
-        "deleted_lines": 23,
+        "added_lines": 2079,
+        "deleted_lines": 24,
         "binary": false
       },
       {
@@ -78,31 +100,59 @@
         "binary": false
       },
       {
+        "path": "README.md",
+        "status": "added",
+        "added_lines": 276,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
         "path": "docker-compose.sonar.yml",
         "status": "modified",
-        "added_lines": 10,
-        "deleted_lines": 8,
+        "added_lines": 13,
+        "deleted_lines": 9,
         "binary": false
       },
       {
         "path": "docker-compose.yml",
         "status": "added",
-        "added_lines": 116,
+        "added_lines": 118,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": "scripts/open-browser.ps1",
+        "status": "added",
+        "added_lines": 46,
         "deleted_lines": 0,
         "binary": false
       },
       {
         "path": "scripts/run-sonar.ps1",
         "status": "modified",
-        "added_lines": 2,
-        "deleted_lines": 2,
+        "added_lines": 14,
+        "deleted_lines": 3,
+        "binary": false
+      },
+      {
+        "path": "scripts/solidify-audit.ps1",
+        "status": "modified",
+        "added_lines": 11,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": "scripts/test-runner.cmd",
+        "status": "added",
+        "added_lines": 5,
+        "deleted_lines": 0,
         "binary": false
       },
       {
         "path": "solidify.json",
         "status": "modified",
-        "added_lines": 1,
-        "deleted_lines": 1,
+        "added_lines": 4,
+        "deleted_lines": 3,
         "binary": false
       },
       {
@@ -291,11 +341,37 @@
   },
   "components": [],
   "release_notes": {
-    "executive_summary": "3 feature(s), 1 fix(es), 0 migration(s) nesta release.",
+    "executive_summary": "4 feature(s), 1 fix(es), 0 migration(s) nesta release.",
     "groups": [
+      {
+        "type": "docs",
+        "items": [
+          {
+            "title": "docs: add open-browser script and standalone Solidify HTML dashboard",
+            "type": "docs",
+            "evidence_refs": [
+              "87f6a08"
+            ]
+          },
+          {
+            "title": "docs: add comprehensive README.md with links to Archify and Solidify",
+            "type": "docs",
+            "evidence_refs": [
+              "d445830"
+            ]
+          }
+        ]
+      },
       {
         "type": "feat",
         "items": [
+          {
+            "title": "feat(solidify): integrate SonarQube measures and automated audit pipeline",
+            "type": "feat",
+            "evidence_refs": [
+              "59a52fc"
+            ]
+          },
           {
             "title": "feat(docker): add multi-stage Dockerfiles and ecosystem docker-compose configurations",
             "type": "feat",
@@ -342,7 +418,7 @@
       "version": "",
       "applicability": "APPLICABLE",
       "execution_status": "failed",
-      "duration_ms": 7630,
+      "duration_ms": 6616,
       "findings": [],
       "metrics": {
         "commands": [

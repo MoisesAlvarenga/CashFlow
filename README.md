@@ -17,7 +17,8 @@ Sistema financeiro distribuído de controle de fluxo de caixa e consolidação d
 | Ferramenta | O que é | Link de Acesso | Abrir no Navegador |
 |---|---|---|---|
 | **Archify** | Diagrama interativo de arquitetura de software (fluxos, componentes, resiliência e temas Dark/Light) | [cash-flow.html](.archify/architecture-cash-flow-20261015-133255/cash-flow.html)<br>[candidate.json](.archify/architecture-cash-flow-20261015-133255/candidate.json) | `powershell -File scripts/open-browser.ps1 -Archify` |
-| **Solidify** | Avaliador arquitetural SOLID e Quality Gate de release determinístico | [release-report.html](.solidify/out/release-report.html)<br>[release-report.json](.solidify/out/release-report.json) | `powershell -File scripts/open-browser.ps1 -Solidify` |
+| **Solidify Dashboard** | Avaliador arquitetural SOLID e Quality Gate com **Abas Interativas** | [release-report.html](.solidify/out/release-report.html)<br>[release-report.json](.solidify/out/release-report.json) | `powershell -File scripts/open-browser.ps1 -Solidify` |
+| **Aba de Testes Unitários** | Nova aba no Solidify com métricas, lista dos 28 testes e cobertura 100% | [release-report.html#tab-tests](.solidify/out/release-report.html#tab-tests) | `powershell -File scripts/open-browser.ps1 -Tests` |
 | **SonarQube** | Dashboard de métricas estáticas, cobertura de testes e Clean Code | [Dashboard SonarQube Local](http://localhost:9000/dashboard?id=desafio_tecnico_Verity) | [Abrir Dashboard SonarQube](http://localhost:9000/dashboard?id=desafio_tecnico_Verity) |
 | **Especificações** | Regras de negócio, arquitetura C4 e matriz de testes | [Requisitos de Negócio (Spec)](.specs/features/fluxo-caixa-consolidado/spec.md)<br>[Design Arquitetural](.specs/features/fluxo-caixa-consolidado/design.md)<br>[Tarefas e Test Coverage Matrix](.specs/features/fluxo-caixa-consolidado/tasks.md) | N/A |
 
@@ -190,13 +191,24 @@ powershell -ExecutionPolicy Bypass -File scripts/run-sonar.ps1
 ```
 * **Dashboard de Resultados**: [http://localhost:9000/dashboard?id=desafio_tecnico_Verity](http://localhost:9000/dashboard?id=desafio_tecnico_Verity)
 
-### 2. Executar Auditoria do Solidify (Quality Gate & SOLID)
-O Solidify inspeciona o histórico de commits do Git, avalia a conformidade arquitetural com os princípios SOLID, lê as métricas publicadas no SonarQube e emite o veredito canônico:
+### 2. Executar Auditoria do Solidify & Visualizar Resultados de Testes
+
+A skill **Solidify** está clonada diretamente no repositório em [`.agents/skills/solidify`](.agents/skills/solidify).
+Ela avalia o histórico do Git, princípios SOLID, integra-se ao SonarQube e roda a suíte de testes unitários (.NET 9):
 
 ```powershell
+# Executar a auditoria do Solidify e gerar o dashboard com abas
 powershell -ExecutionPolicy Bypass -File scripts/solidify-audit.ps1 -Profile quick
+
+# Abrir diretamente a Aba de Testes Unitários no Navegador
+powershell -ExecutionPolicy Bypass -File scripts/open-browser.ps1 -Tests
 ```
-* **Relatório de Saída**: Visualizável em [`.solidify/out/release-report.json`](.solidify/out/release-report.json).
+
+O dashboard HTML possui 4 abas interativas:
+1. **📌 Visão Geral & Score**: Resumo executivo, Quality Gate geral, cards de pontuação e status dos analisadores.
+2. **🧪 Resultados dos Testes Unitários**: Tabela com todos os **28 testes unitários aprovados**, campo de busca e filtro dinâmico, tempo de execução e **100% de cobertura de código** (Domain / Entities).
+3. **🛡️ SonarQube & Clean Code**: Detalhamento de bugs, vulnerabilidades, code smells e rating A.
+4. **📐 Princípios SOLID**: Justificativa e evidências de código para Single Responsibility, Open-Closed, Liskov Substitution, Interface Segregation e Dependency Inversion.
 
 ---
 

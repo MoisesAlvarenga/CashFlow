@@ -9,6 +9,7 @@ param(
     [switch]$Archify,
     [switch]$Solidify,
     [switch]$Sonar,
+    [switch]$Tests,
     [switch]$All = $true
 )
 
@@ -20,7 +21,18 @@ Write-Host "======================================================" -ForegroundC
 Write-Host "       Abrindo Dashboards no Navegador Padrão          " -ForegroundColor Cyan
 Write-Host "======================================================" -ForegroundColor Cyan
 
-if ($Archify -or ($All -and -not ($Solidify -or $Sonar))) {
+if ($Tests) {
+    if (Test-Path $solidifyHtml) {
+        Write-Host "Abrindo Aba de Resultados dos Testes no Solidify..." -ForegroundColor Green
+        $uri = ([System.Uri](Resolve-Path $solidifyHtml).Path).AbsoluteUri + "#tab-tests"
+        Start-Process $uri
+    } else {
+        Write-Host "[AVISO] Arquivo do Solidify não encontrado em $solidifyHtml" -ForegroundColor DarkYellow
+    }
+    exit 0
+}
+
+if ($Archify -or ($All -and -not ($Solidify -or $Sonar -or $Tests))) {
     if (Test-Path $archifyHtml) {
         Write-Host "Abrindo Diagrama de Arquitetura Archify no Navegador..." -ForegroundColor Green
         Start-Process (Resolve-Path $archifyHtml).Path
@@ -29,7 +41,7 @@ if ($Archify -or ($All -and -not ($Solidify -or $Sonar))) {
     }
 }
 
-if ($Solidify -or ($All -and -not ($Archify -or $Sonar))) {
+if ($Solidify -or ($All -and -not ($Archify -or $Sonar -or $Tests))) {
     if (Test-Path $solidifyHtml) {
         Write-Host "Abrindo Relatório Solidify no Navegador..." -ForegroundColor Green
         Start-Process (Resolve-Path $solidifyHtml).Path
@@ -38,7 +50,7 @@ if ($Solidify -or ($All -and -not ($Archify -or $Sonar))) {
     }
 }
 
-if ($Sonar -or ($All -and -not ($Archify -or $Solidify))) {
+if ($Sonar -or ($All -and -not ($Archify -or $Solidify -or $Tests))) {
     Write-Host "Abrindo Dashboard SonarQube no Navegador..." -ForegroundColor Green
     Start-Process $sonarUrl
 }

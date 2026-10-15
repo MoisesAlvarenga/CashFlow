@@ -22,7 +22,10 @@ if (Test-Path ".sonar_token") {
     }
 }
 
-$solidifyBin = "$env:USERPROFILE\.gemini\config\skills\solidify\bin\solidify.cmd"
+$solidifyBin = "$PSScriptRoot\..\.agents\skills\solidify\bin\solidify.cmd"
+if (-not (Test-Path $solidifyBin)) {
+    $solidifyBin = "$env:USERPROFILE\.gemini\config\skills\solidify\bin\solidify.cmd"
+}
 if (-not (Test-Path $solidifyBin)) {
     $solidifyBin = "$env:USERPROFILE\.gemini\config\plugins\solidify\skills\solidify\bin\solidify.cmd"
 }
@@ -65,7 +68,12 @@ if (Test-Path ".solidify\out\release-report.json") {
 }
 try {
     & $solidifyBin report --format $Format --run latest
-    Write-Host "`nRelatório gerado em .solidify/out/" -ForegroundColor Green
 } catch {
     Write-Host "[INFO] Use 'solidify report' quando a análise for concluída." -ForegroundColor Gray
 }
+
+# 4. Gerar Dashboard Interativo com Abas (Resultados dos Testes, Cobertura, SonarQube, SOLID)
+Write-Host "`n[4/4] Consolidando Dashboard Visual com Aba de Testes Unitários..." -ForegroundColor Yellow
+& "$PSScriptRoot\generate-solidify-report.ps1"
+Write-Host "`nRelatório completo gerado em .solidify/out/release-report.html" -ForegroundColor Green
+
