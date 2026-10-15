@@ -2,7 +2,7 @@
   "schema_version": "1.0.0",
   "project": {
     "name": "desafio_tecnico_Verity",
-    "default_base": "master",
+    "default_base": "88140c3",
     "artifact_dir": ".solidify",
     "issue_key_patterns": [
       "[A-Z][A-Z0-9]+-[0-9]+"
@@ -38,6 +38,7 @@
       "require_peer_a": false,
       "require_peer_b": false,
       "require_arbiter": false,
+      "require_distinct_external_models": false,
       "generate_pdf": false,
       "active_security": false
     },
@@ -108,7 +109,7 @@
       "enabled": true,
       "required_in_contractual": true,
       "commands": [
-        ["dotnet", "test", "--logger", "trx", "--collect:XPlat Code Coverage"]
+        ["cmd.exe", "/c", "scripts\\test-runner.cmd"]
       ]
     },
     "sonar": {

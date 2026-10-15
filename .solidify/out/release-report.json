@@ -7,28 +7,331 @@
     "message": "incomplete: gate INCOMPLETE: score schema falhou; re-run necessário"
   },
   "run": {
-    "id": "run-1792087379431013800",
+    "id": "run-1792093886771016000",
     "profile": "quick",
     "solidify_version": "",
-    "started_at": "2026-10-15T18:02:59Z",
-    "finished_at": "2026-10-15T18:03:01Z",
-    "config_hash": "sha256:ae27cc36fb69c631db7db31fbb155cbca7b3bbd82ae04bc75a5309fc3e2155fe",
-    "evidence_hash": "2f66040d4a27d62b08f42f67d90dd3674f255a30ddc9baa8b290b3cc552a010e",
+    "started_at": "2026-10-15T19:51:26Z",
+    "finished_at": "2026-10-15T19:51:36Z",
+    "config_hash": "sha256:56802ecdc2c8526056e74ad8aa258362db6a4bd631b095481f486bffd2b9e7ec",
+    "evidence_hash": "309b1d3d7fc26456103fa1dfa560e011ab211c861ebe2c52f2101a2931338878",
     "project_name": "desafio_tecnico_Verity",
     "project_path": "C:\\DEV\\desafio_tecnico_Verity"
   },
   "git": {
-    "base_ref": "HEAD",
+    "base_ref": "88140c3",
     "base_sha": "",
     "head_ref": "HEAD",
     "head_sha": "",
-    "commits": [],
-    "changed_files": []
+    "commits": [
+      {
+        "sha": "6487b8963d29aec491ebd958d5bcc7656f913d26",
+        "short_sha": "6487b89",
+        "subject": "feat(docker): add multi-stage Dockerfiles and ecosystem docker-compose configurations",
+        "type": "feat",
+        "scope": "docker",
+        "breaking": false
+      },
+      {
+        "sha": "32eed46e9351801fe91859623664a0f5d7dce176",
+        "short_sha": "32eed46",
+        "subject": "feat(scaffold): initialize CashFlow Clean Architecture solution and shared contracts",
+        "type": "feat",
+        "scope": "scaffold",
+        "breaking": false
+      },
+      {
+        "sha": "18f158890055d9337310c0e860be525360917e3c",
+        "short_sha": "18f1588",
+        "subject": "fix(solidify): ajustar tipos de commands e perfil quick sem peer_a obrigatorio",
+        "type": "fix",
+        "scope": "solidify",
+        "breaking": false
+      },
+      {
+        "sha": "88140c303e73e2aca6b1a0799527ee2444066118",
+        "short_sha": "88140c3",
+        "subject": "feat: setup inicial do projeto, especificacoes, archify, sonar e solidify",
+        "type": "feat",
+        "breaking": false
+      }
+    ],
+    "changed_files": [
+      {
+        "path": ".gitignore",
+        "status": "modified",
+        "added_lines": 6,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".solidify/out/release-report.json",
+        "status": "modified",
+        "added_lines": 154,
+        "deleted_lines": 23,
+        "binary": false
+      },
+      {
+        "path": "CashFlow.sln",
+        "status": "added",
+        "added_lines": 200,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": "docker-compose.sonar.yml",
+        "status": "modified",
+        "added_lines": 10,
+        "deleted_lines": 8,
+        "binary": false
+      },
+      {
+        "path": "docker-compose.yml",
+        "status": "added",
+        "added_lines": 116,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": "scripts/run-sonar.ps1",
+        "status": "modified",
+        "added_lines": 2,
+        "deleted_lines": 2,
+        "binary": false
+      },
+      {
+        "path": "solidify.json",
+        "status": "modified",
+        "added_lines": 1,
+        "deleted_lines": 1,
+        "binary": false
+      },
+      {
+        "path": "sonar-project.properties",
+        "status": "deleted",
+        "added_lines": 0,
+        "deleted_lines": 24,
+        "binary": false
+      },
+      {
+        "path": "src/Consolidation/CashFlow.Consolidation.Api/CashFlow.Consolidation.Api.csproj",
+        "status": "added",
+        "added_lines": 18,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": "src/Consolidation/CashFlow.Consolidation.Api/CashFlow.Consolidation.Api.http",
+        "status": "added",
+        "added_lines": 6,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": "src/Consolidation/CashFlow.Consolidation.Api/Dockerfile",
+        "status": "added",
+        "added_lines": 35,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": "src/Consolidation/CashFlow.Consolidation.Api/Program.cs",
+        "status": "added",
+        "added_lines": 41,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": "src/Consolidation/CashFlow.Consolidation.Api/Properties/launchSettings.json",
+        "status": "added",
+        "added_lines": 23,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": "src/Consolidation/CashFlow.Consolidation.Api/appsettings.Development.json",
+        "status": "added",
+        "added_lines": 8,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": "src/Consolidation/CashFlow.Consolidation.Api/appsettings.json",
+        "status": "added",
+        "added_lines": 9,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": "src/Consolidation/CashFlow.Consolidation.Application/CashFlow.Consolidation.Application.csproj",
+        "status": "added",
+        "added_lines": 14,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": "src/Consolidation/CashFlow.Consolidation.Domain/CashFlow.Consolidation.Domain.csproj",
+        "status": "added",
+        "added_lines": 9,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": "src/Consolidation/CashFlow.Consolidation.Infrastructure/CashFlow.Consolidation.Infrastructure.csproj",
+        "status": "added",
+        "added_lines": 14,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": "src/Shared/CashFlow.Shared.Contracts/CashFlow.Shared.Contracts.csproj",
+        "status": "added",
+        "added_lines": 9,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": "src/Shared/CashFlow.Shared.Contracts/Events/TransactionRegisteredEvent.cs",
+        "status": "added",
+        "added_lines": 16,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": "src/Transactions/CashFlow.Transactions.Api/CashFlow.Transactions.Api.csproj",
+        "status": "added",
+        "added_lines": 18,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": "src/Transactions/CashFlow.Transactions.Api/CashFlow.Transactions.Api.http",
+        "status": "added",
+        "added_lines": 6,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": "src/Transactions/CashFlow.Transactions.Api/Dockerfile",
+        "status": "added",
+        "added_lines": 35,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": "src/Transactions/CashFlow.Transactions.Api/Program.cs",
+        "status": "added",
+        "added_lines": 41,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": "src/Transactions/CashFlow.Transactions.Api/Properties/launchSettings.json",
+        "status": "added",
+        "added_lines": 23,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": "src/Transactions/CashFlow.Transactions.Api/appsettings.Development.json",
+        "status": "added",
+        "added_lines": 8,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": "src/Transactions/CashFlow.Transactions.Api/appsettings.json",
+        "status": "added",
+        "added_lines": 9,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": "src/Transactions/CashFlow.Transactions.Application/CashFlow.Transactions.Application.csproj",
+        "status": "added",
+        "added_lines": 14,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": "src/Transactions/CashFlow.Transactions.Domain/CashFlow.Transactions.Domain.csproj",
+        "status": "added",
+        "added_lines": 9,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": "src/Transactions/CashFlow.Transactions.Infrastructure/CashFlow.Transactions.Infrastructure.csproj",
+        "status": "added",
+        "added_lines": 14,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": "tests/CashFlow.IntegrationTests/CashFlow.IntegrationTests.csproj",
+        "status": "added",
+        "added_lines": 26,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": "tests/CashFlow.UnitTests/CashFlow.UnitTests.csproj",
+        "status": "added",
+        "added_lines": 29,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": "tests/CashFlow.UnitTests/Shared/TransactionRegisteredEventTests.cs",
+        "status": "added",
+        "added_lines": 44,
+        "deleted_lines": 0,
+        "binary": false
+      }
+    ]
   },
   "components": [],
   "release_notes": {
-    "executive_summary": "",
-    "groups": [],
+    "executive_summary": "3 feature(s), 1 fix(es), 0 migration(s) nesta release.",
+    "groups": [
+      {
+        "type": "feat",
+        "items": [
+          {
+            "title": "feat(docker): add multi-stage Dockerfiles and ecosystem docker-compose configurations",
+            "type": "feat",
+            "evidence_refs": [
+              "6487b89"
+            ]
+          },
+          {
+            "title": "feat(scaffold): initialize CashFlow Clean Architecture solution and shared contracts",
+            "type": "feat",
+            "evidence_refs": [
+              "32eed46"
+            ]
+          },
+          {
+            "title": "feat: setup inicial do projeto, especificacoes, archify, sonar e solidify",
+            "type": "feat",
+            "evidence_refs": [
+              "88140c3"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "fix",
+        "items": [
+          {
+            "title": "fix(solidify): ajustar tipos de commands e perfil quick sem peer_a obrigatorio",
+            "type": "fix",
+            "evidence_refs": [
+              "18f1588"
+            ]
+          }
+        ]
+      }
+    ],
     "breaking_changes": []
   },
   "migrations": [],
@@ -39,11 +342,11 @@
       "version": "",
       "applicability": "APPLICABLE",
       "execution_status": "failed",
-      "duration_ms": 891,
+      "duration_ms": 7630,
       "findings": [],
       "metrics": {
         "commands": [
-          "dotnet test --logger trx '--collect:XPlat Code Coverage'"
+          "cmd.exe /c 'scripts\\test-runner.cmd'"
         ],
         "exit_code": 1,
         "passed": false
@@ -55,15 +358,1636 @@
     {
       "id": "sonar",
       "version": "",
-      "applicability": "NOT_APPLICABLE",
-      "applicability_source": "heuristic",
-      "execution_status": "skipped:not_applicable",
+      "applicability": "APPLICABLE",
+      "execution_status": "completed",
+      "score": 100,
       "duration_ms": 0,
-      "findings": [],
-      "metrics": {},
-      "limitations": [
-        "sem paths de código no range"
-      ]
+      "findings": [
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 6118,
+          "message": "Refactor this function to reduce its Cognitive Complexity from 20 to the 15 allowed.",
+          "rule": "javascript:S3776",
+          "scope": "unknown",
+          "severity": "high"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 6871,
+          "message": "Refactor this code to not nest functions more than 5 levels deep.",
+          "rule": "javascript:S2004",
+          "scope": "unknown",
+          "severity": "high"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 6034,
+          "message": "Refactor this function to reduce its Cognitive Complexity from 16 to the 15 allowed.",
+          "rule": "javascript:S3776",
+          "scope": "unknown",
+          "severity": "high"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 6175,
+          "message": "Refactor this code to not nest functions more than 5 levels deep.",
+          "rule": "javascript:S2004",
+          "scope": "unknown",
+          "severity": "high"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 6902,
+          "message": "Refactor this code to not nest functions more than 5 levels deep.",
+          "rule": "javascript:S2004",
+          "scope": "unknown",
+          "severity": "high"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 5897,
+          "message": "Prefer `.dataset` over `removeAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 5614,
+          "message": "Prefer `.dataset` over `getAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 5589,
+          "message": "Prefer `.dataset` over `getAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 5981,
+          "message": "Prefer `.dataset` over `getAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 5866,
+          "message": "Prefer `.dataset` over `removeAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 5872,
+          "message": "Prefer `.dataset` over `removeAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 5295,
+          "message": "Use \u003caddress\u003e or \u003cdetails\u003e or \u003cfieldset\u003e or \u003coptgroup\u003e instead of the group role to ensure accessibility across all devices.",
+          "rule": "Web:S6819",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 6027,
+          "message": "Prefer `.dataset` over `hasAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 6046,
+          "message": "Prefer `.dataset` over `removeAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 5922,
+          "message": "Prefer `.dataset` over `hasAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 6085,
+          "message": "Prefer `.dataset` over `getAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 6087,
+          "message": "Prefer `.dataset` over `getAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 7074,
+          "message": "Extract this nested ternary operation into an independent statement.",
+          "rule": "javascript:S3358",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 5876,
+          "message": "Prefer `.dataset` over `removeAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 5285,
+          "message": "Use \u003coutput\u003e instead of the status role to ensure accessibility across all devices.",
+          "rule": "Web:S6819",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 5596,
+          "message": "Prefer `.dataset` over `getAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 5796,
+          "message": "Prefer `.dataset` over `removeAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 5863,
+          "message": "Prefer `.dataset` over `removeAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 6025,
+          "message": "Prefer `.dataset` over `hasAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 3,
+          "message": "Add a \u003ctitle\u003e tag to this page.",
+          "rule": "Web:PageWithoutTitleCheck",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 5855,
+          "message": "Prefer `.dataset` over `getAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 5895,
+          "message": "Prefer `.dataset` over `removeAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 5903,
+          "message": "Prefer `.dataset` over `removeAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 6011,
+          "message": "Prefer `.dataset` over `setAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 6081,
+          "message": "Prefer `.dataset` over `getAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 5887,
+          "message": "Prefer `.dataset` over `removeAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 5923,
+          "message": "Prefer `.dataset` over `hasAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 1049,
+          "message": "Duplicate selector \".diagram-nav #btn-route-probe,\n    .diagram-nav #btn-overview-map,\n    .diagram-nav #btn-semantic-lens\", first used at line 970",
+          "rule": "css:S4666",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 2991,
+          "message": "Duplicate selector \".diagram-container\", first used at line 2985",
+          "rule": "css:S4666",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 7122,
+          "message": "Prefer `.dataset` over `setAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 6103,
+          "message": "Prefer `.dataset` over `setAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 5931,
+          "message": "Prefer `.dataset` over `hasAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 2491,
+          "message": "Duplicate selector \"body\", first used at line 2490",
+          "rule": "css:S4666",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 6278,
+          "message": "Prefer `.dataset` over `setAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 6110,
+          "message": "Prefer `.dataset` over `hasAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 5584,
+          "message": "Prefer `.dataset` over `getAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 5605,
+          "message": "Prefer `.dataset` over `getAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 6206,
+          "message": "Prefer `.dataset` over `getAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 5926,
+          "message": "Prefer `.dataset` over `hasAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 7157,
+          "message": "Prefer `.dataset` over `setAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 5881,
+          "message": "Prefer `.dataset` over `removeAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 5966,
+          "message": "Prefer `.dataset` over `removeAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 4950,
+          "message": "Use \u003caddress\u003e or \u003cdetails\u003e or \u003cfieldset\u003e or \u003coptgroup\u003e instead of the group role to ensure accessibility across all devices.",
+          "rule": "Web:S6819",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 6007,
+          "message": "Prefer `.dataset` over `setAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 6206,
+          "message": "Prefer `.dataset` over `setAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 7156,
+          "message": "Prefer `.dataset` over `setAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 5964,
+          "message": "Prefer `.dataset` over `removeAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 5828,
+          "message": "Prefer `.dataset` over `removeAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 5830,
+          "message": "Prefer `.dataset` over `removeAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 5925,
+          "message": "Prefer `.dataset` over `hasAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": "src/Transactions/CashFlow.Transactions.Api/Program.cs",
+          "line": 38,
+          "message": "Move 'WeatherForecast' into a named namespace.",
+          "rule": "csharpsquid:S3903",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 5827,
+          "message": "Prefer `.dataset` over `removeAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 5924,
+          "message": "Prefer `.dataset` over `hasAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 5799,
+          "message": "Prefer `.dataset` over `removeAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 6670,
+          "message": "Prefer `.dataset` over `getAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 4956,
+          "message": "Use \u003caddress\u003e or \u003cdetails\u003e or \u003cfieldset\u003e or \u003coptgroup\u003e instead of the group role to ensure accessibility across all devices.",
+          "rule": "Web:S6819",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 5384,
+          "message": "Use \u003csection\u003e instead of the region role to ensure accessibility across all devices.",
+          "rule": "Web:S6819",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 5867,
+          "message": "Prefer `.dataset` over `removeAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 6546,
+          "message": "Extract this nested ternary operation into an independent statement.",
+          "rule": "javascript:S3358",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 5598,
+          "message": "Prefer `.dataset` over `setAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 5896,
+          "message": "Prefer `.dataset` over `removeAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 1091,
+          "message": "Duplicate selector \".diagram-nav [data-view=\"reset\"]\", first used at line 1023",
+          "rule": "css:S4666",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 5327,
+          "message": "Use \u003cdialog\u003e instead of the dialog role to ensure accessibility across all devices.",
+          "rule": "Web:S6819",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 6086,
+          "message": "Prefer `.dataset` over `getAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": "src/Consolidation/CashFlow.Consolidation.Api/Program.cs",
+          "line": 38,
+          "message": "Move 'WeatherForecast' into a named namespace.",
+          "rule": "csharpsquid:S3903",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 5933,
+          "message": "Prefer `.dataset` over `hasAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 5439,
+          "message": "Use \u003coutput\u003e instead of the status role to ensure accessibility across all devices.",
+          "rule": "Web:S6819",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 5808,
+          "message": "Prefer `.dataset` over `removeAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 5436,
+          "message": "Use \u003caddress\u003e or \u003cdetails\u003e or \u003cfieldset\u003e or \u003coptgroup\u003e instead of the group role to ensure accessibility across all devices.",
+          "rule": "Web:S6819",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 5878,
+          "message": "Prefer `.dataset` over `removeAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 5892,
+          "message": "Prefer `.dataset` over `removeAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 5882,
+          "message": "Prefer `.dataset` over `removeAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 5910,
+          "message": "Prefer `.dataset` over `removeAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 3104,
+          "message": "Duplicate selector \".toolbar #btn-export::before\", first used at line 3090",
+          "rule": "css:S4666",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 5805,
+          "message": "Prefer `.dataset` over `removeAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": "src/Consolidation/CashFlow.Consolidation.Api/Program.cs",
+          "line": 36,
+          "message": "Await RunAsync instead.",
+          "rule": "csharpsquid:S6966",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 5337,
+          "message": "Use \u003caddress\u003e or \u003cdetails\u003e or \u003cfieldset\u003e or \u003coptgroup\u003e instead of the group role to ensure accessibility across all devices.",
+          "rule": "Web:S6819",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 5802,
+          "message": "Prefer `.dataset` over `removeAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 6001,
+          "message": "Prefer `.dataset` over `getAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 5919,
+          "message": "Prefer `.dataset` over `hasAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 3904,
+          "message": "Duplicate selector \".route-probe-node\", first used at line 3897",
+          "rule": "css:S4666",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 5426,
+          "message": "Use \u003csection\u003e instead of the region role to ensure accessibility across all devices.",
+          "rule": "Web:S6819",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 6254,
+          "message": "Prefer `.dataset` over `removeAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 5932,
+          "message": "Prefer `.dataset` over `hasAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 5884,
+          "message": "Prefer `.dataset` over `removeAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 5801,
+          "message": "Prefer `.dataset` over `removeAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 6195,
+          "message": "Simplify this regular expression to reduce its runtime, as it has super-linear performance due to backtracking.",
+          "rule": "javascript:S8786",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 6012,
+          "message": "Prefer `.dataset` over `setAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 5894,
+          "message": "Prefer `.dataset` over `removeAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 5783,
+          "message": "Simplify this regular expression to reduce its runtime, as it has super-linear performance due to backtracking.",
+          "rule": "javascript:S8786",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 5720,
+          "message": "Prefer `.dataset` over `getAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 5798,
+          "message": "Prefer `.dataset` over `removeAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 6026,
+          "message": "Prefer `.dataset` over `hasAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 5410,
+          "message": "Use \u003cdialog\u003e instead of the dialog role to ensure accessibility across all devices.",
+          "rule": "Web:S6819",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 6205,
+          "message": "Prefer `.dataset` over `setAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 7076,
+          "message": "Prefer `.dataset` over `setAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 7121,
+          "message": "Prefer `.dataset` over `setAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 7146,
+          "message": "Prefer `.dataset` over `setAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 6024,
+          "message": "Prefer `.dataset` over `hasAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 6359,
+          "message": "Extract this nested ternary operation into an independent statement.",
+          "rule": "javascript:S3358",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 5804,
+          "message": "Prefer `.dataset` over `removeAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 6108,
+          "message": "Prefer `.dataset` over `getAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 5921,
+          "message": "Prefer `.dataset` over `hasAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 5920,
+          "message": "Prefer `.dataset` over `hasAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 5871,
+          "message": "Prefer `.dataset` over `removeAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 7063,
+          "message": "Extract this nested ternary operation into an independent statement.",
+          "rule": "javascript:S3358",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 3662,
+          "message": "Duplicate selector \".toolbar .export-menu button[data-action=\"route-share-card\"]::before,\n    .toolbar .export-menu button[data-action=\"reach-share-card\"]::before\", first used at line 3637",
+          "rule": "css:S4666",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 5803,
+          "message": "Prefer `.dataset` over `removeAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 6014,
+          "message": "Prefer `.dataset` over `setAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 6098,
+          "message": "Prefer `.dataset` over `setAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 5905,
+          "message": "Prefer `.dataset` over `removeAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 5797,
+          "message": "Prefer `.dataset` over `removeAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 5365,
+          "message": "Use \u003caddress\u003e or \u003cdetails\u003e or \u003cfieldset\u003e or \u003coptgroup\u003e instead of the group role to ensure accessibility across all devices.",
+          "rule": "Web:S6819",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 6019,
+          "message": "Prefer `.dataset` over `setAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 3102,
+          "message": "Duplicate selector \".toolbar\", first used at line 3031",
+          "rule": "css:S4666",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 7145,
+          "message": "Prefer `.dataset` over `setAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 6261,
+          "message": "Prefer `.dataset` over `getAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 5859,
+          "message": "Prefer `.dataset` over `removeAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 31,
+          "message": "Prefer `.dataset` over `setAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 5909,
+          "message": "Prefer `.dataset` over `removeAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 5585,
+          "message": "Prefer `.dataset` over `getAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 5841,
+          "message": "Prefer `.dataset` over `removeAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 6104,
+          "message": "Prefer `.dataset` over `setAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 5930,
+          "message": "Prefer `.dataset` over `hasAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 5809,
+          "message": "Prefer `.dataset` over `removeAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 5599,
+          "message": "Prefer `.dataset` over `setAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 2937,
+          "message": "Duplicate selector \".card-dot\", first used at line 2889",
+          "rule": "css:S4666",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 22,
+          "message": "Prefer `.dataset` over `setAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 6000,
+          "message": "Prefer `.dataset` over `getAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 5433,
+          "message": "The accessible name should be part of the visible label.",
+          "rule": "Web:S7927",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 5649,
+          "message": "Prefer `.dataset` over `getAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 7090,
+          "message": "Prefer `.dataset` over `setAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 5829,
+          "message": "Prefer `.dataset` over `removeAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 5714,
+          "message": "Prefer `.dataset` over `setAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 5779,
+          "message": "Simplify this regular expression to reduce its runtime, as it has super-linear performance due to backtracking.",
+          "rule": "javascript:S8786",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 6010,
+          "message": "Prefer `.dataset` over `setAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 5391,
+          "message": "The accessible name should be part of the visible label.",
+          "rule": "Web:S7927",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 5831,
+          "message": "Prefer `.dataset` over `removeAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 5913,
+          "message": "Prefer `.dataset` over `removeAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 6218,
+          "message": "Prefer `childNode.remove()` over `parentNode.removeChild(childNode)`.",
+          "rule": "javascript:S7762",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 3226,
+          "message": "Duplicate selector \".toolbar-chevron\", first used at line 3204",
+          "rule": "css:S4666",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 5888,
+          "message": "Prefer `.dataset` over `removeAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 5781,
+          "message": "Unnecessary escape character: \\-.",
+          "rule": "javascript:S6535",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 5901,
+          "message": "Prefer `.dataset` over `removeAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 5795,
+          "message": "Prefer `.dataset` over `removeAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 7155,
+          "message": "Prefer `.dataset` over `setAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 5928,
+          "message": "Prefer `.dataset` over `hasAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 5868,
+          "message": "Prefer `.dataset` over `removeAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 5891,
+          "message": "Prefer `.dataset` over `removeAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 5806,
+          "message": "Prefer `.dataset` over `removeAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 5800,
+          "message": "Prefer `.dataset` over `removeAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 5436,
+          "message": "\"tabindex\" should only be declared on interactive elements.",
+          "rule": "Web:S6845",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 6096,
+          "message": "Prefer `.dataset` over `setAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 5929,
+          "message": "Prefer `.dataset` over `hasAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 5908,
+          "message": "Prefer `.dataset` over `removeAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 5927,
+          "message": "Prefer `.dataset` over `hasAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 5862,
+          "message": "Prefer `.dataset` over `removeAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 4962,
+          "message": "Use \u003caddress\u003e or \u003cdetails\u003e or \u003cfieldset\u003e or \u003coptgroup\u003e instead of the group role to ensure accessibility across all devices.",
+          "rule": "Web:S6819",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 5893,
+          "message": "Prefer `.dataset` over `removeAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 5858,
+          "message": "Prefer `.dataset` over `removeAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 5902,
+          "message": "Prefer `.dataset` over `removeAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 5810,
+          "message": "Prefer `.dataset` over `removeAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 3103,
+          "message": "Duplicate selector \".toolbar #btn-export\", first used at line 3083",
+          "rule": "css:S4666",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 7064,
+          "message": "Extract this nested ternary operation into an independent statement.",
+          "rule": "javascript:S3358",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 6013,
+          "message": "Prefer `.dataset` over `setAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 5526,
+          "message": "Use an object spread instead of `Object.assign` eg: `{ ...foo }`.",
+          "rule": "javascript:S6661",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 5341,
+          "message": "Use \u003csection\u003e instead of the region role to ensure accessibility across all devices.",
+          "rule": "Web:S6819",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 6471,
+          "message": "Extract this nested ternary operation into an independent statement.",
+          "rule": "javascript:S3358",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": "src/Transactions/CashFlow.Transactions.Api/Program.cs",
+          "line": 36,
+          "message": "Await RunAsync instead.",
+          "rule": "csharpsquid:S6966",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 6044,
+          "message": "Prefer `.dataset` over `removeAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 5877,
+          "message": "Prefer `.dataset` over `removeAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 6065,
+          "message": "Prefer `.dataset` over `getAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 6020,
+          "message": "Prefer `.dataset` over `setAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 2574,
+          "message": "Duplicate selector \"html:is([data-reader-rail=\"true\"], [data-reader-rail=\"overlay\"]) .cards .card\", first used at line 2573",
+          "rule": "css:S4666",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 5995,
+          "message": "Prefer `.dataset` over `getAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 5549,
+          "message": "Extract this nested ternary operation into an independent statement.",
+          "rule": "javascript:S3358",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 5778,
+          "message": "Simplify this regular expression to reduce its runtime, as it has super-linear performance due to backtracking.",
+          "rule": "javascript:S8786",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 5904,
+          "message": "Prefer `.dataset` over `removeAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 6723,
+          "message": "Move function 'authoredStep' to the outer scope.",
+          "rule": "javascript:S7721",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 5286,
+          "message": "Use \u003cdialog\u003e instead of the dialog role to ensure accessibility across all devices.",
+          "rule": "Web:S6819",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 5419,
+          "message": "Use \u003caddress\u003e or \u003cdetails\u003e or \u003cfieldset\u003e or \u003coptgroup\u003e instead of the group role to ensure accessibility across all devices.",
+          "rule": "Web:S6819",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 5914,
+          "message": "Prefer `.dataset` over `removeAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 7089,
+          "message": "Prefer `.dataset` over `setAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 171,
+          "message": "Add \"lang\" and/or \"xml:lang\" attributes to the \"\u003chtml\u003e\" or \"\u003cbody\u003e\" element",
+          "rule": "Web:S5254",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 5999,
+          "message": "Prefer `.dataset` over `getAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 6097,
+          "message": "Prefer `.dataset` over `setAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 5807,
+          "message": "Prefer `.dataset` over `removeAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 6375,
+          "message": "Prefer `.dataset` over `getAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 19,
+          "message": "Prefer `.dataset` over `setAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 5399,
+          "message": "Use \u003caddress\u003e or \u003cdetails\u003e or \u003cfieldset\u003e or \u003coptgroup\u003e instead of the group role to ensure accessibility across all devices.",
+          "rule": "Web:S6819",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 6093,
+          "message": "Prefer `.dataset` over `setAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 5873,
+          "message": "Prefer `.dataset` over `removeAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 5600,
+          "message": "Prefer `.dataset` over `setAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 5883,
+          "message": "Prefer `.dataset` over `removeAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        },
+        {
+          "file_path": ".archify/architecture-cash-flow-20261015-133255/cash-flow.html",
+          "line": 6109,
+          "message": "Prefer `.dataset` over `hasAttribute(…)`.",
+          "rule": "javascript:S7761",
+          "scope": "unknown",
+          "severity": "medium"
+        }
+      ],
+      "metrics": {
+        "bugs": 15,
+        "code_smells": 952,
+        "counts": {
+          "total": 200,
+          "by_severity": {
+            "high": 5,
+            "medium": 195
+          },
+          "by_scope": {
+            "unknown": 200
+          },
+          "by_type": {
+            "BUG": 4,
+            "CODE_SMELL": 196
+          }
+        },
+        "coverage": 0.3,
+        "duplication_pct": 22,
+        "quality_gate_status": "OK",
+        "security_hotspots": 0,
+        "technical_debt": "13d4h",
+        "vulnerabilities": 2
+      }
     },
     {
       "id": "lighthouse",

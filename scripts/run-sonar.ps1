@@ -47,14 +47,25 @@ $beginArgs = @(
     "/d:sonar.cs.vstest.reportsPaths=**/TestResults/**/*.trx"
 )
 
+if (Test-Path ".sonar_token") {
+    $fileToken = (Get-Content ".sonar_token").Trim()
+    if (-not [string]::IsNullOrWhiteSpace($fileToken)) {
+        $SonarToken = $fileToken
+    }
+}
+
 if (-not [string]::IsNullOrWhiteSpace($SonarToken)) {
     $beginArgs += "/d:sonar.token=$SonarToken"
 }
 
 try {
     dotnet-sonarscanner @beginArgs
+    if ($LASTEXITCODE -ne 0) {
+        Write-Host "[ERRO] dotnet-sonarscanner begin falhou (exit code $LASTEXITCODE). Interrompendo." -ForegroundColor Red
+        exit $LASTEXITCODE
+    }
 } catch {
-    Write-Host "[ERRO] Falha ao iniciar dotnet-sonarscanner. Verifique se a ferramenta está instalada: dotnet tool install -g dotnet-sonarscanner" -ForegroundColor Red
+    Write-Host "[ERRO] Falha ao iniciar dotnet-sonarscanner: $_" -ForegroundColor Red
     exit 1
 }
 

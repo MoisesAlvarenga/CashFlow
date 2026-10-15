@@ -25,4 +25,6 @@ coverage/
 .sonarqube/
 .solidify/
 out/
+.sonar_token
+
 
