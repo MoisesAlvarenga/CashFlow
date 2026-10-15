@@ -4,14 +4,22 @@ Sistema financeiro distribuído de controle de fluxo de caixa e consolidação d
 
 ---
 
-## 🧭 Acesso Rápido às Ferramentas e Relatórios de Qualidade
+## 🧭 Acesso Rápido às Ferramentas e Relatórios no Navegador
 
-| Ferramenta | Descrição | Link de Acesso |
-|---|---|---|
-| **Archify** | Diagrama interativo de arquitetura de software (fluxos, componentes, resiliência e temas Dark/Light) | [Visualizar Diagrama HTML](.archify/architecture-cash-flow-20261015-133255/cash-flow.html)<br>[Especificação JSON](.archify/architecture-cash-flow-20261015-133255/candidate.json) |
-| **Solidify** | Avaliador arquitetural SOLID e Quality Gate de release determinístico | [Relatório Canônico de Release (JSON)](.solidify/out/release-report.json)<br>[Configuração do Solidify](solidify.json)<br>[Script de Auditoria](scripts/solidify-audit.ps1) |
-| **SonarQube** | Dashboard de métricas estáticas, cobertura de testes e Clean Code | [Dashboard SonarQube Local](http://localhost:9000/dashboard?id=desafio_tecnico_Verity)<br>[Guia SonarQube + Solidify](docs/SONARQUBE_SOLIDIFY.md)<br>[Script de Execução Sonar](scripts/run-sonar.ps1) |
-| **Especificações** | Regras de negócio, arquitetura C4 e matriz de testes | [Requisitos de Negócio (Spec)](.specs/features/fluxo-caixa-consolidado/spec.md)<br>[Design Arquitetural](.specs/features/fluxo-caixa-consolidado/design.md)<br>[Tarefas e Test Coverage Matrix](.specs/features/fluxo-caixa-consolidado/tasks.md) |
+> [!TIP]
+> **Como abrir direto no seu Navegador Web**:
+> No VS Code ou IDE, clicar em links de arquivos locais (`.html`) abre o código-fonte no editor da IDE por padrão.
+> Para abrir o **Archify**, o **Solidify** e o **SonarQube** diretamente no seu navegador padrão (Chrome/Edge/Firefox), execute:
+> ```powershell
+> powershell -File scripts/open-browser.ps1
+> ```
+
+| Ferramenta | O que é | Link de Acesso | Abrir no Navegador |
+|---|---|---|---|
+| **Archify** | Diagrama interativo de arquitetura de software (fluxos, componentes, resiliência e temas Dark/Light) | [cash-flow.html](.archify/architecture-cash-flow-20261015-133255/cash-flow.html)<br>[candidate.json](.archify/architecture-cash-flow-20261015-133255/candidate.json) | `powershell -File scripts/open-browser.ps1 -Archify` |
+| **Solidify** | Avaliador arquitetural SOLID e Quality Gate de release determinístico | [release-report.html](.solidify/out/release-report.html)<br>[release-report.json](.solidify/out/release-report.json) | `powershell -File scripts/open-browser.ps1 -Solidify` |
+| **SonarQube** | Dashboard de métricas estáticas, cobertura de testes e Clean Code | [Dashboard SonarQube Local](http://localhost:9000/dashboard?id=desafio_tecnico_Verity) | [Abrir Dashboard SonarQube](http://localhost:9000/dashboard?id=desafio_tecnico_Verity) |
+| **Especificações** | Regras de negócio, arquitetura C4 e matriz de testes | [Requisitos de Negócio (Spec)](.specs/features/fluxo-caixa-consolidado/spec.md)<br>[Design Arquitetural](.specs/features/fluxo-caixa-consolidado/design.md)<br>[Tarefas e Test Coverage Matrix](.specs/features/fluxo-caixa-consolidado/tasks.md) | N/A |
 
 ---
 
