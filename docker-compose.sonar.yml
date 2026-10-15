@@ -1,3 +1,5 @@
+name: verity-sonarqube
+
 services:
   sonarqube:
     image: sonarqube:community
@@ -9,17 +11,17 @@ services:
       - SONAR_ES_BOOTSTRAP_CHECKS_DISABLE=true
       - SONAR_SEARCH_JAVAADDITIONALOPTS=-Dnode.store.allow_mmap=false
     volumes:
-      - sonarqube_data:/opt/sonarqube/data
-      - sonarqube_extensions:/opt/sonarqube/extensions
-      - sonarqube_logs:/opt/sonarqube/logs
+      - verity_sonarqube_data:/opt/sonarqube/data
+      - verity_sonarqube_extensions:/opt/sonarqube/extensions
+      - verity_sonarqube_logs:/opt/sonarqube/logs
     networks:
-      - sonar-net
+      - verity-sonar-net
 
 networks:
-  sonar-net:
+  verity-sonar-net:
     driver: bridge
 
 volumes:
-  sonarqube_data:
-  sonarqube_extensions:
-  sonarqube_logs:
+  verity_sonarqube_data:
+  verity_sonarqube_extensions:
+  verity_sonarqube_logs:

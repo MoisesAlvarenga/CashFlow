@@ -1,0 +1,116 @@
+name: cashflow-ecosystem
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: cashflow-postgres
+    restart: unless-stopped
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_USER: verity
+      POSTGRES_PASSWORD: verity_secret
+      POSTGRES_DB: cashflow_db
+    volumes:
+      - cashflow_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U verity -d cashflow_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - cashflow-net
+
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: cashflow-rabbitmq
+    restart: unless-stopped
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: verity
+      RABBITMQ_DEFAULT_PASS: verity_secret
+    volumes:
+      - cashflow_rabbitmq_data:/var/lib/rabbitmq
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "check_running"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - cashflow-net
+
+  transactions-api:
+    build:
+      context: .
+      dockerfile: src/Transactions/CashFlow.Transactions.Api/Dockerfile
+    container_name: cashflow-transactions-api
+    restart: unless-stopped
+    ports:
+      - "5101:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=cashflow_db;Username=verity;Password=verity_secret
+      - RabbitMq__Host=rabbitmq
+      - RabbitMq__Username=verity
+      - RabbitMq__Password=verity_secret
+    depends_on:
+      postgres:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    networks:
+      - cashflow-net
+
+  consolidation-api:
+    build:
+      context: .
+      dockerfile: src/Consolidation/CashFlow.Consolidation.Api/Dockerfile
+    container_name: cashflow-consolidation-api
+    restart: unless-stopped
+    ports:
+      - "5102:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=cashflow_db;Username=verity;Password=verity_secret
+      - RabbitMq__Host=rabbitmq
+      - RabbitMq__Username=verity
+      - RabbitMq__Password=verity_secret
+    depends_on:
+      postgres:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    networks:
+      - cashflow-net
+
+  sonarqube:
+    image: sonarqube:community
+    container_name: sonarqube-verity
+    restart: unless-stopped
+    ports:
+      - "9000:9000"
+    environment:
+      - SONAR_ES_BOOTSTRAP_CHECKS_DISABLE=true
+      - SONAR_SEARCH_JAVAADDITIONALOPTS=-Dnode.store.allow_mmap=false
+    volumes:
+      - verity_sonarqube_data:/opt/sonarqube/data
+      - verity_sonarqube_extensions:/opt/sonarqube/extensions
+      - verity_sonarqube_logs:/opt/sonarqube/logs
+    networks:
+      - cashflow-net
+    profiles:
+      - tools
+      - all
+
+networks:
+  cashflow-net:
+    driver: bridge
+
+volumes:
+  cashflow_postgres_data:
+  cashflow_rabbitmq_data:
+  verity_sonarqube_data:
+  verity_sonarqube_extensions:
+  verity_sonarqube_logs:
