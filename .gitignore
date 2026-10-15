@@ -20,3 +20,9 @@ TestResults/
 *.trx
 coverage/
 *.lcov
+
+## Tools
+.sonarqube/
+.solidify/
+out/
+

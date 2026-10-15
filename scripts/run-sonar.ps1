@@ -30,8 +30,8 @@ if ($StartDocker) {
 # 2. Verificar acessibilidade do SonarQube
 Write-Host "[2/5] Testando conexão com SonarQube em $SonarUrl..." -ForegroundColor Yellow
 try {
-    $response = Invoke-WebRequest -Uri "$SonarUrl/api/system/status" -UseBasicParsing -TimeoutSec 10
-    Write-Host "SonarQube Online! Status: $($response.Content)" -ForegroundColor Green
+    $response = Invoke-RestMethod -Uri "$SonarUrl/api/system/status" -TimeoutSec 10
+    Write-Host "SonarQube Online! Status: $($response.status)" -ForegroundColor Green
 } catch {
     Write-Host "[AVISO] Não foi possível conectar a $SonarUrl imediatamente." -ForegroundColor DarkYellow
     Write-Host "Certifique-se de que o SonarQube está rodando (docker compose -f docker-compose.sonar.yml up -d)." -ForegroundColor DarkYellow

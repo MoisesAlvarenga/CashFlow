@@ -2,67 +2,198 @@
   "schema_version": "1.1.0",
   "status": "INCOMPLETE",
   "failed_stage": "AI_ORCHESTRATION",
-  "reason_code": 5,
+  "reason_code": 12,
   "failure": {
-    "message": "git: resolver range base..head"
+    "message": "incomplete: gate INCOMPLETE: score schema falhou; re-run necessário"
   },
   "run": {
-    "id": "run-1792087122448637000",
+    "id": "run-1792087379431013800",
     "profile": "quick",
     "solidify_version": "",
-    "started_at": "2026-10-15T17:58:42Z",
-    "finished_at": "2026-10-15T17:58:42Z",
-    "config_hash": "sha256:718bac046b290e6b93dc1d416dc7697184035d1aad588376c9595ef7ef21291c",
-    "evidence_hash": "",
+    "started_at": "2026-10-15T18:02:59Z",
+    "finished_at": "2026-10-15T18:03:01Z",
+    "config_hash": "sha256:ae27cc36fb69c631db7db31fbb155cbca7b3bbd82ae04bc75a5309fc3e2155fe",
+    "evidence_hash": "2f66040d4a27d62b08f42f67d90dd3674f255a30ddc9baa8b290b3cc552a010e",
     "project_name": "desafio_tecnico_Verity",
     "project_path": "C:\\DEV\\desafio_tecnico_Verity"
   },
   "git": {
-    "base_ref": "master",
+    "base_ref": "HEAD",
     "base_sha": "",
     "head_ref": "HEAD",
     "head_sha": "",
-    "commits": null,
-    "changed_files": null
+    "commits": [],
+    "changed_files": []
   },
   "components": [],
   "release_notes": {
     "executive_summary": "",
-    "groups": null,
-    "breaking_changes": null
+    "groups": [],
+    "breaking_changes": []
   },
   "migrations": [],
   "env_changes": [],
-  "analyzers": [],
+  "analyzers": [
+    {
+      "id": "tests",
+      "version": "",
+      "applicability": "APPLICABLE",
+      "execution_status": "failed",
+      "duration_ms": 891,
+      "findings": [],
+      "metrics": {
+        "commands": [
+          "dotnet test --logger trx '--collect:XPlat Code Coverage'"
+        ],
+        "exit_code": 1,
+        "passed": false
+      },
+      "limitations": [
+        "runner: exit: exit status 1"
+      ]
+    },
+    {
+      "id": "sonar",
+      "version": "",
+      "applicability": "NOT_APPLICABLE",
+      "applicability_source": "heuristic",
+      "execution_status": "skipped:not_applicable",
+      "duration_ms": 0,
+      "findings": [],
+      "metrics": {},
+      "limitations": [
+        "sem paths de código no range"
+      ]
+    },
+    {
+      "id": "lighthouse",
+      "version": "",
+      "applicability": "NOT_APPLICABLE",
+      "applicability_source": "heuristic",
+      "execution_status": "skipped:not_applicable",
+      "duration_ms": 0,
+      "findings": [],
+      "metrics": {},
+      "limitations": [
+        "componente frontend-web ausente"
+      ]
+    },
+    {
+      "id": "security",
+      "version": "",
+      "applicability": "CONDITIONAL",
+      "applicability_source": "heuristic",
+      "execution_status": "skipped:not_configured",
+      "duration_ms": 0,
+      "findings": [],
+      "metrics": {},
+      "limitations": [
+        "nenhum componente sensível; análise reduzida"
+      ]
+    },
+    {
+      "id": "k6",
+      "version": "",
+      "applicability": "NOT_APPLICABLE",
+      "applicability_source": "heuristic",
+      "execution_status": "skipped:not_applicable",
+      "duration_ms": 0,
+      "findings": [],
+      "metrics": {},
+      "limitations": [
+        "nem backend-api nem worker"
+      ]
+    },
+    {
+      "id": "coverage",
+      "version": "",
+      "applicability": "CONDITIONAL",
+      "execution_status": "skipped:not_configured",
+      "duration_ms": 0,
+      "findings": [],
+      "metrics": {},
+      "limitations": [
+        "analyzers.coverage.report_path não configurado"
+      ]
+    },
+    {
+      "id": "jev_regression",
+      "version": "",
+      "applicability": "CONDITIONAL",
+      "execution_status": "skipped",
+      "duration_ms": 0,
+      "findings": null,
+      "metrics": {
+        "skip_code": "disabled"
+      },
+      "limitations": [
+        "jev_regression: analyzers.jev_regression.enabled=false"
+      ]
+    }
+  ],
   "solid": {
     "principles": {}
   },
   "ai_review": {
-    "mode": "",
+    "mode": "quick",
     "peer_reviewed": false,
     "actors": null,
-    "independence_degraded": false
+    "independence_degraded": true
   },
   "scores": {
-    "quality": null,
+    "quality": 0,
     "grade": "",
     "confidence": 0,
     "confidence_level": "",
-    "score_status": "",
-    "pillars": null
+    "score_status": "unavailable",
+    "pillars": []
   },
   "risk": {
-    "level": "",
+    "level": "LOW",
     "factors": null
   },
   "quality_gate": {
-    "status": "",
-    "rules": null
+    "status": "INCOMPLETE",
+    "rules": [
+      {
+        "id": "G1",
+        "status": "INCOMPLETE",
+        "message": "score schema falhou; re-run necessário",
+        "blocking": true
+      },
+      {
+        "id": "G2",
+        "status": "BLOCKED",
+        "message": "independência dos peers degradada",
+        "blocking": true
+      }
+    ]
+  },
+  "independence_gate": {
+    "status": "BLOCKED",
+    "reason": "independência dos peers degradada",
+    "distinct_models": 0,
+    "peer_a_called": false,
+    "peer_b_called": false,
+    "arbiter_called": false
   },
   "final_gate": {
     "status": "INCOMPLETE",
-    "reason": "AI Provider failure or unhandled exception",
-    "rules": null
+    "reason": "score schema falhou; re-run necessário",
+    "rules": [
+      {
+        "id": "G1",
+        "status": "INCOMPLETE",
+        "message": "",
+        "blocking": true
+      },
+      {
+        "id": "G2",
+        "status": "BLOCKED",
+        "message": "",
+        "blocking": true
+      }
+    ]
   },
   "recommendations": [],
   "limitations": [],
