@@ -139,22 +139,30 @@ C:\DEV\desafio_tecnico_Verity\
 
 ### Opção 1: Executando o Ecossistema Completo via Docker Compose
 
-Para subir todos os componentes (APIs, PostgreSQL, RabbitMQ e SonarQube):
+Para subir todos os componentes (APIs de Lançamentos e Consolidação, PostgreSQL e RabbitMQ) e abrir automaticamente as telas do Swagger:
 
 ```powershell
-# Subir todo o ecossistema em segundo plano
-docker compose up -d
+# Método Rápido (Executa o build, sobe os contêineres e abre o Swagger no navegador):
+.\scripts\start-docker.cmd
 
-# Visualizar o status dos contêineres e portas
+# Ou diretamente via PowerShell:
+powershell -ExecutionPolicy Bypass -File scripts/start-docker.ps1 -Build
+
+# Ou via comando padrão do Docker Compose:
+docker compose up -d --build
+```
+
+Visualizar o status dos contêineres e portas ativas:
+```powershell
 docker compose ps
 ```
 
-Portas expostas:
-* **API de Lançamentos**: `http://localhost:5101/swagger`
-* **API de Consolidação**: `http://localhost:5102/swagger`
+Portas expostas no ambiente Docker:
+* **API de Lançamentos (Swagger)**: `http://localhost:5101/swagger`
+* **API de Consolidação (Swagger)**: `http://localhost:5102/swagger`
 * **RabbitMQ Dashboard**: `http://localhost:15672` (Usuário: `verity` / Senha: `verity_secret`)
-* **SonarQube Dashboard**: `http://localhost:9000` (Usuário: `admin` / Senha: `admin`)
 * **PostgreSQL**: `localhost:5433` (Banco: `cashflow_db`, Usuário: `verity`)
+* **SonarQube Dashboard** *(opcional via perfil tools)*: `http://localhost:9000` (Usuário: `admin` / Senha: `admin`)
 
 ---
 
