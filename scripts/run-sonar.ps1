@@ -43,6 +43,8 @@ $beginArgs = @(
     "begin",
     "/k:$ProjectKey",
     "/d:sonar.host.url=$SonarUrl",
+    "/d:sonar.exclusions=**/.archify/**,**/.agents/**,**/.solidify/**,**/.specs/**,**/bin/**,**/obj/**,**/out/**",
+    "/d:sonar.coverage.exclusions=**/tests/**,**/Program.cs",
     "/d:sonar.cs.opencover.reportsPaths=**/TestResults/**/coverage.opencover.xml,**/TestResults/**/coverage.cobertura.xml",
     "/d:sonar.cs.vstest.reportsPaths=**/TestResults/**/*.trx"
 )
@@ -72,8 +74,8 @@ try {
 # 4. Build e Testes com Cobertura
 Write-Host "[4/5] Compilando e executando testes com cobertura..." -ForegroundColor Yellow
 if (Test-Path "*.sln") {
-    dotnet build --no-incremental
-    dotnet test --logger trx --collect:"XPlat Code Coverage" -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover,cobertura
+    dotnet build CashFlow.sln --no-incremental
+    dotnet test tests/CashFlow.UnitTests/CashFlow.UnitTests.csproj --logger trx --collect:"XPlat Code Coverage"
 } else {
     Write-Host "[AVISO] Nenhuma solução .sln encontrada na raiz ainda. Pulando build direto." -ForegroundColor DarkYellow
 }
