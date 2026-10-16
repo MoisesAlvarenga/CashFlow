@@ -16,9 +16,11 @@ Sistema financeiro distribuído de controle de fluxo de caixa e consolidação d
 
 | Ferramenta | O que é | Link de Acesso | Abrir no Navegador |
 |---|---|---|---|
+| **Swagger - Lançamentos** | OpenAPI 3.0 interativo para cadastro de transações de crédito e débito | [http://localhost:5101/swagger](http://localhost:5101/swagger) | `powershell -File scripts/open-browser.ps1 -SwaggerTransactions` |
+| **Swagger - Consolidação** | OpenAPI 3.0 interativo para consulta de saldo diário consolidado | [http://localhost:5102/swagger](http://localhost:5102/swagger) | `powershell -File scripts/open-browser.ps1 -SwaggerConsolidation` |
 | **Archify** | Diagrama interativo de arquitetura de software (fluxos, componentes, resiliência e temas Dark/Light) | [cash-flow.html](.archify/architecture-cash-flow-20261015-133255/cash-flow.html)<br>[candidate.json](.archify/architecture-cash-flow-20261015-133255/candidate.json) | `powershell -File scripts/open-browser.ps1 -Archify` |
 | **Solidify Dashboard** | Avaliador arquitetural SOLID e Quality Gate com **Abas Interativas** | [release-report.html](.solidify/out/release-report.html)<br>[release-report.json](.solidify/out/release-report.json) | `powershell -File scripts/open-browser.ps1 -Solidify` |
-| **Aba de Testes Unitários** | Nova aba no Solidify com métricas, lista dos 28 testes e cobertura 100% | [release-report.html#tab-tests](.solidify/out/release-report.html#tab-tests) | `powershell -File scripts/open-browser.ps1 -Tests` |
+| **Aba de Testes Unitários** | Aba no Solidify com métricas, lista dos **45 testes unitários** e cobertura 99% | [release-report.html#tab-tests](.solidify/out/release-report.html#tab-tests) | `powershell -File scripts/open-browser.ps1 -Tests` |
 | **SonarQube** | Dashboard de métricas estáticas, cobertura de testes e Clean Code | [Dashboard SonarQube Local](http://localhost:9000/dashboard?id=desafio_tecnico_Verity) | [Abrir Dashboard SonarQube](http://localhost:9000/dashboard?id=desafio_tecnico_Verity) |
 | **Especificações** | Regras de negócio, arquitetura C4 e matriz de testes | [Requisitos de Negócio (Spec)](.specs/features/fluxo-caixa-consolidado/spec.md)<br>[Design Arquitetural](.specs/features/fluxo-caixa-consolidado/design.md)<br>[Tarefas e Test Coverage Matrix](.specs/features/fluxo-caixa-consolidado/tasks.md) | N/A |
 
@@ -209,6 +211,36 @@ O dashboard HTML possui 4 abas interativas:
 2. **🧪 Resultados dos Testes Unitários**: Tabela com todos os **28 testes unitários aprovados**, campo de busca e filtro dinâmico, tempo de execução e **100% de cobertura de código** (Domain / Entities).
 3. **🛡️ SonarQube & Clean Code**: Detalhamento de bugs, vulnerabilidades, code smells e rating A.
 4. **📐 Princípios SOLID**: Justificativa e evidências de código para Single Responsibility, Open-Closed, Liskov Substitution, Interface Segregation e Dependency Inversion.
+
+---
+
+## 📑 Documentação Interativa com Swagger (OpenAPI 3.0)
+
+Ambos os microsserviços possuem **Swagger UI** configurado com especificações completas, tags organizadas, comentários XML detalhados de entidades/DTOs e documentação de todos os códigos de resposta HTTP:
+
+### 1. API de Lançamentos (`CashFlow.Transactions.Api`)
+* **URL do Swagger UI**: [http://localhost:5101/swagger](http://localhost:5101/swagger)
+* **Especificação OpenAPI JSON**: [http://localhost:5101/swagger/v1/swagger.json](http://localhost:5101/swagger/v1/swagger.json)
+* **Endpoints Documentados**:
+  * `POST /api/v1/transactions`: Registra um lançamento financeiro de crédito (`1`) ou débito (`2`), executa regras de negócio com FluentValidation e persiste o evento atomicamente via **Transactional Outbox**.
+    * `201 Created`: Transação registrada com sucesso (`RegisterTransactionResult`).
+    * `400 Bad Request`: Erros de validação detalhados por campo (`ValidationProblemDetails`).
+    * `500 Internal Server Error`: Falha inesperada.
+  * `GET /health`: Diagnóstico operacional do microsserviço.
+  * `GET /`: Redirecionamento automático e amigável para o Swagger UI (`/swagger`).
+
+### 2. API de Consolidação (`CashFlow.Consolidation.Api`)
+* **URL do Swagger UI**: [http://localhost:5102/swagger](http://localhost:5102/swagger)
+* **Especificação OpenAPI JSON**: [http://localhost:5102/swagger/v1/swagger.json](http://localhost:5102/swagger/v1/swagger.json)
+* **Endpoints Documentados**:
+  * `GET /api/v1/daily-balances?date=YYYY-MM-DD`: Consulta o consolidado do dia (total de créditos, débitos, saldo líquido e quantidade de transações). Caso a data não seja informada, assume a data atual (UTC).
+    * `200 OK`: Saldo consolidado retornado (`DailyBalanceDto`).
+    * `404 Not Found`: Nenhum lançamento consolidado encontrado para a data informada.
+  * `POST /api/v1/daily-balances/process`: Processa o lançamento e atualiza os acumuladores de saldo líquido diário.
+    * `200 OK`: Saldo atualizado com sucesso (`DailyBalanceDto`).
+    * `400 Bad Request`: Tipo de transação inválido ou valor não positivo.
+  * `GET /health`: Diagnóstico operacional do microsserviço.
+  * `GET /`: Redirecionamento automático para o Swagger UI (`/swagger`).
 
 ---
 
