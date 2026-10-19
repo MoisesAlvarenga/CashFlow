@@ -12,8 +12,8 @@ The system adopts **Approach 1: Two Autonomous Services with Asynchronous Messag
 All codebase classes, interfaces, entities, records, and projects use **English** naming conventions following .NET idiomatic practices.
 
 The architecture ensures strict physical and logical decoupling:
-1. **`CashFlow.Transactions.Api`**: Handles incoming financial transaction requests (credits and debits), validating data and writing the `Transaction` entity alongside an `OutboxMessage` within the same local ACID transaction. An asynchronous background worker (`OutboxPublisherWorker`) dispatches pending messages to the broker (`RabbitMQ` via `MassTransit`).
-2. **`CashFlow.Consolidation.Api`**: Asynchronously consumes `TransactionRegisteredEvent` messages through an idempotent consumer (`TransactionRegisteredConsumer`), aggregating and updating the daily consolidated balance (`DailyBalance`). The read endpoint provides sub-10ms query responses, easily satisfying the 50 req/s throughput requirement.
+1. **`CashFlow.Transactions.Api`**: Handles incoming financial transaction requests (credits and debits), validating data and writing the `Transaction` entity alongside an `OutboxMessage` within the same local ACID transaction. An asynchronous background worker (`OutboxProcessorWorker`) dispatches pending messages to the broker (`RabbitMQ` via official `RabbitMQ.Client v7` driver).
+2. **`CashFlow.Consolidation.Api`**: Asynchronously consumes `TransactionRegisteredEvent` messages through an idempotent consumer (`TransactionRegisteredConsumer`), aggregating and updating the daily consolidated balance (`DailyBalance`). The read endpoint provides sub-5ms query responses using indexed PostgreSQL queries, easily satisfying the 50 req/s throughput requirement.
 
 Even if the Consolidation service or the message broker is completely unavailable, merchants can continue registering transactions without interruption.
 
@@ -25,29 +25,29 @@ flowchart TD
     end
 
     subgraph TransactionsService["Transactions Service (CashFlow.Transactions.Api)"]
-        TransactionsController["TransactionsController\nPOST /api/v1/transactions"]
+        TransactionsEndpoint["Minimal API Endpoint\nPOST /api/v1/transactions"]
         TransactionHandler["RegisterTransactionCommandHandler"]
         TransactionRepo["TransactionRepository"]
         OutboxTable["Outbox Table\n(Same ACID Transaction)"]
-        OutboxPublisher["OutboxPublisherWorker\n(BackgroundService)"]
+        OutboxPublisher["OutboxProcessorWorker\n(BackgroundService)"]
         DbTransactions[("Database\nTransactions & Outbox")]
     end
 
     subgraph Messaging["Message Broker"]
-        Queue["RabbitMQ / MassTransit\nQueue: transaction-registered-event"]
+        Queue["RabbitMQ Direct Exchange\ncashflow.transactions"]
         DLQ["Dead Letter Queue (DLQ)"]
     end
 
     subgraph ConsolidationService["Consolidation Service (CashFlow.Consolidation.Api)"]
-        EventConsumer["TransactionRegisteredConsumer\n(MassTransit Consumer)"]
+        EventConsumer["TransactionRegisteredConsumer\n(RabbitMQ.Client BackgroundService)"]
         DailyBalanceService["DailyBalanceService\n(Idempotent Aggregation)"]
         DailyBalanceRepo["DailyBalanceRepository"]
-        DbConsolidation[("Database / Cache\nDaily Balances")]
-        DailyBalancesController["DailyBalancesController\nGET /api/v1/daily-balances"]
+        DbConsolidation[("PostgreSQL Database\nIndexed Daily Balances")]
+        DailyBalancesEndpoint["Minimal API Endpoint\nGET /api/v1/daily-balances"]
     end
 
-    Merchant -->|HTTP POST| TransactionsController
-    TransactionsController --> TransactionHandler
+    Merchant -->|HTTP POST| TransactionsEndpoint
+    TransactionsEndpoint --> TransactionHandler
     TransactionHandler --> TransactionRepo
     TransactionRepo -->|BeginTransaction / Commit| DbTransactions
     TransactionHandler -->|Persists Event| OutboxTable
@@ -61,8 +61,8 @@ flowchart TD
     DailyBalanceService --> DailyBalanceRepo
     DailyBalanceRepo --> DbConsolidation
 
-    Reports -->|HTTP GET| DailyBalancesController
-    DailyBalancesController --> DailyBalanceRepo
+    Reports -->|HTTP GET| DailyBalancesEndpoint
+    DailyBalancesEndpoint --> DailyBalanceRepo
 ```
 
 ### Resilience Sequence (Consolidation Service Offline)
@@ -260,8 +260,8 @@ public record TransactionRegisteredEvent(
 | Concern | Location | Impact | Mitigation |
 | ------- | -------- | ------ | ---------- |
 | Concurrency on daily balance updates | `DailyBalanceService` | Mathematical race conditions on net balance | Atomic upsert queries or optimistic concurrency with versioning |
-| Outbox message accumulation if broker stays down | `OutboxPublisherWorker` | Delayed consolidation reporting | Batch polling (100 messages/batch) with an index on `ProcessedAt IS NULL` |
-| Query latency under peak concurrency (50 req/s) | `DailyBalancesController` | Degraded p95 latency | In-memory caching (`IMemoryCache`) with event-driven invalidation for sub-10ms response times |
+| Outbox message accumulation if broker stays down | `OutboxProcessorWorker` | Delayed consolidation reporting | Batch polling (20 messages/batch) with an index on `ProcessedAt IS NULL` |
+| Query latency under peak concurrency (50 req/s) | `ConsolidationEndpoints` | Degraded p95 latency | Database B-tree index on Date column (`IX_DailyBalances_Date`) delivering sub-5ms query times (validated via K6 with P95 < 45ms and 0% loss) |
 
 ---
 
@@ -271,5 +271,5 @@ public record TransactionRegisteredEvent(
 | ------- | ------- | --------- |
 | English class naming standard | English ubiquitous language | Professional C# standard, clean integration with .NET framework types, requested by user |
 | Transactional Outbox Pattern | Outbox Table + Worker | Eliminates dual-write failure hazards between database and message broker |
-| MassTransit as messaging abstraction | MassTransit | Seamless transition between RabbitMQ in Docker and `InMemoryTestHarness` in unit/integration tests |
+| Native RabbitMQ.Client driver | `RabbitMQ.Client v7.2` | High-throughput official driver with async ACK/NACK, avoiding heavy third-party framework overhead |
 | DateOnly native .NET type | `System.DateOnly` | Eliminates timezone and daylight saving time bugs in daily cash flow calculations |

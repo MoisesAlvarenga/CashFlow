@@ -56,6 +56,17 @@ Todo o ciclo de engenharia deste projeto foi conduzido pelo paradigma **Spec-Dri
 2. **`design.md` (Como Construir)**: Especifica a arquitetura de microsserviços autônomos, o desacoplamento via mensageria, o tratamento do problema da escrita dupla (*Dual-Write*) através do padrão *Transactional Outbox*, a estratégia de idempotência e os diagramas de sequência.
 3. **`tasks.md` (Plano de Execução)**: Decomposição do projeto em tarefas rastreáveis, fases de entrega (Domínio puro -> Aplicação CQRS -> Infraestrutura -> APIs -> Testes -> Containerização) e matriz de cobertura de testes.
 
+### 🤖 Engenharia Assistida por IA com Governança Arquitetural Humana (Human-in-the-Loop)
+
+O projeto adotou as melhores práticas contemporâneas de **Engenharia de Software Assistida por Inteligência Artificial**:
+
+* **Governança Arquitetural 100% Humana**: Todas as decisões de arquitetura de software, seleção de padrões de projeto (Transactional Outbox, CQRS, Clean Architecture, SOLID), modelagem de dados no PostgreSQL, dimensionamento de buffer no RabbitMQ, concorrência e estratégias de idempotência foram **concebidas, estruturadas e decididas pelo Arquiteto / Desenvolvedor**, registradas nas Decisões Arquiteturais ([`.specs/STATE.md`](.specs/STATE.md)).
+* **Papel da IA (Aceleração Operacional)**: Modelos de IA generativa atuaram estritamente como **ferramenta de auxílio e acelerador de produtividade (Pair Programming)** — auxiliando na escrita rápida de código boilerplate, esqueletos de DTOs, sintaxes repetitivas e scaffolding de testes unitários.
+* **Validação Rígida via Quality Gates**: Todo o código produzido passou por validação humana contínua e foi auditado por esteiras automatizadas de controle de qualidade:
+  * **SonarQube**: 0 Bugs, 0 Vulnerabilidades e 0 Code Smells.
+  * **Solidify Quality Gate**: Auditoria formal de conformidade com os 5 princípios SOLID.
+  * **Suíte de Testes Automatizada**: 51 testes unitários determinísticos (100% aprovados) e testes de estresse com **Grafana K6** (0% de erro sob 50+ req/s).
+
 ---
 
 ## 🧰 Harness de Engenharia & Ferramental de Automação

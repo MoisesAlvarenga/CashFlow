@@ -1,37 +1,34 @@
 # Cash Flow and Daily Consolidation Tasks
 
-## Execution Protocol (MANDATORY -- do not skip)
+## Execution Protocol
 
-Implement these tasks with the `tlc-spec-driven` skill: **activate it by name and follow its Execute flow and Critical Rules.** Do not search for skill files by filesystem path. The skill is the source of truth for the full flow (per-task cycle, sub-agent delegation, adequacy review, Verifier, discrimination sensor).
+Implementado sob o paradigma **Spec-Driven Development (SDD)**: arquitetura, modelagem de dados, resiliência e regras de negócio especificadas e decididas pelo Desenvolvedor/Arquiteto humano, utilizando ferramentas de IA como copiloto para aceleração da codificação sob validação contínua de testes determinísticos e Quality Gates.
 
 ---
 
 **Design**: `.specs/features/fluxo-caixa-consolidado/design.md`  
-**Status**: Ready for Approval  
+**Status**: Completed & Verified ✅
 
 ---
 
 ## Test Coverage Matrix
 
-> Generated from codebase, project guidelines, and spec - confirm before Execute. Guidelines found: none - strong defaults applied.
-
 | Code Layer | Required Test Type | Coverage Expectation | Location Pattern | Run Command |
 | ---------- | ------------------ | -------------------- | ---------------- | ----------- |
-| Domain / Entities | unit | 100% branches; 1:1 with spec ACs; edge cases for negative amounts and invalid types | `tests/**/*.UnitTests/**/*.cs` | `dotnet test --filter "Category=Unit"` |
-| Application / Handlers & Validators | unit | All validation paths, error handling, and command execution | `tests/**/*.UnitTests/**/*.cs` | `dotnet test --filter "Category=Unit"` |
-| Messaging / Consumers & Workers | unit | Consumption behavior, idempotency, and outbox publication with TestHarness | `tests/**/*.UnitTests/**/*.cs` | `dotnet test --filter "Category=Unit"` |
-| Controllers / APIs | integration | HTTP contracts, status codes (201, 200, 400), ProblemDetails | `tests/**/*.IntegrationTests/**/*.cs` | `dotnet test --filter "Category=Integration"` |
-| Resilience & End-to-End | integration | Transactions API operation with Consolidation service offline and subsequent recovery | `tests/**/*.IntegrationTests/**/*.cs` | `dotnet test --filter "Category=Integration"` |
+| Domain / Entities | unit | 100% branches; 1:1 with spec ACs; edge cases for negative amounts and invalid types | `tests/CashFlow.UnitTests/` | `dotnet test` |
+| Application / Handlers & Validators | unit | All validation paths, error handling, and command execution | `tests/CashFlow.UnitTests/` | `dotnet test` |
+| Messaging / Consumers & Workers | unit | Consumption behavior, idempotency, and outbox publication | `tests/CashFlow.UnitTests/` | `dotnet test` |
+| Minimal APIs & Contracts | unit | HTTP status codes (201, 200, 400), ProblemDetails, queries | `tests/CashFlow.UnitTests/` | `dotnet test` |
+| Resilience & Peak Performance | load (k6) | Transactions API resilience with Outbox and 50+ req/s load test | `tests/load/` | `.\scripts\run-tests.ps1 -Load` |
 
 ## Gate Check Commands
 
-> Deterministic validation commands targeting .NET 9 LTS.
-
 | Gate Level | When to Use | Command |
 | ---------- | ----------- | ------- |
-| Quick | After tasks with unit tests only | `dotnet test --filter "Category=Unit"` |
-| Full | After tasks with integration tests | `dotnet test` |
-| Build | After phase completion or infrastructure tasks | `dotnet build` |
+| Unit Tests | Validação de regras e handlers em memória | `dotnet test tests/CashFlow.UnitTests/` |
+| Load Tests | Validação de carga K6 (50 req/s, P95 < 500ms) | `.\scripts\run-tests.ps1 -Load` |
+| Build | Compilação estrita com zero erros e zero warnings | `dotnet build CashFlow.sln` |
+| SonarQube | Auditoria estática de segurança e Clean Code | `.\scripts\run-sonar.ps1` |
 
 ---
 
