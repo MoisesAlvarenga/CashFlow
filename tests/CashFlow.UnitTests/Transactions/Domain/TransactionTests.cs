@@ -6,6 +6,9 @@ namespace CashFlow.UnitTests.Transactions.Domain;
 
 public class TransactionTests
 {
+    /// <summary>
+    /// Garante que uma transação de crédito seja instanciada com Guid único, tipo Credit, valor positivo, data e descrição corretos.
+    /// </summary>
     [Fact]
     [Trait("Category", "Unit")]
     public void CreateCredit_WithValidParameters_ShouldInstantiateCreditTransaction()
@@ -27,6 +30,9 @@ public class TransactionTests
         Assert.True(transaction.CreatedAt <= DateTimeOffset.UtcNow);
     }
 
+    /// <summary>
+    /// Garante que uma transação de débito seja instanciada com Guid único, tipo Debit, valor positivo, data e descrição corretos.
+    /// </summary>
     [Fact]
     [Trait("Category", "Unit")]
     public void CreateDebit_WithValidParameters_ShouldInstantiateDebitTransaction()
@@ -48,6 +54,9 @@ public class TransactionTests
         Assert.True(transaction.CreatedAt <= DateTimeOffset.UtcNow);
     }
 
+    /// <summary>
+    /// Garante que a tentativa de criar transação de crédito com valor zero ou negativo dispare ArgumentOutOfRangeException.
+    /// </summary>
     [Theory]
     [InlineData(0)]
     [InlineData(-10.50)]
@@ -65,6 +74,9 @@ public class TransactionTests
         Assert.Equal("amount", ex.ParamName);
     }
 
+    /// <summary>
+    /// Garante que a tentativa de criar transação de débito com valor zero ou negativo dispare ArgumentOutOfRangeException.
+    /// </summary>
     [Theory]
     [InlineData(0)]
     [InlineData(-50.00)]
@@ -82,6 +94,9 @@ public class TransactionTests
         Assert.Equal("amount", ex.ParamName);
     }
 
+    /// <summary>
+    /// Garante que uma transação de crédito com descrição vazia, em branco ou nula seja rejeitada com ArgumentException.
+    /// </summary>
     [Theory]
     [InlineData("")]
     [InlineData("   ")]
@@ -100,6 +115,9 @@ public class TransactionTests
         Assert.Equal("description", ex.ParamName);
     }
 
+    /// <summary>
+    /// Garante que uma transação de débito com descrição vazia, em branco ou nula seja rejeitada com ArgumentException.
+    /// </summary>
     [Theory]
     [InlineData("")]
     [InlineData("   ")]
@@ -118,6 +136,9 @@ public class TransactionTests
         Assert.Equal("description", ex.ParamName);
     }
 
+    /// <summary>
+    /// Garante a sanitização da descrição do lançamento, removendo espaços desnecessários no início e no final com Trim().
+    /// </summary>
     [Fact]
     [Trait("Category", "Unit")]
     public void CreateTransaction_ShouldTrimDescriptionWhitespace()

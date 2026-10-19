@@ -4,6 +4,7 @@ using CashFlow.Transactions.Domain.Entities;
 
 public interface ITransactionRepository
 {
-    Task AddAsync(Transaction transaction, CancellationToken ct = default);
-    Task<Transaction?> GetByIdAsync(Guid id, CancellationToken ct = default);
+    Task AddAsync(Transaction transaction);
+    Task<Transaction?> GetByIdAsync(Guid id);
+    Task<IReadOnlyList<Transaction>> GetByFilterAsync(DateOnly? startDate, DateOnly? endDate);
 }

@@ -7,13 +7,13 @@
     "message": "incomplete: gate INCOMPLETE: score schema falhou; re-run necessário"
   },
   "run": {
-    "id": "run-1792102405448226000",
+    "id": "run-1792360240564386300",
     "profile": "quick",
     "solidify_version": "",
-    "started_at": "2026-10-15T22:13:25Z",
-    "finished_at": "2026-10-15T22:13:35Z",
-    "config_hash": "sha256:56802ecdc2c8526056e74ad8aa258362db6a4bd631b095481f486bffd2b9e7ec",
-    "evidence_hash": "14b193f07213cbd35ae5c80712273f31b18a697e7f6d9d516c9c8ec8690c66a7",
+    "started_at": "2026-10-18T21:50:40Z",
+    "finished_at": "2026-10-18T21:51:30Z",
+    "config_hash": "sha256:3e3051ff55e196a339208f9a9df90bb5fad8d45007179f966e442870ad5cdbc7",
+    "evidence_hash": "9f5dac33e6aca617964d05cf632d88d53c75af82e94b174a3e8b69baceb3d906",
     "project_name": "desafio_tecnico_Verity",
     "project_path": "C:\\DEV\\desafio_tecnico_Verity"
   },
@@ -23,6 +23,38 @@
     "head_ref": "HEAD",
     "head_sha": "",
     "commits": [
+      {
+        "sha": "195e56920e2ebe4f061a9a191e519ee90e0db9bb",
+        "short_sha": "195e569",
+        "subject": "feat(docker): optimize Dockerfiles, add .dockerignore and start-docker automation scripts",
+        "type": "feat",
+        "scope": "docker",
+        "breaking": false
+      },
+      {
+        "sha": "8a75e5cb99c47600bcce7077d9c364334de7a688",
+        "short_sha": "8a75e5c",
+        "subject": "feat(swagger): configure rich Swagger UI and OpenAPI documentation for both services",
+        "type": "feat",
+        "scope": "swagger",
+        "breaking": false
+      },
+      {
+        "sha": "f53032b4ec426940395d9ec351977554e0e2e8bd",
+        "short_sha": "f53032b",
+        "subject": "feat(sonar-solid): resolve sonar issues, apply pure SOLID across Clean Architecture layers with 45 unit tests",
+        "type": "feat",
+        "scope": "sonar-solid",
+        "breaking": false
+      },
+      {
+        "sha": "cae9282c4f3b1c1a0ff636fdd3875c11603df425",
+        "short_sha": "cae9282",
+        "subject": "feat(solidify): clone skill into repo, implement domain unit tests and test results tab in dashboard",
+        "type": "feat",
+        "scope": "solidify",
+        "breaking": false
+      },
       {
         "sha": "87f6a08e0a194fea9b3232fa2df91f49afaa6ed1",
         "short_sha": "87f6a08",
@@ -79,6 +111,3357 @@
     ],
     "changed_files": [
       {
+        "path": ".agents/.skill-lock.json",
+        "status": "modified",
+        "added_lines": 12,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/.dev/go-docker.sh",
+        "status": "added",
+        "added_lines": 9,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/.gitignore",
+        "status": "added",
+        "added_lines": 10,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/.scannerwork/.sonar_lock",
+        "status": "added",
+        "added_lines": 0,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/.scannerwork/report-task.txt",
+        "status": "added",
+        "added_lines": 6,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/.scannerwork/sonar-go-to-slang-darwin-amd64",
+        "status": "added",
+        "binary": true
+      },
+      {
+        "path": ".agents/skills/solidify/.solidify-current",
+        "status": "added",
+        "binary": true
+      },
+      {
+        "path": ".agents/skills/solidify/Dockerfile.solidify",
+        "status": "added",
+        "added_lines": 33,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/Makefile",
+        "status": "added",
+        "added_lines": 89,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/README.md",
+        "status": "added",
+        "added_lines": 142,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/SKILL.md",
+        "status": "added",
+        "added_lines": 183,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/cmd/solidify/main.go",
+        "status": "added",
+        "added_lines": 12,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/docs/ADJUST.md",
+        "status": "added",
+        "added_lines": 1547,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/docs/AGENT_USAGE.md",
+        "status": "added",
+        "added_lines": 60,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/docs/BRANCH-COMPARE.md",
+        "status": "added",
+        "added_lines": 1268,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/docs/CI-CD.md",
+        "status": "added",
+        "added_lines": 28,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/docs/SETUP-LOCAL.md",
+        "status": "added",
+        "added_lines": 227,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/docs/adr/0001-go-version-e-ambiente-de-build.md",
+        "status": "added",
+        "added_lines": 43,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/docs/adr/0002-logging-e-error-codes.md",
+        "status": "added",
+        "added_lines": 57,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/docs/adr/0003-git-via-shell-out.md",
+        "status": "added",
+        "added_lines": 53,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/docs/adr/0004-git-log-via-per-commit-show.md",
+        "status": "added",
+        "added_lines": 61,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/docs/adr/0005-manifest-discovery-bounded.md",
+        "status": "added",
+        "added_lines": 65,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/docs/adr/0006-stack-detector.md",
+        "status": "added",
+        "added_lines": 69,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/docs/adr/0007-component-classifier.md",
+        "status": "added",
+        "added_lines": 65,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/docs/adr/0008-applicability-engine-v1.md",
+        "status": "added",
+        "added_lines": 75,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/docs/adr/0009-migration-detector.md",
+        "status": "added",
+        "added_lines": 68,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/docs/adr/0010-sql-operation-parser.md",
+        "status": "added",
+        "added_lines": 109,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/docs/adr/0011-migration-risk-engine.md",
+        "status": "added",
+        "added_lines": 95,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/docs/adr/0012-env-usage-detector.md",
+        "status": "added",
+        "added_lines": 96,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/docs/adr/0013-env-base-vs-head-comparator.md",
+        "status": "added",
+        "added_lines": 81,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/docs/adr/0014-secret-redaction-framework.md",
+        "status": "added",
+        "added_lines": 104,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/docs/adr/0015-artifact-store-filesystem.md",
+        "status": "added",
+        "added_lines": 94,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/docs/adr/0016-sqlite-storage.md",
+        "status": "added",
+        "added_lines": 67,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/docs/adr/0017-evidence-manifest.md",
+        "status": "added",
+        "added_lines": 54,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/docs/adr/0018-evidence-budget.md",
+        "status": "added",
+        "added_lines": 14,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/docs/adr/0019-sharding-v1.md",
+        "status": "added",
+        "added_lines": 35,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/docs/adr/0020-analyzer-interface.md",
+        "status": "added",
+        "added_lines": 49,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/docs/adr/0021-scheduler-resource-aware.md",
+        "status": "added",
+        "added_lines": 50,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/docs/adr/0022-runner-seguro.md",
+        "status": "added",
+        "added_lines": 50,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/docs/adr/0023-cache-engine.md",
+        "status": "added",
+        "added_lines": 42,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/docs/adr/0024-test-discovery.md",
+        "status": "added",
+        "added_lines": 42,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/docs/adr/0025-test-executor.md",
+        "status": "added",
+        "added_lines": 50,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/docs/adr/0026-coverage-importer.md",
+        "status": "added",
+        "added_lines": 46,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/docs/adr/0027-sonar-config-discovery.md",
+        "status": "added",
+        "added_lines": 45,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/docs/adr/0028-sonar-web-api.md",
+        "status": "added",
+        "added_lines": 47,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/docs/adr/0029-sonar-normalizer.md",
+        "status": "added",
+        "added_lines": 51,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/docs/adr/0030-sonar-scanner-runner.md",
+        "status": "added",
+        "added_lines": 44,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/docs/adr/0031-secret-scanner-adapter.md",
+        "status": "added",
+        "added_lines": 45,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/docs/adr/0032-osv-scanner-adapter.md",
+        "status": "added",
+        "added_lines": 53,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/docs/adr/0033-semgrep-adapter.md",
+        "status": "added",
+        "added_lines": 44,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/docs/adr/0034-security-gate.md",
+        "status": "added",
+        "added_lines": 58,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/docs/adr/0035-zap-adapters.md",
+        "status": "added",
+        "added_lines": 52,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/docs/adr/0036-zap-api-active.md",
+        "status": "added",
+        "added_lines": 57,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/docs/adr/0037-frontend-resolver.md",
+        "status": "added",
+        "added_lines": 62,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/docs/adr/0038-lighthouse-adapter.md",
+        "status": "added",
+        "added_lines": 57,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/docs/adr/0039-lighthouse-pillar-gate.md",
+        "status": "added",
+        "added_lines": 51,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/docs/adr/0040-endpoint-change-detector.md",
+        "status": "added",
+        "added_lines": 58,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/docs/adr/0041-k6-adapter.md",
+        "status": "added",
+        "added_lines": 66,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/docs/adr/0042-load-normalize.md",
+        "status": "added",
+        "added_lines": 63,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/docs/adr/0043-baseline-comparator.md",
+        "status": "added",
+        "added_lines": 69,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/docs/adr/0044-mcp-sdk.md",
+        "status": "added",
+        "added_lines": 45,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/docs/adr/0045-mcp-server.md",
+        "status": "added",
+        "added_lines": 58,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/docs/adr/0046-evidence-tools.md",
+        "status": "added",
+        "added_lines": 62,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/docs/adr/0047-submit-peer-review.md",
+        "status": "added",
+        "added_lines": 67,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/docs/adr/0048-setup-docs.md",
+        "status": "added",
+        "added_lines": 59,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/docs/adr/0049-peer-review-schema.md",
+        "status": "added",
+        "added_lines": 68,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/docs/adr/0050-peer-prompt.md",
+        "status": "added",
+        "added_lines": 63,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/docs/adr/0051-peer-ingest.md",
+        "status": "added",
+        "added_lines": 62,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/docs/adr/0052-ai-provider-interface.md",
+        "status": "added",
+        "added_lines": 69,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/docs/adr/0053-openai-adapter.md",
+        "status": "added",
+        "added_lines": 78,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/docs/adr/0054-9router-preset.md",
+        "status": "added",
+        "added_lines": 80,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/docs/adr/0055-model-discovery.md",
+        "status": "added",
+        "added_lines": 69,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/docs/adr/0056-capability-probe.md",
+        "status": "added",
+        "added_lines": 71,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/docs/adr/0057-model-selector.md",
+        "status": "added",
+        "added_lines": 77,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/docs/adr/0058-peer-request.md",
+        "status": "added",
+        "added_lines": 67,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/docs/adr/0059-peer-executor.md",
+        "status": "added",
+        "added_lines": 81,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/docs/adr/0060-independence-audit.md",
+        "status": "added",
+        "added_lines": 73,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/docs/adr/0061-divergence-engine.md",
+        "status": "added",
+        "added_lines": 65,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/docs/adr/0062-arbiter-prompt-v1.md",
+        "status": "added",
+        "added_lines": 61,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/docs/adr/0063-arbiter-executor.md",
+        "status": "added",
+        "added_lines": 61,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/docs/adr/0064-arbitration-merge.md",
+        "status": "added",
+        "added_lines": 80,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/docs/adr/0065-solid-score-engine.md",
+        "status": "added",
+        "added_lines": 66,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/docs/adr/0066-pillar-score-engine.md",
+        "status": "added",
+        "added_lines": 64,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/docs/adr/0067-release-risk-engine.md",
+        "status": "added",
+        "added_lines": 66,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/docs/adr/0068-confidence-engine.md",
+        "status": "added",
+        "added_lines": 56,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/docs/adr/0069-quality-gate.md",
+        "status": "added",
+        "added_lines": 68,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/docs/adr/0070-release-report-schema-validator.md",
+        "status": "added",
+        "added_lines": 64,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/docs/adr/0071-canonical-report-builder.md",
+        "status": "added",
+        "added_lines": 64,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/docs/adr/0072-artifact-immutability.md",
+        "status": "added",
+        "added_lines": 65,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/docs/adr/0073-executive-summary-model.md",
+        "status": "added",
+        "added_lines": 65,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/docs/adr/0074-dashboard-ui-scaffold.md",
+        "status": "added",
+        "added_lines": 79,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/docs/adr/0075-print-pdf-pipeline.md",
+        "status": "added",
+        "added_lines": 88,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/docs/adr/0076-role-swap-runner.md",
+        "status": "added",
+        "added_lines": 61,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/docs/adr/0077-robustness-comparator.md",
+        "status": "added",
+        "added_lines": 61,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/docs/adr/0078-robustness-report-integration.md",
+        "status": "added",
+        "added_lines": 56,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/docs/adr/0079-benchmark-suite.md",
+        "status": "added",
+        "added_lines": 54,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/docs/adr/0080-memory-profiling.md",
+        "status": "added",
+        "added_lines": 48,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/docs/adr/0081-core-image-budget.md",
+        "status": "added",
+        "added_lines": 53,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/docs/adr/0082-tool-resource-limits.md",
+        "status": "added",
+        "added_lines": 50,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/docs/adr/0083-cache-verification.md",
+        "status": "added",
+        "added_lines": 55,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/docs/adr/0084-path-traversal-tests.md",
+        "status": "added",
+        "added_lines": 53,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/docs/adr/0085-command-injection-tests.md",
+        "status": "added",
+        "added_lines": 47,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/docs/adr/0086-secret-corpus-redaction.md",
+        "status": "added",
+        "added_lines": 51,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/docs/adr/0087-active-target-safety.md",
+        "status": "added",
+        "added_lines": 52,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/docs/adr/0088-fixture-fullstack.md",
+        "status": "added",
+        "added_lines": 40,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/docs/adr/0089-e2e-backend-only.md",
+        "status": "added",
+        "added_lines": 47,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/docs/adr/0090-e2e-frontend-only.md",
+        "status": "added",
+        "added_lines": 43,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/docs/adr/0091-e2e-contractual-peer.md",
+        "status": "added",
+        "added_lines": 37,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/docs/adr/0092-e2e-9router-smoke.md",
+        "status": "added",
+        "added_lines": 41,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/docs/adr/0093-e2e-migration-env-risk.md",
+        "status": "added",
+        "added_lines": 44,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/docs/adr/0094-e2e-hard-gate.md",
+        "status": "added",
+        "added_lines": 41,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/docs/adr/0095-readme-projeto-real.md",
+        "status": "added",
+        "added_lines": 38,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/docs/adr/0096-doctor.md",
+        "status": "added",
+        "added_lines": 42,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/docs/adr/0097-example-reports.md",
+        "status": "added",
+        "added_lines": 47,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/docs/adr/0098-adr-index.md",
+        "status": "added",
+        "added_lines": 34,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/docs/adr/0116-canonical-ai-evaluation-schema.md",
+        "status": "added",
+        "added_lines": 109,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/docs/adr/0117-real-independence-gate.md",
+        "status": "added",
+        "added_lines": 154,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/docs/adr/0118-terminal-mcp-peer-a.md",
+        "status": "added",
+        "added_lines": 147,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/docs/adr/0119-mcp-transport-real.md",
+        "status": "added",
+        "added_lines": 171,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/docs/adr/0120-canonical-payload-v2.md",
+        "status": "added",
+        "added_lines": 179,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/docs/adr/0121-telemetry-v1-cutoff.md",
+        "status": "added",
+        "added_lines": 167,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/docs/adr/0122-peer-reviews-migrate.md",
+        "status": "added",
+        "added_lines": 193,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/docs/adr/0123-peer-review-canary.md",
+        "status": "added",
+        "added_lines": 149,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/docs/adr/0124-doctor-canary-flag.md",
+        "status": "added",
+        "added_lines": 137,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/docs/adr/0125-peer-review-trend-widget.md",
+        "status": "added",
+        "added_lines": 170,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/docs/adr/0126-schema-v3-deferred.md",
+        "status": "added",
+        "added_lines": 103,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/docs/adr/0127-provider-resilience-model-failover.md",
+        "status": "added",
+        "added_lines": 90,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/docs/adr/0128-dashboard-embed-and-report-cli.md",
+        "status": "added",
+        "added_lines": 27,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/docs/adr/0129-evidence-backed-solid-applicability-scoring.md",
+        "status": "added",
+        "added_lines": 198,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/docs/adr/README.md",
+        "status": "added",
+        "added_lines": 3,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/docs/dashboard-gap-mapping.md",
+        "status": "added",
+        "added_lines": 171,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/docs/gate-policy-schema-proposal.md",
+        "status": "added",
+        "added_lines": 293,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/examples/report-fail.json",
+        "status": "added",
+        "added_lines": 61,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/examples/report-pass.json",
+        "status": "added",
+        "added_lines": 55,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/examples/report-warn.json",
+        "status": "added",
+        "added_lines": 56,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/examples/solidify-config.json",
+        "status": "added",
+        "added_lines": 73,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/fixtures/fullstack-sample/.env.example",
+        "status": "added",
+        "added_lines": 5,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/fixtures/fullstack-sample/README.md",
+        "status": "added",
+        "added_lines": 11,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/fixtures/fullstack-sample/db/001_users.sql",
+        "status": "added",
+        "added_lines": 6,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/fixtures/fullstack-sample/package.json",
+        "status": "added",
+        "added_lines": 9,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/fixtures/fullstack-sample/solidai.yaml",
+        "status": "added",
+        "added_lines": 10,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/fixtures/fullstack-sample/src/api/users.go",
+        "status": "added",
+        "added_lines": 18,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/fixtures/fullstack-sample/src/web/index.html",
+        "status": "added",
+        "added_lines": 16,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/fixtures/fullstack-sample/tests/users_test.go",
+        "status": "added",
+        "added_lines": 26,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/go.mod",
+        "status": "added",
+        "added_lines": 22,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/go.sum",
+        "status": "added",
+        "added_lines": 58,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/ai/arbiter/.gitkeep",
+        "status": "added",
+        "added_lines": 0,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/ai/discovery.go",
+        "status": "added",
+        "added_lines": 229,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/ai/discovery/.gitkeep",
+        "status": "added",
+        "added_lines": 0,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/ai/discovery_test.go",
+        "status": "added",
+        "added_lines": 286,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/ai/json_helper.go",
+        "status": "added",
+        "added_lines": 13,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/ai/ninerouter.go",
+        "status": "added",
+        "added_lines": 192,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/ai/ninerouter_test.go",
+        "status": "added",
+        "added_lines": 273,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/ai/openai.go",
+        "status": "added",
+        "added_lines": 251,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/ai/openai_test.go",
+        "status": "added",
+        "added_lines": 352,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/ai/probe.go",
+        "status": "added",
+        "added_lines": 307,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/ai/probe_test.go",
+        "status": "added",
+        "added_lines": 275,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/ai/prompts/.gitkeep",
+        "status": "added",
+        "added_lines": 0,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/ai/provider.go",
+        "status": "added",
+        "added_lines": 248,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/ai/provider/openaicompat/.gitkeep",
+        "status": "added",
+        "added_lines": 0,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/ai/provider_test.go",
+        "status": "added",
+        "added_lines": 278,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/ai/resilience.go",
+        "status": "added",
+        "added_lines": 102,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/ai/resilience_test.go",
+        "status": "added",
+        "added_lines": 29,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/ai/review/.gitkeep",
+        "status": "added",
+        "added_lines": 0,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/ai/selector.go",
+        "status": "added",
+        "added_lines": 311,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/ai/selector_test.go",
+        "status": "added",
+        "added_lines": 307,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/analyzer/analyzer.go",
+        "status": "added",
+        "added_lines": 330,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/analyzer/analyzer_test.go",
+        "status": "added",
+        "added_lines": 311,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/analyzer/lighthouse/.gitkeep",
+        "status": "added",
+        "added_lines": 0,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/analyzer/load/.gitkeep",
+        "status": "added",
+        "added_lines": 0,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/analyzer/runner/.gitkeep",
+        "status": "added",
+        "added_lines": 0,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/analyzer/security/.gitkeep",
+        "status": "added",
+        "added_lines": 0,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/analyzer/sonar/.gitkeep",
+        "status": "added",
+        "added_lines": 0,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/analyzer/tests/.gitkeep",
+        "status": "added",
+        "added_lines": 0,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/app/.gitkeep",
+        "status": "added",
+        "added_lines": 0,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/app/analyzer_coverage.go",
+        "status": "added",
+        "added_lines": 55,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/app/analyzer_jev_regression.go",
+        "status": "added",
+        "added_lines": 151,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/app/analyzer_jev_regression_test.go",
+        "status": "added",
+        "added_lines": 101,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/app/analyzer_k6.go",
+        "status": "added",
+        "added_lines": 204,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/app/analyzer_lighthouse.go",
+        "status": "added",
+        "added_lines": 72,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/app/analyzer_narrative.go",
+        "status": "added",
+        "added_lines": 333,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/app/analyzer_narrative_test.go",
+        "status": "added",
+        "added_lines": 81,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/app/analyzer_security.go",
+        "status": "added",
+        "added_lines": 250,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/app/analyzer_sonar.go",
+        "status": "added",
+        "added_lines": 120,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/app/analyzer_tests.go",
+        "status": "added",
+        "added_lines": 45,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/app/analyzer_tests_test.go",
+        "status": "added",
+        "added_lines": 25,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/app/analyzers.go",
+        "status": "added",
+        "added_lines": 159,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/app/app.go",
+        "status": "added",
+        "added_lines": 287,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/app/app_test.go",
+        "status": "added",
+        "added_lines": 180,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/app/git_wiring.go",
+        "status": "added",
+        "added_lines": 322,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/app/git_wiring_test.go",
+        "status": "added",
+        "added_lines": 121,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/app/init.go",
+        "status": "added",
+        "added_lines": 143,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/app/init_test.go",
+        "status": "added",
+        "added_lines": 247,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/app/mcp.go",
+        "status": "added",
+        "added_lines": 157,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/app/peer_reviews.go",
+        "status": "added",
+        "added_lines": 174,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/app/report.go",
+        "status": "added",
+        "added_lines": 123,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/app/report_test.go",
+        "status": "added",
+        "added_lines": 49,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/app/run.go",
+        "status": "added",
+        "added_lines": 983,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/app/run_test.go",
+        "status": "added",
+        "added_lines": 351,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/app/solid_resolve_test.go",
+        "status": "added",
+        "added_lines": 104,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/applicability/applicability.go",
+        "status": "added",
+        "added_lines": 276,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/applicability/applicability_test.go",
+        "status": "added",
+        "added_lines": 339,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/applicability/enricher.go",
+        "status": "added",
+        "added_lines": 26,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/applicability/jev.go",
+        "status": "added",
+        "added_lines": 236,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/applicability/jev_test.go",
+        "status": "added",
+        "added_lines": 160,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/applicability/llm.go",
+        "status": "added",
+        "added_lines": 513,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/applicability/llm_test.go",
+        "status": "added",
+        "added_lines": 307,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/arbiter/executor.go",
+        "status": "added",
+        "added_lines": 423,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/arbiter/executor_test.go",
+        "status": "added",
+        "added_lines": 449,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/arbiter/merge.go",
+        "status": "added",
+        "added_lines": 351,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/arbiter/merge_test.go",
+        "status": "added",
+        "added_lines": 384,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/arbiter/prompt.go",
+        "status": "added",
+        "added_lines": 284,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/arbiter/prompt_test.go",
+        "status": "added",
+        "added_lines": 280,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/artifacts/artifacts.go",
+        "status": "added",
+        "added_lines": 314,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/artifacts/artifacts_test.go",
+        "status": "added",
+        "added_lines": 456,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/baseline/comparator.go",
+        "status": "added",
+        "added_lines": 359,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/baseline/comparator_test.go",
+        "status": "added",
+        "added_lines": 426,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/bench/bench.go",
+        "status": "added",
+        "added_lines": 109,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/bench/bench_test.go",
+        "status": "added",
+        "added_lines": 56,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/budget/budget.go",
+        "status": "added",
+        "added_lines": 323,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/budget/budget_test.go",
+        "status": "added",
+        "added_lines": 260,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/cache/cache.go",
+        "status": "added",
+        "added_lines": 335,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/cache/cache_test.go",
+        "status": "added",
+        "added_lines": 342,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/cacheverify/cacheverify.go",
+        "status": "added",
+        "added_lines": 203,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/cacheverify/cacheverify_test.go",
+        "status": "added",
+        "added_lines": 134,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/changes/changes.go",
+        "status": "added",
+        "added_lines": 233,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/changes/changes_test.go",
+        "status": "added",
+        "added_lines": 264,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/classification/classify.go",
+        "status": "added",
+        "added_lines": 276,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/classification/classify_test.go",
+        "status": "added",
+        "added_lines": 176,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/component/component.go",
+        "status": "added",
+        "added_lines": 201,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/component/component_test.go",
+        "status": "added",
+        "added_lines": 228,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/confidence/engine.go",
+        "status": "added",
+        "added_lines": 187,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/confidence/engine_test.go",
+        "status": "added",
+        "added_lines": 199,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/config/.gitkeep",
+        "status": "added",
+        "added_lines": 0,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/config/config.go",
+        "status": "added",
+        "added_lines": 583,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/config/config_test.go",
+        "status": "added",
+        "added_lines": 597,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/config/load.go",
+        "status": "added",
+        "added_lines": 284,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/config/override.go",
+        "status": "added",
+        "added_lines": 160,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/config/validate.go",
+        "status": "added",
+        "added_lines": 528,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/dashboard/dashboard.go",
+        "status": "added",
+        "added_lines": 292,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/dashboard/dashboard_test.go",
+        "status": "added",
+        "added_lines": 334,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/detect/envchange/.gitkeep",
+        "status": "added",
+        "added_lines": 0,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/detect/migration/.gitkeep",
+        "status": "added",
+        "added_lines": 0,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/detect/project/.gitkeep",
+        "status": "added",
+        "added_lines": 0,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/detect/route/.gitkeep",
+        "status": "added",
+        "added_lines": 0,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/doctor/doctor.go",
+        "status": "added",
+        "added_lines": 294,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/doctor/doctor_test.go",
+        "status": "added",
+        "added_lines": 99,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/doctor/peer_review_canary.go",
+        "status": "added",
+        "added_lines": 162,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/doctor/peer_review_canary_test.go",
+        "status": "added",
+        "added_lines": 254,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/e2e/backend_only.go",
+        "status": "added",
+        "added_lines": 224,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/e2e/backend_only_test.go",
+        "status": "added",
+        "added_lines": 169,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/e2e/contractual_flow_test.go",
+        "status": "added",
+        "added_lines": 185,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/e2e/hardgate_security_test.go",
+        "status": "added",
+        "added_lines": 50,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/e2e/migenv_risk_test.go",
+        "status": "added",
+        "added_lines": 48,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/envx/detect.go",
+        "status": "added",
+        "added_lines": 227,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/envx/detect_test.go",
+        "status": "added",
+        "added_lines": 425,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/envx/diff.go",
+        "status": "added",
+        "added_lines": 225,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/envx/diff_test.go",
+        "status": "added",
+        "added_lines": 434,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/errs/errs.go",
+        "status": "added",
+        "added_lines": 143,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/errs/errs_test.go",
+        "status": "added",
+        "added_lines": 135,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/errs/public.go",
+        "status": "added",
+        "added_lines": 19,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/errs/public_test.go",
+        "status": "added",
+        "added_lines": 12,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/errs/render.go",
+        "status": "added",
+        "added_lines": 85,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/errs/testdata/error.json",
+        "status": "added",
+        "added_lines": 10,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/errs/testdata/error_human.txt",
+        "status": "added",
+        "added_lines": 4,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/evidence/.gitkeep",
+        "status": "added",
+        "added_lines": 0,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/evidence/evidence.go",
+        "status": "added",
+        "added_lines": 213,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/evidence/evidence_test.go",
+        "status": "added",
+        "added_lines": 261,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/frontend/frontend.go",
+        "status": "added",
+        "added_lines": 227,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/frontend/frontend_test.go",
+        "status": "added",
+        "added_lines": 275,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/gate/.gitkeep",
+        "status": "added",
+        "added_lines": 0,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/gate/gate.go",
+        "status": "added",
+        "added_lines": 370,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/gate/gate_test.go",
+        "status": "added",
+        "added_lines": 274,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/gitx/.gitkeep",
+        "status": "added",
+        "added_lines": 0,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/gitx/changes.go",
+        "status": "added",
+        "added_lines": 295,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/gitx/changes_test.go",
+        "status": "added",
+        "added_lines": 274,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/gitx/diff.go",
+        "status": "added",
+        "added_lines": 353,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/gitx/diff_test.go",
+        "status": "added",
+        "added_lines": 287,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/gitx/log.go",
+        "status": "added",
+        "added_lines": 191,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/gitx/log_test.go",
+        "status": "added",
+        "added_lines": 351,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/gitx/scope.go",
+        "status": "added",
+        "added_lines": 205,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/gitx/scope_test.go",
+        "status": "added",
+        "added_lines": 237,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/hardgate/hardgate.go",
+        "status": "added",
+        "added_lines": 99,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/hardgate/hardgate_test.go",
+        "status": "added",
+        "added_lines": 89,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/imagebudget/imagebudget.go",
+        "status": "added",
+        "added_lines": 174,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/imagebudget/imagebudget_test.go",
+        "status": "added",
+        "added_lines": 108,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/jev/client.go",
+        "status": "added",
+        "added_lines": 342,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/jev/client_test.go",
+        "status": "added",
+        "added_lines": 169,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/jsonx/jsonx.go",
+        "status": "added",
+        "added_lines": 144,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/jsonx/jsonx_test.go",
+        "status": "added",
+        "added_lines": 65,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/k6/k6.go",
+        "status": "added",
+        "added_lines": 404,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/k6/k6_test.go",
+        "status": "added",
+        "added_lines": 358,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/lighthouse/gate.go",
+        "status": "added",
+        "added_lines": 144,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/lighthouse/gate_test.go",
+        "status": "added",
+        "added_lines": 212,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/lighthouse/lighthouse.go",
+        "status": "added",
+        "added_lines": 277,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/lighthouse/lighthouse_test.go",
+        "status": "added",
+        "added_lines": 306,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/limits/limits.go",
+        "status": "added",
+        "added_lines": 139,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/limits/limits_test.go",
+        "status": "added",
+        "added_lines": 115,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/load/normalize.go",
+        "status": "added",
+        "added_lines": 248,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/load/normalize_test.go",
+        "status": "added",
+        "added_lines": 315,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/logging/logging.go",
+        "status": "added",
+        "added_lines": 139,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/logging/logging_test.go",
+        "status": "added",
+        "added_lines": 146,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/manifests/discover.go",
+        "status": "added",
+        "added_lines": 216,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/manifests/discover_test.go",
+        "status": "added",
+        "added_lines": 305,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/mcp/mcp.go",
+        "status": "added",
+        "added_lines": 72,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/mcp/mcp_test.go",
+        "status": "added",
+        "added_lines": 51,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/mcpserver/.gitkeep",
+        "status": "added",
+        "added_lines": 0,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/mcpserver/evidence.go",
+        "status": "added",
+        "added_lines": 293,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/mcpserver/evidence_test.go",
+        "status": "added",
+        "added_lines": 183,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/mcpserver/metrics.go",
+        "status": "added",
+        "added_lines": 193,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/mcpserver/metrics_test.go",
+        "status": "added",
+        "added_lines": 209,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/mcpserver/migrate.go",
+        "status": "added",
+        "added_lines": 95,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/mcpserver/migrate_test.go",
+        "status": "added",
+        "added_lines": 244,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/mcpserver/peer.go",
+        "status": "added",
+        "added_lines": 369,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/mcpserver/peer_ingest.go",
+        "status": "added",
+        "added_lines": 286,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/mcpserver/peer_ingest_test.go",
+        "status": "added",
+        "added_lines": 266,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/mcpserver/peer_test.go",
+        "status": "added",
+        "added_lines": 315,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/mcpserver/prompt.go",
+        "status": "added",
+        "added_lines": 144,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/mcpserver/prompt_test.go",
+        "status": "added",
+        "added_lines": 232,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/mcpserver/schema.go",
+        "status": "added",
+        "added_lines": 302,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/mcpserver/schema_test.go",
+        "status": "added",
+        "added_lines": 235,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/mcpserver/server.go",
+        "status": "added",
+        "added_lines": 191,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/mcpserver/server_test.go",
+        "status": "added",
+        "added_lines": 96,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/mcpserver/setup.go",
+        "status": "added",
+        "added_lines": 253,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/mcpserver/setup_test.go",
+        "status": "added",
+        "added_lines": 169,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/mcpserver/trend.go",
+        "status": "added",
+        "added_lines": 74,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/mcpserver/trend_test.go",
+        "status": "added",
+        "added_lines": 92,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/migenv/migenv.go",
+        "status": "added",
+        "added_lines": 116,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/migenv/migenv_test.go",
+        "status": "added",
+        "added_lines": 92,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/migrations/detect.go",
+        "status": "added",
+        "added_lines": 415,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/migrations/detect_test.go",
+        "status": "added",
+        "added_lines": 327,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/migrations/parser.go",
+        "status": "added",
+        "added_lines": 306,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/migrations/parser_test.go",
+        "status": "added",
+        "added_lines": 478,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/migrations/risk.go",
+        "status": "added",
+        "added_lines": 331,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/migrations/risk_test.go",
+        "status": "added",
+        "added_lines": 447,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/ninesmoke/ninesmoke.go",
+        "status": "added",
+        "added_lines": 125,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/ninesmoke/ninesmoke_test.go",
+        "status": "added",
+        "added_lines": 101,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/osv/osv.go",
+        "status": "added",
+        "added_lines": 380,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/osv/osv_test.go",
+        "status": "added",
+        "added_lines": 357,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/pathguard/pathguard.go",
+        "status": "added",
+        "added_lines": 98,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/pathguard/pathguard_test.go",
+        "status": "added",
+        "added_lines": 107,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/peer/aggregate.go",
+        "status": "added",
+        "added_lines": 126,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/peer/aggregate_test.go",
+        "status": "added",
+        "added_lines": 238,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/peer/audit.go",
+        "status": "added",
+        "added_lines": 248,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/peer/audit_test.go",
+        "status": "added",
+        "added_lines": 316,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/peer/divergence.go",
+        "status": "added",
+        "added_lines": 300,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/peer/divergence_test.go",
+        "status": "added",
+        "added_lines": 289,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/peer/executor.go",
+        "status": "added",
+        "added_lines": 453,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/peer/executor_test.go",
+        "status": "added",
+        "added_lines": 172,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/peer/heuristic.go",
+        "status": "added",
+        "added_lines": 541,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/peer/heuristic_test.go",
+        "status": "added",
+        "added_lines": 210,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/peer/peer_a.go",
+        "status": "added",
+        "added_lines": 244,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/peer/peer_a_test.go",
+        "status": "added",
+        "added_lines": 271,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/peer/peer_review_rubric.md",
+        "status": "added",
+        "added_lines": 51,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/peer/prompt_rubric.go",
+        "status": "added",
+        "added_lines": 18,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/peer/request.go",
+        "status": "added",
+        "added_lines": 279,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/peer/request_test.go",
+        "status": "added",
+        "added_lines": 278,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/peer/robustness.go",
+        "status": "added",
+        "added_lines": 236,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/peer/robustness_test.go",
+        "status": "added",
+        "added_lines": 204,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/peer/roleswap.go",
+        "status": "added",
+        "added_lines": 199,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/peer/roleswap_test.go",
+        "status": "added",
+        "added_lines": 220,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/peer/schema.go",
+        "status": "added",
+        "added_lines": 115,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/print/browser.go",
+        "status": "added",
+        "added_lines": 91,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/print/pdf.go",
+        "status": "added",
+        "added_lines": 162,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/print/print_test.go",
+        "status": "added",
+        "added_lines": 207,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/print/validate.go",
+        "status": "added",
+        "added_lines": 224,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/prof/prof.go",
+        "status": "added",
+        "added_lines": 160,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/prof/prof_test.go",
+        "status": "added",
+        "added_lines": 94,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/prof/render.go",
+        "status": "added",
+        "added_lines": 10,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/redact/redact.go",
+        "status": "added",
+        "added_lines": 140,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/redact/redact_test.go",
+        "status": "added",
+        "added_lines": 412,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/redaction/.gitkeep",
+        "status": "added",
+        "added_lines": 0,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/report/builder.go",
+        "status": "added",
+        "added_lines": 523,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/report/builder_test.go",
+        "status": "added",
+        "added_lines": 203,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/report/canonical/.gitkeep",
+        "status": "added",
+        "added_lines": 0,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/report/html/.gitkeep",
+        "status": "added",
+        "added_lines": 0,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/report/jsonhelpers.go",
+        "status": "added",
+        "added_lines": 6,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/report/pdf/.gitkeep",
+        "status": "added",
+        "added_lines": 0,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/report/robustness.go",
+        "status": "added",
+        "added_lines": 147,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/report/robustness_test.go",
+        "status": "added",
+        "added_lines": 110,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/report/schema.go",
+        "status": "added",
+        "added_lines": 264,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/report/schema_test.go",
+        "status": "added",
+        "added_lines": 272,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/report/store.go",
+        "status": "added",
+        "added_lines": 207,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/report/store_test.go",
+        "status": "added",
+        "added_lines": 261,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/report/summary.go",
+        "status": "added",
+        "added_lines": 236,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/report/summary_test.go",
+        "status": "added",
+        "added_lines": 264,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/risk/engine.go",
+        "status": "added",
+        "added_lines": 252,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/risk/engine_test.go",
+        "status": "added",
+        "added_lines": 278,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/runner/runner.go",
+        "status": "added",
+        "added_lines": 325,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/runner/runner_test.go",
+        "status": "added",
+        "added_lines": 412,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/runtimehooks/.gitkeep",
+        "status": "added",
+        "added_lines": 0,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/scheduler/.gitkeep",
+        "status": "added",
+        "added_lines": 0,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/scheduler/scheduler.go",
+        "status": "added",
+        "added_lines": 270,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/scheduler/scheduler_test.go",
+        "status": "added",
+        "added_lines": 285,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/scope/.gitkeep",
+        "status": "added",
+        "added_lines": 0,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/score/.gitkeep",
+        "status": "added",
+        "added_lines": 0,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/score/pillar.go",
+        "status": "added",
+        "added_lines": 178,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/score/pillar_test.go",
+        "status": "added",
+        "added_lines": 206,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/score/solid.go",
+        "status": "added",
+        "added_lines": 250,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/score/solid_test.go",
+        "status": "added",
+        "added_lines": 296,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/secretcorpus/secretcorpus.go",
+        "status": "added",
+        "added_lines": 152,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/secretcorpus/secretcorpus_test.go",
+        "status": "added",
+        "added_lines": 91,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/secrets/secrets.go",
+        "status": "added",
+        "added_lines": 212,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/secrets/secrets_test.go",
+        "status": "added",
+        "added_lines": 258,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/security/security.go",
+        "status": "added",
+        "added_lines": 231,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/security/security_test.go",
+        "status": "added",
+        "added_lines": 298,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/semgrep/semgrep.go",
+        "status": "added",
+        "added_lines": 261,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/semgrep/semgrep_test.go",
+        "status": "added",
+        "added_lines": 315,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/sharding/sharding.go",
+        "status": "added",
+        "added_lines": 160,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/sharding/sharding_test.go",
+        "status": "added",
+        "added_lines": 255,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/shellguard/shellguard.go",
+        "status": "added",
+        "added_lines": 119,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/shellguard/shellguard_test.go",
+        "status": "added",
+        "added_lines": 134,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/sonar/client.go",
+        "status": "added",
+        "added_lines": 305,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/sonar/client_test.go",
+        "status": "added",
+        "added_lines": 412,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/sonar/discover.go",
+        "status": "added",
+        "added_lines": 299,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/sonar/discover_test.go",
+        "status": "added",
+        "added_lines": 341,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/sonar/normalize.go",
+        "status": "added",
+        "added_lines": 343,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/sonar/normalize_test.go",
+        "status": "added",
+        "added_lines": 360,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/sonar/scanner.go",
+        "status": "added",
+        "added_lines": 215,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/sonar/scanner_test.go",
+        "status": "added",
+        "added_lines": 254,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/stack/stack.go",
+        "status": "added",
+        "added_lines": 141,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/stack/stack_test.go",
+        "status": "added",
+        "added_lines": 227,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/storage/artifacts/.gitkeep",
+        "status": "added",
+        "added_lines": 0,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/storage/sqlite/.gitkeep",
+        "status": "added",
+        "added_lines": 0,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/storage/storage.go",
+        "status": "added",
+        "added_lines": 793,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/storage/storage_test.go",
+        "status": "added",
+        "added_lines": 511,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/targetguard/targetguard.go",
+        "status": "added",
+        "added_lines": 95,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/targetguard/targetguard_test.go",
+        "status": "added",
+        "added_lines": 96,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/testexec/discover.go",
+        "status": "added",
+        "added_lines": 329,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/testexec/discover_test.go",
+        "status": "added",
+        "added_lines": 358,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/testexec/executor.go",
+        "status": "added",
+        "added_lines": 301,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/testexec/executor_test.go",
+        "status": "added",
+        "added_lines": 312,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/version/.gitkeep",
+        "status": "added",
+        "added_lines": 0,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/version/version.go",
+        "status": "added",
+        "added_lines": 36,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/version/version_bench_test.go",
+        "status": "added",
+        "added_lines": 18,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/zap/active.go",
+        "status": "added",
+        "added_lines": 307,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/zap/active_test.go",
+        "status": "added",
+        "added_lines": 368,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/zap/zap.go",
+        "status": "added",
+        "added_lines": 286,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/internal/zap/zap_test.go",
+        "status": "added",
+        "added_lines": 308,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/prompts/arbiter.md",
+        "status": "added",
+        "added_lines": 39,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/prompts/peer-review.md",
+        "status": "added",
+        "added_lines": 51,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/schemas/arbiter.schema.json",
+        "status": "added",
+        "added_lines": 59,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/schemas/peer-review.schema.json",
+        "status": "added",
+        "added_lines": 117,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/schemas/release-report.schema.json",
+        "status": "added",
+        "added_lines": 1095,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/schemas/solidify-config.schema.json",
+        "status": "added",
+        "added_lines": 24,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/scripts/verify.sh",
+        "status": "added",
+        "added_lines": 70,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/solidify.json",
+        "old_path": "solidify.json",
+        "status": "copied",
+        "added_lines": 29,
+        "deleted_lines": 27,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/spec/AGENT_HANDOFF.md",
+        "status": "added",
+        "added_lines": 184,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/spec/ARCHITECTURE.md",
+        "status": "added",
+        "added_lines": 1679,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/spec/CONTRACTS.md",
+        "status": "added",
+        "added_lines": 854,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/spec/README.md",
+        "status": "added",
+        "added_lines": 157,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/spec/REPORT_SPEC.md",
+        "status": "added",
+        "added_lines": 555,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/spec/SOLIDIFY_FULL_SPEC.md",
+        "status": "added",
+        "added_lines": 4212,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/spec/TASKS.md",
+        "status": "added",
+        "added_lines": 741,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/spec/prompts/arbiter.md",
+        "status": "added",
+        "added_lines": 39,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/spec/prompts/peer-review.md",
+        "status": "added",
+        "added_lines": 51,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/spec/schemas/arbiter.schema.json",
+        "status": "added",
+        "added_lines": 59,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/spec/schemas/peer-review.schema.json",
+        "status": "added",
+        "added_lines": 117,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/spec/schemas/release-report.schema.json",
+        "status": "added",
+        "added_lines": 1072,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/spec/schemas/solidify-config.schema.json",
+        "status": "added",
+        "added_lines": 24,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/spec/solidify.example.json",
+        "old_path": "solidify.json",
+        "status": "copied",
+        "added_lines": 20,
+        "deleted_lines": 60,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/testdata/fixtures/provider/canonical_response.json",
+        "status": "added",
+        "added_lines": 40,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/testdata/fixtures/provider/claude_quota_exceeded.json",
+        "status": "added",
+        "added_lines": 6,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/testdata/fixtures/provider/gemini_credits_depleted.json",
+        "status": "added",
+        "added_lines": 6,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/testdata/fixtures/provider/openai_invalid_token.json",
+        "status": "added",
+        "added_lines": 8,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/testdata/validation_plan_sai_127.md",
+        "status": "added",
+        "added_lines": 32,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/web/embed.go",
+        "status": "added",
+        "added_lines": 9,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/web/public/.gitkeep",
+        "status": "added",
+        "added_lines": 0,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/web/public/assets/app.css",
+        "status": "added",
+        "added_lines": 313,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/web/public/assets/mockup-run.html",
+        "status": "added",
+        "added_lines": 394,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/web/public/assets/tokens.css",
+        "status": "added",
+        "added_lines": 111,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/web/public/index.html",
+        "status": "added",
+        "added_lines": 43,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/web/src/.gitkeep",
+        "status": "added",
+        "added_lines": 0,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/web/src/dom.js",
+        "status": "added",
+        "added_lines": 115,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/web/src/hydrate.js",
+        "status": "added",
+        "added_lines": 573,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/web/src/main.js",
+        "status": "added",
+        "added_lines": 648,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/web/src/mapping.js",
+        "status": "added",
+        "added_lines": 382,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".agents/skills/solidify/web/src/views/release.js",
+        "status": "added",
+        "added_lines": 231,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": ".dockerignore",
+        "status": "added",
+        "added_lines": 17,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
         "path": ".gitignore",
         "status": "modified",
         "added_lines": 8,
@@ -88,7 +3471,7 @@
       {
         "path": ".solidify/out/release-report.json",
         "status": "modified",
-        "added_lines": 2079,
+        "added_lines": 2155,
         "deleted_lines": 24,
         "binary": false
       },
@@ -102,7 +3485,7 @@
       {
         "path": "README.md",
         "status": "added",
-        "added_lines": 276,
+        "added_lines": 328,
         "deleted_lines": 0,
         "binary": false
       },
@@ -121,23 +3504,51 @@
         "binary": false
       },
       {
+        "path": "scripts/check-sonar-issues.ps1",
+        "status": "added",
+        "added_lines": 27,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": "scripts/generate-solidify-report.ps1",
+        "status": "added",
+        "added_lines": 971,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
         "path": "scripts/open-browser.ps1",
         "status": "added",
-        "added_lines": 46,
+        "added_lines": 76,
         "deleted_lines": 0,
         "binary": false
       },
       {
         "path": "scripts/run-sonar.ps1",
         "status": "modified",
-        "added_lines": 14,
-        "deleted_lines": 3,
+        "added_lines": 18,
+        "deleted_lines": 5,
         "binary": false
       },
       {
         "path": "scripts/solidify-audit.ps1",
         "status": "modified",
-        "added_lines": 11,
+        "added_lines": 21,
+        "deleted_lines": 2,
+        "binary": false
+      },
+      {
+        "path": "scripts/start-docker.cmd",
+        "status": "added",
+        "added_lines": 2,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": "scripts/start-docker.ps1",
+        "status": "added",
+        "added_lines": 69,
         "deleted_lines": 0,
         "binary": false
       },
@@ -165,7 +3576,7 @@
       {
         "path": "src/Consolidation/CashFlow.Consolidation.Api/CashFlow.Consolidation.Api.csproj",
         "status": "added",
-        "added_lines": 18,
+        "added_lines": 21,
         "deleted_lines": 0,
         "binary": false
       },
@@ -179,21 +3590,21 @@
       {
         "path": "src/Consolidation/CashFlow.Consolidation.Api/Dockerfile",
         "status": "added",
-        "added_lines": 35,
+        "added_lines": 31,
         "deleted_lines": 0,
         "binary": false
       },
       {
         "path": "src/Consolidation/CashFlow.Consolidation.Api/Program.cs",
         "status": "added",
-        "added_lines": 41,
+        "added_lines": 146,
         "deleted_lines": 0,
         "binary": false
       },
       {
         "path": "src/Consolidation/CashFlow.Consolidation.Api/Properties/launchSettings.json",
         "status": "added",
-        "added_lines": 23,
+        "added_lines": 14,
         "deleted_lines": 0,
         "binary": false
       },
@@ -214,7 +3625,21 @@
       {
         "path": "src/Consolidation/CashFlow.Consolidation.Application/CashFlow.Consolidation.Application.csproj",
         "status": "added",
-        "added_lines": 14,
+        "added_lines": 16,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": "src/Consolidation/CashFlow.Consolidation.Application/DTOs/DailyBalanceDto.cs",
+        "status": "added",
+        "added_lines": 19,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": "src/Consolidation/CashFlow.Consolidation.Application/Services/DailyBalanceService.cs",
+        "status": "added",
+        "added_lines": 65,
         "deleted_lines": 0,
         "binary": false
       },
@@ -226,30 +3651,58 @@
         "binary": false
       },
       {
-        "path": "src/Consolidation/CashFlow.Consolidation.Infrastructure/CashFlow.Consolidation.Infrastructure.csproj",
+        "path": "src/Consolidation/CashFlow.Consolidation.Domain/Entities/DailyBalance.cs",
         "status": "added",
-        "added_lines": 14,
+        "added_lines": 45,
         "deleted_lines": 0,
         "binary": false
       },
       {
-        "path": "src/Shared/CashFlow.Shared.Contracts/CashFlow.Shared.Contracts.csproj",
+        "path": "src/Consolidation/CashFlow.Consolidation.Domain/Repositories/IDailyBalanceRepository.cs",
         "status": "added",
         "added_lines": 9,
         "deleted_lines": 0,
         "binary": false
       },
       {
+        "path": "src/Consolidation/CashFlow.Consolidation.Infrastructure/CashFlow.Consolidation.Infrastructure.csproj",
+        "status": "added",
+        "added_lines": 18,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": "src/Consolidation/CashFlow.Consolidation.Infrastructure/Data/ConsolidationDbContext.cs",
+        "status": "added",
+        "added_lines": 30,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": "src/Consolidation/CashFlow.Consolidation.Infrastructure/Repositories/DailyBalanceRepository.cs",
+        "status": "added",
+        "added_lines": 38,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": "src/Shared/CashFlow.Shared.Contracts/CashFlow.Shared.Contracts.csproj",
+        "status": "added",
+        "added_lines": 11,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
         "path": "src/Shared/CashFlow.Shared.Contracts/Events/TransactionRegisteredEvent.cs",
         "status": "added",
-        "added_lines": 16,
+        "added_lines": 31,
         "deleted_lines": 0,
         "binary": false
       },
       {
         "path": "src/Transactions/CashFlow.Transactions.Api/CashFlow.Transactions.Api.csproj",
         "status": "added",
-        "added_lines": 18,
+        "added_lines": 21,
         "deleted_lines": 0,
         "binary": false
       },
@@ -263,21 +3716,21 @@
       {
         "path": "src/Transactions/CashFlow.Transactions.Api/Dockerfile",
         "status": "added",
-        "added_lines": 35,
+        "added_lines": 31,
         "deleted_lines": 0,
         "binary": false
       },
       {
         "path": "src/Transactions/CashFlow.Transactions.Api/Program.cs",
         "status": "added",
-        "added_lines": 41,
+        "added_lines": 116,
         "deleted_lines": 0,
         "binary": false
       },
       {
         "path": "src/Transactions/CashFlow.Transactions.Api/Properties/launchSettings.json",
         "status": "added",
-        "added_lines": 23,
+        "added_lines": 14,
         "deleted_lines": 0,
         "binary": false
       },
@@ -298,12 +3751,61 @@
       {
         "path": "src/Transactions/CashFlow.Transactions.Application/CashFlow.Transactions.Application.csproj",
         "status": "added",
-        "added_lines": 14,
+        "added_lines": 20,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": "src/Transactions/CashFlow.Transactions.Application/Commands/RegisterTransactionCommand.cs",
+        "status": "added",
+        "added_lines": 29,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": "src/Transactions/CashFlow.Transactions.Application/Handlers/RegisterTransactionCommandHandler.cs",
+        "status": "added",
+        "added_lines": 72,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": "src/Transactions/CashFlow.Transactions.Application/Validators/RegisterTransactionCommandValidator.cs",
+        "status": "added",
+        "added_lines": 28,
         "deleted_lines": 0,
         "binary": false
       },
       {
         "path": "src/Transactions/CashFlow.Transactions.Domain/CashFlow.Transactions.Domain.csproj",
+        "status": "added",
+        "added_lines": 13,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": "src/Transactions/CashFlow.Transactions.Domain/Entities/OutboxMessage.cs",
+        "status": "added",
+        "added_lines": 12,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": "src/Transactions/CashFlow.Transactions.Domain/Entities/Transaction.cs",
+        "status": "added",
+        "added_lines": 53,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": "src/Transactions/CashFlow.Transactions.Domain/Repositories/IOutboxRepository.cs",
+        "status": "added",
+        "added_lines": 10,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": "src/Transactions/CashFlow.Transactions.Domain/Repositories/ITransactionRepository.cs",
         "status": "added",
         "added_lines": 9,
         "deleted_lines": 0,
@@ -312,7 +3814,28 @@
       {
         "path": "src/Transactions/CashFlow.Transactions.Infrastructure/CashFlow.Transactions.Infrastructure.csproj",
         "status": "added",
-        "added_lines": 14,
+        "added_lines": 18,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": "src/Transactions/CashFlow.Transactions.Infrastructure/Data/TransactionsDbContext.cs",
+        "status": "added",
+        "added_lines": 41,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": "src/Transactions/CashFlow.Transactions.Infrastructure/Repositories/OutboxRepository.cs",
+        "status": "added",
+        "added_lines": 41,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": "src/Transactions/CashFlow.Transactions.Infrastructure/Repositories/TransactionRepository.cs",
+        "status": "added",
+        "added_lines": 29,
         "deleted_lines": 0,
         "binary": false
       },
@@ -331,9 +3854,51 @@
         "binary": false
       },
       {
+        "path": "tests/CashFlow.UnitTests/Consolidation/Application/DailyBalanceServiceTests.cs",
+        "status": "added",
+        "added_lines": 121,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": "tests/CashFlow.UnitTests/Consolidation/Domain/DailyBalanceTests.cs",
+        "status": "added",
+        "added_lines": 142,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
         "path": "tests/CashFlow.UnitTests/Shared/TransactionRegisteredEventTests.cs",
         "status": "added",
         "added_lines": 44,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": "tests/CashFlow.UnitTests/Transactions/Application/RegisterTransactionCommandHandlerTests.cs",
+        "status": "added",
+        "added_lines": 153,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": "tests/CashFlow.UnitTests/Transactions/Application/RegisterTransactionCommandValidatorTests.cs",
+        "status": "added",
+        "added_lines": 137,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": "tests/CashFlow.UnitTests/Transactions/Domain/OutboxMessageTests.cs",
+        "status": "added",
+        "added_lines": 46,
+        "deleted_lines": 0,
+        "binary": false
+      },
+      {
+        "path": "tests/CashFlow.UnitTests/Transactions/Domain/TransactionTests.cs",
+        "status": "added",
+        "added_lines": 134,
         "deleted_lines": 0,
         "binary": false
       }
@@ -341,30 +3906,39 @@
   },
   "components": [],
   "release_notes": {
-    "executive_summary": "4 feature(s), 1 fix(es), 0 migration(s) nesta release.",
+    "executive_summary": "8 feature(s), 1 fix(es), 0 migration(s) nesta release.",
     "groups": [
-      {
-        "type": "docs",
-        "items": [
-          {
-            "title": "docs: add open-browser script and standalone Solidify HTML dashboard",
-            "type": "docs",
-            "evidence_refs": [
-              "87f6a08"
-            ]
-          },
-          {
-            "title": "docs: add comprehensive README.md with links to Archify and Solidify",
-            "type": "docs",
-            "evidence_refs": [
-              "d445830"
-            ]
-          }
-        ]
-      },
       {
         "type": "feat",
         "items": [
+          {
+            "title": "feat(docker): optimize Dockerfiles, add .dockerignore and start-docker automation scripts",
+            "type": "feat",
+            "evidence_refs": [
+              "195e569"
+            ]
+          },
+          {
+            "title": "feat(swagger): configure rich Swagger UI and OpenAPI documentation for both services",
+            "type": "feat",
+            "evidence_refs": [
+              "8a75e5c"
+            ]
+          },
+          {
+            "title": "feat(sonar-solid): resolve sonar issues, apply pure SOLID across Clean Architecture layers with 45 unit tests",
+            "type": "feat",
+            "evidence_refs": [
+              "f53032b"
+            ]
+          },
+          {
+            "title": "feat(solidify): clone skill into repo, implement domain unit tests and test results tab in dashboard",
+            "type": "feat",
+            "evidence_refs": [
+              "cae9282"
+            ]
+          },
           {
             "title": "feat(solidify): integrate SonarQube measures and automated audit pipeline",
             "type": "feat",
@@ -396,6 +3970,25 @@
         ]
       },
       {
+        "type": "docs",
+        "items": [
+          {
+            "title": "docs: add open-browser script and standalone Solidify HTML dashboard",
+            "type": "docs",
+            "evidence_refs": [
+              "87f6a08"
+            ]
+          },
+          {
+            "title": "docs: add comprehensive README.md with links to Archify and Solidify",
+            "type": "docs",
+            "evidence_refs": [
+              "d445830"
+            ]
+          }
+        ]
+      },
+      {
         "type": "fix",
         "items": [
           {
@@ -411,14 +4004,85 @@
     "breaking_changes": []
   },
   "migrations": [],
-  "env_changes": [],
+  "env_changes": [
+    {
+      "name": "DB_HOST",
+      "status": "added",
+      "components": [
+        ".agents/skills/solidify/internal/envx/detect_test.go"
+      ],
+      "has_default": true,
+      "documented": true,
+      "likely_secret": false,
+      "references": [
+        {
+          "file": ".agents/skills/solidify/internal/envx/detect_test.go"
+        }
+      ],
+      "deployment_action": ""
+    },
+    {
+      "name": "DB_PORT",
+      "status": "added",
+      "components": null,
+      "has_default": true,
+      "documented": true,
+      "likely_secret": false,
+      "references": null,
+      "deployment_action": ""
+    },
+    {
+      "name": "DB_USER",
+      "status": "added",
+      "components": null,
+      "has_default": true,
+      "documented": true,
+      "likely_secret": false,
+      "references": null,
+      "deployment_action": ""
+    },
+    {
+      "name": "DB_PASSWORD",
+      "status": "added",
+      "components": [
+        ".agents/skills/solidify/docs/adr/0086-secret-corpus-redaction.md",
+        ".agents/skills/solidify/internal/envx/diff_test.go",
+        ".agents/skills/solidify/internal/secretcorpus/secretcorpus.go"
+      ],
+      "has_default": true,
+      "documented": true,
+      "likely_secret": true,
+      "references": [
+        {
+          "file": ".agents/skills/solidify/docs/adr/0086-secret-corpus-redaction.md"
+        },
+        {
+          "file": ".agents/skills/solidify/internal/envx/diff_test.go"
+        },
+        {
+          "file": ".agents/skills/solidify/internal/secretcorpus/secretcorpus.go"
+        }
+      ],
+      "deployment_action": ""
+    },
+    {
+      "name": "API_PORT",
+      "status": "added",
+      "components": null,
+      "has_default": true,
+      "documented": true,
+      "likely_secret": false,
+      "references": null,
+      "deployment_action": ""
+    }
+  ],
   "analyzers": [
     {
       "id": "tests",
       "version": "",
       "applicability": "APPLICABLE",
       "execution_status": "failed",
-      "duration_ms": 6616,
+      "duration_ms": 5980,
       "findings": [],
       "metrics": {
         "commands": [
@@ -2068,19 +5732,6 @@
     {
       "id": "lighthouse",
       "version": "",
-      "applicability": "NOT_APPLICABLE",
-      "applicability_source": "heuristic",
-      "execution_status": "skipped:not_applicable",
-      "duration_ms": 0,
-      "findings": [],
-      "metrics": {},
-      "limitations": [
-        "componente frontend-web ausente"
-      ]
-    },
-    {
-      "id": "security",
-      "version": "",
       "applicability": "CONDITIONAL",
       "applicability_source": "heuristic",
       "execution_status": "skipped:not_configured",
@@ -2088,21 +5739,264 @@
       "findings": [],
       "metrics": {},
       "limitations": [
-        "nenhum componente sensível; análise reduzida"
+        "frontend-web presente, mas target Lighthouse não configurado"
       ]
+    },
+    {
+      "id": "security",
+      "version": "",
+      "applicability": "APPLICABLE",
+      "execution_status": "completed",
+      "score": 0,
+      "duration_ms": 0,
+      "findings": [
+        {
+          "file_path": ".agents/skills/solidify/internal/config/config_test.go",
+          "line": 154,
+          "message": "Detected a Generic API Key, potentially exposing access to various services and sensitive operations.",
+          "rule": "generic-api-key",
+          "severity": "critical",
+          "source": "secrets"
+        },
+        {
+          "file_path": ".agents/skills/solidify/internal/config/config_test.go",
+          "line": 537,
+          "message": "Detected a Generic API Key, potentially exposing access to various services and sensitive operations.",
+          "rule": "generic-api-key",
+          "severity": "critical",
+          "source": "secrets"
+        },
+        {
+          "file_path": ".agents/skills/solidify/internal/redact/redact_test.go",
+          "line": 37,
+          "message": "Uncovered a GitHub Personal Access Token, potentially leading to unauthorized repository access and sensitive content exposure.",
+          "rule": "github-pat",
+          "severity": "critical",
+          "source": "secrets"
+        },
+        {
+          "file_path": ".agents/skills/solidify/internal/redact/redact_test.go",
+          "line": 49,
+          "message": "Uncovered a GitHub Personal Access Token, potentially leading to unauthorized repository access and sensitive content exposure.",
+          "rule": "github-pat",
+          "severity": "critical",
+          "source": "secrets"
+        },
+        {
+          "file_path": ".agents/skills/solidify/internal/redact/redact_test.go",
+          "line": 85,
+          "message": "Uncovered a JSON Web Token, which may lead to unauthorized access to web applications and sensitive user data.",
+          "rule": "jwt",
+          "severity": "critical",
+          "source": "secrets"
+        },
+        {
+          "file_path": ".agents/skills/solidify/internal/redact/redact_test.go",
+          "line": 98,
+          "message": "Uncovered a GitHub Personal Access Token, potentially leading to unauthorized repository access and sensitive content exposure.",
+          "rule": "github-pat",
+          "severity": "critical",
+          "source": "secrets"
+        },
+        {
+          "file_path": ".agents/skills/solidify/internal/secretcorpus/secretcorpus.go",
+          "line": 42,
+          "message": "Uncovered a JSON Web Token, which may lead to unauthorized access to web applications and sensitive user data.",
+          "rule": "jwt",
+          "severity": "critical",
+          "source": "secrets"
+        },
+        {
+          "file_path": ".agents/skills/solidify/internal/secretcorpus/secretcorpus.go",
+          "line": 58,
+          "message": "Detected a Generic API Key, potentially exposing access to various services and sensitive operations.",
+          "rule": "generic-api-key",
+          "severity": "critical",
+          "source": "secrets"
+        },
+        {
+          "file_path": ".sonarqube/out/ScannerEngineInput.json",
+          "line": 64,
+          "message": "Detected a Generic API Key, potentially exposing access to various services and sensitive operations.",
+          "rule": "generic-api-key",
+          "severity": "critical",
+          "source": "secrets"
+        },
+        {
+          "file_path": ".sonarqube/out/ScannerEngineInput.json",
+          "line": 104,
+          "message": "Detected a Generic API Key, potentially exposing access to various services and sensitive operations.",
+          "rule": "generic-api-key",
+          "severity": "critical",
+          "source": "secrets"
+        },
+        {
+          "file_path": ".sonarqube/out/ScannerEngineInput.json",
+          "line": 148,
+          "message": "Detected a Generic API Key, potentially exposing access to various services and sensitive operations.",
+          "rule": "generic-api-key",
+          "severity": "critical",
+          "source": "secrets"
+        },
+        {
+          "file_path": ".sonarqube/out/ScannerEngineInput.json",
+          "line": 184,
+          "message": "Detected a Generic API Key, potentially exposing access to various services and sensitive operations.",
+          "rule": "generic-api-key",
+          "severity": "critical",
+          "source": "secrets"
+        },
+        {
+          "file_path": ".sonarqube/out/ScannerEngineInput.json",
+          "line": 224,
+          "message": "Detected a Generic API Key, potentially exposing access to various services and sensitive operations.",
+          "rule": "generic-api-key",
+          "severity": "critical",
+          "source": "secrets"
+        },
+        {
+          "file_path": ".sonarqube/out/ScannerEngineInput.json",
+          "line": 264,
+          "message": "Detected a Generic API Key, potentially exposing access to various services and sensitive operations.",
+          "rule": "generic-api-key",
+          "severity": "critical",
+          "source": "secrets"
+        },
+        {
+          "file_path": ".sonarqube/out/ScannerEngineInput.json",
+          "line": 304,
+          "message": "Detected a Generic API Key, potentially exposing access to various services and sensitive operations.",
+          "rule": "generic-api-key",
+          "severity": "critical",
+          "source": "secrets"
+        },
+        {
+          "file_path": ".sonarqube/out/ScannerEngineInput.json",
+          "line": 344,
+          "message": "Detected a Generic API Key, potentially exposing access to various services and sensitive operations.",
+          "rule": "generic-api-key",
+          "severity": "critical",
+          "source": "secrets"
+        },
+        {
+          "file_path": ".sonarqube/out/ScannerEngineInput.json",
+          "line": 388,
+          "message": "Detected a Generic API Key, potentially exposing access to various services and sensitive operations.",
+          "rule": "generic-api-key",
+          "severity": "critical",
+          "source": "secrets"
+        },
+        {
+          "file_path": ".sonarqube/out/ScannerEngineInput.json",
+          "line": 424,
+          "message": "Detected a Generic API Key, potentially exposing access to various services and sensitive operations.",
+          "rule": "generic-api-key",
+          "severity": "critical",
+          "source": "secrets"
+        },
+        {
+          "file_path": ".sonarqube/out/ScannerEngineInput.json",
+          "line": 464,
+          "message": "Detected a Generic API Key, potentially exposing access to various services and sensitive operations.",
+          "rule": "generic-api-key",
+          "severity": "critical",
+          "source": "secrets"
+        },
+        {
+          "file_path": "C:/DEV/desafio_tecnico_Verity/.agents/skills/solidify/go.mod",
+          "line": 0,
+          "message": "github.com/modelcontextprotocol/go-sdk: Cross-Site Tool Execution for HTTP Servers without Authorizatrion in github.com/modelcontextprotocol/go-sdk",
+          "rule": "GHSA-89xv-2j6f-qhc8",
+          "severity": "high",
+          "source": "osv"
+        },
+        {
+          "file_path": "C:/DEV/desafio_tecnico_Verity/.agents/skills/solidify/go.mod",
+          "line": 0,
+          "message": "github.com/modelcontextprotocol/go-sdk: Improper handling of null Unicode character when parsing JSON in github.com/modelcontextprotocol/go-sdk",
+          "rule": "GHSA-q382-vc8q-7jhj",
+          "severity": "high",
+          "source": "osv"
+        },
+        {
+          "file_path": "C:/DEV/desafio_tecnico_Verity/.agents/skills/solidify/go.mod",
+          "line": 0,
+          "message": "github.com/modelcontextprotocol/go-sdk: MCP Go SDK Vulnerable to Improper Handling of Case Sensitivity",
+          "rule": "GHSA-wvj2-96wp-fq3f",
+          "severity": "high",
+          "source": "osv"
+        },
+        {
+          "file_path": "C:/DEV/desafio_tecnico_Verity/.agents/skills/solidify/go.mod",
+          "line": 0,
+          "message": "github.com/modelcontextprotocol/go-sdk: DNS Rebinding Protection Disabled by Default in Model Context Protocol Go SDK for Servers Running on Localhost",
+          "rule": "GHSA-xw59-hvm2-8pj6",
+          "severity": "high",
+          "source": "osv"
+        },
+        {
+          "file_path": "C:/DEV/desafio_tecnico_Verity/.agents/skills/solidify/go.mod",
+          "line": 0,
+          "message": "github.com/modelcontextprotocol/go-sdk: MCP Go SDK Vulnerable to Improper Handling of Case Sensitivity in github.com/modelcontextprotocol/go-sdk",
+          "rule": "GO-2026-4569",
+          "severity": "medium",
+          "source": "osv"
+        },
+        {
+          "file_path": "C:/DEV/desafio_tecnico_Verity/.agents/skills/solidify/go.mod",
+          "line": 0,
+          "message": "github.com/modelcontextprotocol/go-sdk: Improper handling of null Unicode character when parsing JSON in github.com/modelcontextprotocol/go-sdk",
+          "rule": "GO-2026-4770",
+          "severity": "medium",
+          "source": "osv"
+        },
+        {
+          "file_path": "C:/DEV/desafio_tecnico_Verity/.agents/skills/solidify/go.mod",
+          "line": 0,
+          "message": "github.com/modelcontextprotocol/go-sdk: Cross-Site Tool Execution for HTTP Servers without Authorizatrion in github.com/modelcontextprotocol/go-sdk",
+          "rule": "GO-2026-4773",
+          "severity": "medium",
+          "source": "osv"
+        },
+        {
+          "file_path": "C:/DEV/desafio_tecnico_Verity/.agents/skills/solidify/go.mod",
+          "line": 0,
+          "message": "github.com/modelcontextprotocol/go-sdk: DNS Rebinding Protection Disabled by Default in Model Context Protocol Go SDK for Servers Running on Localhost in github.com/modelcontextprotocol/go-sdk",
+          "rule": "GO-2026-5771",
+          "severity": "medium",
+          "source": "osv"
+        }
+      ],
+      "metrics": {
+        "by_severity": {
+          "critical": 19,
+          "high": 4,
+          "medium": 4
+        },
+        "by_source": {
+          "osv": 8,
+          "secrets": 19
+        },
+        "gate_allow": false,
+        "gate_reason": "secret detected"
+      }
     },
     {
       "id": "k6",
       "version": "",
-      "applicability": "NOT_APPLICABLE",
-      "applicability_source": "heuristic",
-      "execution_status": "skipped:not_applicable",
+      "applicability": "APPLICABLE",
+      "execution_status": "completed",
+      "score": 100,
       "duration_ms": 0,
       "findings": [],
-      "metrics": {},
-      "limitations": [
-        "nem backend-api nem worker"
-      ]
+      "metrics": {
+        "error_rate": 0,
+        "p95_ms": 77,
+        "p99_ms": 148,
+        "pass_thresholds": true,
+        "requests": 695,
+        "throughput_rps": 22.629875975939044
+      }
     },
     {
       "id": "coverage",

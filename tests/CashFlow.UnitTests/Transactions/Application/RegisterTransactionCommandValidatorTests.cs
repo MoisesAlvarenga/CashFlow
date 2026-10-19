@@ -9,6 +9,9 @@ public class RegisterTransactionCommandValidatorTests
 {
     private readonly RegisterTransactionCommandValidator _validator = new();
 
+    /// <summary>
+    /// Garante que um comando de cadastro de crédito com dados válidos passe com sucesso pela validação do FluentValidation.
+    /// </summary>
     [Fact]
     [Trait("Category", "Unit")]
     public void Validate_WithValidCreditCommand_ShouldPass()
@@ -29,6 +32,9 @@ public class RegisterTransactionCommandValidatorTests
         Assert.Empty(result.Errors);
     }
 
+    /// <summary>
+    /// Garante que um comando de cadastro de débito com dados válidos passe com sucesso pela validação do FluentValidation.
+    /// </summary>
     [Fact]
     [Trait("Category", "Unit")]
     public void Validate_WithValidDebitCommand_ShouldPass()
@@ -49,6 +55,9 @@ public class RegisterTransactionCommandValidatorTests
         Assert.Empty(result.Errors);
     }
 
+    /// <summary>
+    /// Garante que valores zero ou negativos sejam reprovados pela regra AmountGreaterThanZero do FluentValidation.
+    /// </summary>
     [Theory]
     [InlineData(0)]
     [InlineData(-50.00)]
@@ -71,6 +80,9 @@ public class RegisterTransactionCommandValidatorTests
         Assert.Contains(result.Errors, e => e.PropertyName == nameof(RegisterTransactionCommand.Amount));
     }
 
+    /// <summary>
+    /// Garante que descrições vazias, nulas ou compostas por espaços sejam reprovadas com mensagem de erro clara.
+    /// </summary>
     [Theory]
     [InlineData("")]
     [InlineData("   ")]
@@ -94,6 +106,9 @@ public class RegisterTransactionCommandValidatorTests
         Assert.Contains(result.Errors, e => e.PropertyName == nameof(RegisterTransactionCommand.Description));
     }
 
+    /// <summary>
+    /// Garante que descrições com mais de 255 caracteres sejam rejeitadas para preservar a integridade do banco de dados.
+    /// </summary>
     [Fact]
     [Trait("Category", "Unit")]
     public void Validate_WithDescriptionExceeding255Characters_ShouldFail()
@@ -115,6 +130,9 @@ public class RegisterTransactionCommandValidatorTests
         Assert.Contains(result.Errors, e => e.PropertyName == nameof(RegisterTransactionCommand.Description));
     }
 
+    /// <summary>
+    /// Garante que valores numéricos inválidos para o enum TransactionType (diferentes de Credit=1 e Debit=2) sejam rejeitados.
+    /// </summary>
     [Fact]
     [Trait("Category", "Unit")]
     public void Validate_WithInvalidEnumType_ShouldFail()

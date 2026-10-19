@@ -1,0 +1,87 @@
+namespace CashFlow.Transactions.Api.Endpoints;
+
+using CashFlow.Transactions.Application.Commands;
+using CashFlow.Transactions.Application.DTOs;
+using CashFlow.Transactions.Application.Handlers;
+using CashFlow.Transactions.Application.Queries;
+using FluentValidation;
+
+/// <summary>
+/// Métodos de extensão para mapeamento dos endpoints Minimal API de Lançamentos.
+/// </summary>
+public static class TransactionEndpoints
+{
+    /// <summary>
+    /// Registra todos os endpoints do microsserviço de Lançamentos (Transactions API).
+    /// </summary>
+    /// <param name="app">A instância de WebApplication do pipeline HTTP.</param>
+    /// <returns>A mesma instância de WebApplication para encadeamento fluente.</returns>
+    public static WebApplication TransactionAPI(this WebApplication app)
+    {
+        return app.MapTransactionEndpoints();
+    }
+
+    /// <summary>
+    /// Alias fluente no padrão Map* para registro de rotas de Lançamentos.
+    /// </summary>
+    public static WebApplication MapTransactionEndpoints(this WebApplication app)
+    {
+        // Redirecionamento da raiz para o Swagger UI
+        app.MapGet("/", () => Results.Redirect("/swagger"))
+           .ExcludeFromDescription();
+
+        // POST /api/v1/transactions - Registrar lançamento financeiro
+        app.MapPost("/api/v1/transactions", async (
+            RegisterTransactionCommand command,
+            IRegisterTransactionCommandHandler handler) =>
+        {
+            try
+            {
+                var result = await handler.HandleAsync(command);
+                return Results.Created($"/api/v1/transactions/{result.TransactionId}", result);
+            }
+            catch (ValidationException ex)
+            {
+                var errors = ex.Errors
+                    .GroupBy(e => e.PropertyName)
+                    .ToDictionary(g => g.Key, g => g.Select(e => e.ErrorMessage).ToArray());
+
+                return Results.ValidationProblem(errors);
+            }
+        })
+        .WithName("RegisterTransaction")
+        .WithTags("Transactions")
+        .WithSummary("Registra um lançamento financeiro de crédito ou débito")
+        .WithDescription("Valida os dados com FluentValidation, persiste a transação atomicamente no banco de dados e gera uma mensagem de evento na tabela de Outbox para sincronização assíncrona.")
+        .Produces<RegisterTransactionResult>(StatusCodes.Status201Created, contentType: "application/json")
+        .ProducesValidationProblem(StatusCodes.Status400BadRequest)
+        .ProducesProblem(StatusCodes.Status500InternalServerError);
+
+        // GET /api/v1/transactions - Consultar lançamentos com filtros opcionais de data
+        app.MapGet("/api/v1/transactions", async (
+            DateOnly? date,
+            DateOnly? startDate,
+            DateOnly? endDate,
+            IGetTransactionsQueryHandler handler) =>
+        {
+            var query = new GetTransactionsQuery(date, startDate, endDate);
+            var transactions = await handler.HandleAsync(query);
+            return Results.Ok(transactions);
+        })
+        .WithName("GetTransactions")
+        .WithTags("Transactions")
+        .WithSummary("Consulta os lançamentos financeiros com filtro de data")
+        .WithDescription("Retorna a lista de transações registradas, permitindo filtrar por uma data pontual ('date') ou intervalo de datas ('startDate' e 'endDate'). Caso nenhum parâmetro seja enviado, lista todos os lançamentos em ordem cronológica decrescente.")
+        .Produces<IReadOnlyList<TransactionDto>>(StatusCodes.Status200OK, contentType: "application/json");
+
+        // GET /health - Diagnóstico operacional
+        app.MapGet("/health", () => Results.Ok(new { status = "Healthy", service = "Transactions.Api", timestamp = DateTimeOffset.UtcNow }))
+           .WithName("HealthCheck")
+           .WithTags("Health")
+           .WithSummary("Verifica a saúde operacional do serviço")
+           .WithDescription("Retorna 200 OK com o estado do serviço e timestamp atual.")
+           .Produces(StatusCodes.Status200OK);
+
+        return app;
+    }
+}

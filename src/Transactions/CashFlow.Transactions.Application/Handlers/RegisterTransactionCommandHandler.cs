@@ -1,6 +1,7 @@
 namespace CashFlow.Transactions.Application.Handlers;
 
 using System.Text.Json;
+using CashFlow.Shared.Contracts.Context;
 using CashFlow.Shared.Contracts.Events;
 using CashFlow.Transactions.Application.Commands;
 using CashFlow.Transactions.Domain.Entities;
@@ -9,7 +10,7 @@ using FluentValidation;
 
 public interface IRegisterTransactionCommandHandler
 {
-    Task<RegisterTransactionResult> HandleAsync(RegisterTransactionCommand command, CancellationToken ct = default);
+    Task<RegisterTransactionResult> HandleAsync(RegisterTransactionCommand command);
 }
 
 public class RegisterTransactionCommandHandler : IRegisterTransactionCommandHandler
@@ -17,19 +18,23 @@ public class RegisterTransactionCommandHandler : IRegisterTransactionCommandHand
     private readonly ITransactionRepository _transactionRepository;
     private readonly IOutboxRepository _outboxRepository;
     private readonly IValidator<RegisterTransactionCommand> _validator;
+    private readonly ICancellationTokenProvider _tokenProvider;
 
     public RegisterTransactionCommandHandler(
         ITransactionRepository transactionRepository,
         IOutboxRepository outboxRepository,
-        IValidator<RegisterTransactionCommand> validator)
+        IValidator<RegisterTransactionCommand> validator,
+        ICancellationTokenProvider? tokenProvider = null)
     {
         _transactionRepository = transactionRepository ?? throw new ArgumentNullException(nameof(transactionRepository));
         _outboxRepository = outboxRepository ?? throw new ArgumentNullException(nameof(outboxRepository));
         _validator = validator ?? throw new ArgumentNullException(nameof(validator));
+        _tokenProvider = tokenProvider ?? DefaultCancellationTokenProvider.Instance;
     }
 
-    public async Task<RegisterTransactionResult> HandleAsync(RegisterTransactionCommand command, CancellationToken ct = default)
+    public async Task<RegisterTransactionResult> HandleAsync(RegisterTransactionCommand command)
     {
+        var ct = _tokenProvider.Token;
         var validationResult = await _validator.ValidateAsync(command, ct);
         if (!validationResult.IsValid)
         {
@@ -40,7 +45,7 @@ public class RegisterTransactionCommandHandler : IRegisterTransactionCommandHand
             ? Transaction.CreateCredit(command.Amount, command.Date, command.Description)
             : Transaction.CreateDebit(command.Amount, command.Date, command.Description);
 
-        await _transactionRepository.AddAsync(transaction, ct);
+        await _transactionRepository.AddAsync(transaction);
 
         var integrationEvent = new TransactionRegisteredEvent(
             TransactionId: transaction.Id,
@@ -61,7 +66,7 @@ public class RegisterTransactionCommandHandler : IRegisterTransactionCommandHand
             RetryCount = 0
         };
 
-        await _outboxRepository.AddMessageAsync(outboxMessage, ct);
+        await _outboxRepository.AddMessageAsync(outboxMessage);
 
         return new RegisterTransactionResult(
             TransactionId: transaction.Id,

@@ -4,6 +4,6 @@ using CashFlow.Consolidation.Domain.Entities;
 
 public interface IDailyBalanceRepository
 {
-    Task<DailyBalance?> GetByDateAsync(DateOnly date, CancellationToken ct = default);
-    Task SaveOrUpdateAsync(DailyBalance dailyBalance, CancellationToken ct = default);
+    Task<DailyBalance?> GetByDateAsync(DateOnly date);
+    Task SaveOrUpdateAsync(DailyBalance dailyBalance);
 }

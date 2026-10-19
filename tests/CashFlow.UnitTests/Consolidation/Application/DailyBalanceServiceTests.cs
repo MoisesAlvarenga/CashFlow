@@ -11,19 +11,22 @@ public class DailyBalanceServiceTests
     {
         public readonly Dictionary<DateOnly, DailyBalance> Storage = new();
 
-        public Task<DailyBalance?> GetByDateAsync(DateOnly date, CancellationToken ct = default)
+        public Task<DailyBalance?> GetByDateAsync(DateOnly date)
         {
             Storage.TryGetValue(date, out var balance);
             return Task.FromResult(balance);
         }
 
-        public Task SaveOrUpdateAsync(DailyBalance dailyBalance, CancellationToken ct = default)
+        public Task SaveOrUpdateAsync(DailyBalance dailyBalance)
         {
             Storage[dailyBalance.Date] = dailyBalance;
             return Task.CompletedTask;
         }
     }
 
+    /// <summary>
+    /// Garante que a consulta de saldo consolidado retorne null quando não houver registros para a data (gerando HTTP 404 padronizado na API).
+    /// </summary>
     [Fact]
     [Trait("Category", "Unit")]
     public async Task GetDailyBalanceAsync_WhenNotFound_ShouldReturnNull()
@@ -39,6 +42,9 @@ public class DailyBalanceServiceTests
         Assert.Null(result);
     }
 
+    /// <summary>
+    /// Garante o correto mapeamento da entidade DailyBalance para DailyBalanceDto contendo data, créditos, débitos, saldo líquido e contagem de lançamentos.
+    /// </summary>
     [Fact]
     [Trait("Category", "Unit")]
     public async Task GetDailyBalanceAsync_WhenExists_ShouldReturnMappedDto()
@@ -65,6 +71,9 @@ public class DailyBalanceServiceTests
         Assert.Equal(2, result.TransactionCount);
     }
 
+    /// <summary>
+    /// Garante que o recebimento de evento de crédito crie um novo saldo diário se inexistente e acumule o valor corretamente.
+    /// </summary>
     [Fact]
     [Trait("Category", "Unit")]
     public async Task ProcessTransactionAsync_WithCredit_ShouldCreateAndAccumulateBalance()
@@ -86,6 +95,9 @@ public class DailyBalanceServiceTests
         Assert.True(repo.Storage.ContainsKey(date));
     }
 
+    /// <summary>
+    /// Garante a agregação incremental de débitos em saldo diário pré-existente sem sobrescrever lançamentos anteriores.
+    /// </summary>
     [Fact]
     [Trait("Category", "Unit")]
     public async Task ProcessTransactionAsync_WithDebit_ShouldAccumulateToExistingBalance()
@@ -106,6 +118,9 @@ public class DailyBalanceServiceTests
         Assert.Equal(2, finalResult.TransactionCount);
     }
 
+    /// <summary>
+    /// Garante a rejeição de tipos de transação desconhecidos com ArgumentException para evitar corrupção do consolidado financeiro.
+    /// </summary>
     [Fact]
     [Trait("Category", "Unit")]
     public async Task ProcessTransactionAsync_WithInvalidType_ShouldThrowArgumentException()

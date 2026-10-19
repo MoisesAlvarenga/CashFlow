@@ -1,0 +1,297 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Arquitetura de Fluxo de Caixa & Consolidação Diária",
+    "output": ".archify/architecture-cash-flow-20261019-132200/cash-flow.html",
+    "quality_profile": "showcase",
+    "legend": {
+      "entries": {
+        "backend": {
+          "label": "Backend"
+        },
+        "database": {
+          "label": "Banco de Dados"
+        },
+        "messagebus": {
+          "label": "Mensageria"
+        },
+        "external": {
+          "label": "Sistema Externo"
+        }
+      }
+    }
+  },
+  "components": [
+    {
+      "id": "merchant",
+      "type": "external",
+      "label": "Cliente Lojista",
+      "sublabel": "PDV / Cliente Web",
+      "pos": [
+        50,
+        70
+      ],
+      "size": [
+        150,
+        60
+      ]
+    },
+    {
+      "id": "transactions_api",
+      "type": "backend",
+      "label": "API de Transações",
+      "sublabel": "POST /api/transactions",
+      "tag": "C# .NET 9 LTS",
+      "pos": [
+        360,
+        70
+      ],
+      "size": [
+        170,
+        64
+      ]
+    },
+    {
+      "id": "transactions_db",
+      "type": "database",
+      "label": "Banco de Transações",
+      "sublabel": "PostgreSQL (ACID + Outbox)",
+      "tag": "EF Core 9",
+      "pos": [
+        660,
+        70
+      ],
+      "size": [
+        160,
+        64
+      ]
+    },
+    {
+      "id": "outbox_worker",
+      "type": "backend",
+      "label": "Worker do Outbox",
+      "sublabel": "BackgroundService",
+      "tag": "At-Least-Once",
+      "pos": [
+        940,
+        70
+      ],
+      "size": [
+        160,
+        64
+      ]
+    },
+    {
+      "id": "rabbitmq",
+      "type": "messagebus",
+      "label": "Broker RabbitMQ",
+      "sublabel": "Exchange Direta (AMQP)",
+      "tag": "RabbitMQ.Client 7",
+      "pos": [
+        940,
+        240
+      ],
+      "size": [
+        160,
+        64
+      ]
+    },
+    {
+      "id": "dlq",
+      "type": "messagebus",
+      "label": "Fila Dead Letter (DLQ)",
+      "sublabel": "Mensagens Rejeitadas",
+      "tag": "DLQ Buffer",
+      "pos": [
+        1230,
+        240
+      ],
+      "size": [
+        160,
+        64
+      ]
+    },
+    {
+      "id": "consolidation_consumer",
+      "type": "backend",
+      "label": "Consumidor de Saldo",
+      "sublabel": "BackgroundService",
+      "tag": "Idempotente",
+      "pos": [
+        940,
+        410
+      ],
+      "size": [
+        160,
+        64
+      ]
+    },
+    {
+      "id": "consolidation_db",
+      "type": "database",
+      "label": "Banco de Saldo Diário",
+      "sublabel": "Saldos Consolidados",
+      "tag": "Índice de Data",
+      "pos": [
+        660,
+        410
+      ],
+      "size": [
+        160,
+        64
+      ]
+    },
+    {
+      "id": "consolidation_api",
+      "type": "backend",
+      "label": "API de Consolidação",
+      "sublabel": "GET /api/consolidation/...",
+      "tag": "C# .NET 9 LTS",
+      "pos": [
+        360,
+        410
+      ],
+      "size": [
+        170,
+        64
+      ]
+    },
+    {
+      "id": "bi_system",
+      "type": "external",
+      "label": "BI & Analytics",
+      "sublabel": "Sistema de Gestão",
+      "pos": [
+        50,
+        410
+      ],
+      "size": [
+        150,
+        60
+      ]
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "Fronteira de Serviço: CashFlow.Transactions.Api",
+      "wraps": [
+        "transactions_api",
+        "transactions_db",
+        "outbox_worker"
+      ]
+    },
+    {
+      "kind": "security-group",
+      "label": "Cluster de Mensageria: RabbitMQ",
+      "wraps": [
+        "rabbitmq",
+        "dlq"
+      ]
+    },
+    {
+      "kind": "region",
+      "label": "Fronteira de Serviço: CashFlow.Consolidation.Api",
+      "wraps": [
+        "consolidation_api",
+        "consolidation_db",
+        "consolidation_consumer"
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "id": "merchant-to-api",
+      "from": "merchant",
+      "to": "transactions_api",
+      "label": "POST /api/transactions",
+      "variant": "emphasis"
+    },
+    {
+      "id": "api-to-store",
+      "from": "transactions_api",
+      "to": "transactions_db",
+      "label": "ACID & Outbox"
+    },
+    {
+      "id": "store-to-worker",
+      "from": "transactions_db",
+      "to": "outbox_worker",
+      "label": "Leitura de pendentes"
+    },
+    {
+      "id": "worker-to-broker",
+      "from": "outbox_worker",
+      "to": "rabbitmq",
+      "label": "Publicação de evento",
+      "variant": "emphasis",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "id": "broker-to-dlq",
+      "from": "rabbitmq",
+      "to": "dlq",
+      "label": "Mensagens com falha",
+      "variant": "dashed"
+    },
+    {
+      "id": "broker-to-consumer",
+      "from": "rabbitmq",
+      "to": "consolidation_consumer",
+      "label": "Consumo de evento",
+      "variant": "emphasis",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "id": "consumer-to-store",
+      "from": "consolidation_consumer",
+      "to": "consolidation_db",
+      "label": "Upsert de saldo"
+    },
+    {
+      "id": "api-to-balance-store",
+      "from": "consolidation_api",
+      "to": "consolidation_db",
+      "label": "Consulta de saldo"
+    },
+    {
+      "id": "bi-to-api",
+      "from": "bi_system",
+      "to": "consolidation_api",
+      "label": "GET /daily-balances",
+      "variant": "emphasis"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "emerald",
+      "title": "Serviço Autônomo de Ingestão",
+      "items": [
+        "API de Transações aceita créditos e débitos via Minimal APIs",
+        "Transactional Outbox garante persistência local ACID antes do envio pela rede",
+        "Opera com 100% de disponibilidade mesmo se a Consolidação ou Broker estiverem offline"
+      ]
+    },
+    {
+      "dot": "cyan",
+      "title": "Mensageria com Driver Nativo",
+      "items": [
+        "Driver oficial RabbitMQ.Client 7 publica TransactionRegisteredEvent",
+        "Exchange direta amortece picos e garante entrega At-Least-Once",
+        "Dead Letter Queue (DLQ) e confirmações assíncronas (BasicAck/Nack)"
+      ]
+    },
+    {
+      "dot": "amber",
+      "title": "Consolidação & Alto Desempenho",
+      "items": [
+        "Consumidor idempotente consolida o saldo diário por data via SQL atômico",
+        "Consultas indexadas no PostgreSQL com P95 < 45ms comprovadas via K6",
+        "0% de perda sob concorrência (superando o limite de 5% do desafio)"
+      ]
+    }
+  ]
+}

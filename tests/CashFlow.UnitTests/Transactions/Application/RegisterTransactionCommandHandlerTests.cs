@@ -16,15 +16,23 @@ public class RegisterTransactionCommandHandlerTests
     {
         public readonly List<Transaction> Added = [];
 
-        public Task AddAsync(Transaction transaction, CancellationToken ct = default)
+        public Task AddAsync(Transaction transaction)
         {
             Added.Add(transaction);
             return Task.CompletedTask;
         }
 
-        public Task<Transaction?> GetByIdAsync(Guid id, CancellationToken ct = default)
+        public Task<Transaction?> GetByIdAsync(Guid id)
         {
             return Task.FromResult(Added.FirstOrDefault(t => t.Id == id));
+        }
+
+        public Task<IReadOnlyList<Transaction>> GetByFilterAsync(DateOnly? startDate, DateOnly? endDate)
+        {
+            var query = Added.AsEnumerable();
+            if (startDate.HasValue) query = query.Where(t => t.Date >= startDate.Value);
+            if (endDate.HasValue) query = query.Where(t => t.Date <= endDate.Value);
+            return Task.FromResult<IReadOnlyList<Transaction>>(query.ToList());
         }
     }
 
@@ -32,19 +40,19 @@ public class RegisterTransactionCommandHandlerTests
     {
         public readonly List<OutboxMessage> Messages = [];
 
-        public Task AddMessageAsync(OutboxMessage message, CancellationToken ct = default)
+        public Task AddMessageAsync(OutboxMessage message)
         {
             Messages.Add(message);
             return Task.CompletedTask;
         }
 
-        public Task<IReadOnlyList<OutboxMessage>> GetPendingMessagesAsync(int batchSize, CancellationToken ct = default)
+        public Task<IReadOnlyList<OutboxMessage>> GetPendingMessagesAsync(int batchSize)
         {
             var pending = Messages.Where(m => m.ProcessedAt == null).Take(batchSize).ToList();
             return Task.FromResult<IReadOnlyList<OutboxMessage>>(pending);
         }
 
-        public Task MarkAsProcessedAsync(Guid messageId, CancellationToken ct = default)
+        public Task MarkAsProcessedAsync(Guid messageId)
         {
             var msg = Messages.FirstOrDefault(m => m.Id == messageId);
             if (msg != null)
@@ -55,6 +63,9 @@ public class RegisterTransactionCommandHandlerTests
         }
     }
 
+    /// <summary>
+    /// Garante a persistência atômica da transação de crédito e da respectiva mensagem Outbox para publicação no RabbitMQ.
+    /// </summary>
     [Fact]
     [Trait("Category", "Unit")]
     public async Task HandleAsync_WithValidCreditCommand_ShouldPersistTransactionAndOutboxEvent()
@@ -101,6 +112,9 @@ public class RegisterTransactionCommandHandlerTests
         Assert.Equal(500.00m, deserializedEvent.Amount);
     }
 
+    /// <summary>
+    /// Garante a persistência de lançamento de débito e evento Outbox correspondente através do handler de aplicação.
+    /// </summary>
     [Fact]
     [Trait("Category", "Unit")]
     public async Task HandleAsync_WithValidDebitCommand_ShouldPersistDebitTransaction()
@@ -128,6 +142,9 @@ public class RegisterTransactionCommandHandlerTests
         Assert.Single(outboxRepo.Messages);
     }
 
+    /// <summary>
+    /// Garante que um comando inválido seja barrado pelo validador antes de tocar os repositórios (Fail-Fast).
+    /// </summary>
     [Fact]
     [Trait("Category", "Unit")]
     public async Task HandleAsync_WithInvalidCommand_ShouldThrowValidationException()

@@ -6,6 +6,9 @@ namespace CashFlow.UnitTests.Shared;
 
 public class TransactionRegisteredEventTests
 {
+    /// <summary>
+    /// Garante que o evento TransactionRegisteredEvent possa ser serializado em JSON e desserializado sem perda de precisão ou corrupção de tipos.
+    /// </summary>
     [Fact]
     [Trait("Category", "Unit")]
     public void Event_ShouldSerializeAndDeserializeProperly()
@@ -34,6 +37,9 @@ public class TransactionRegisteredEventTests
         Assert.Equal(evt.Timestamp, deserialized.Timestamp);
     }
 
+    /// <summary>
+    /// Garante a estabilidade contratual dos valores inteiros do enum TransactionType (Credit = 1, Debit = 2) entre microsserviços.
+    /// </summary>
     [Theory]
     [InlineData(TransactionType.Credit, 1)]
     [InlineData(TransactionType.Debit, 2)]

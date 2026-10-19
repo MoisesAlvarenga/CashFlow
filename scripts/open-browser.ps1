@@ -10,13 +10,20 @@ param(
     [switch]$Solidify,
     [switch]$Sonar,
     [switch]$Tests,
+    [switch]$K6,
+    [switch]$Load,
     [switch]$Swagger,
     [switch]$SwaggerTransactions,
     [switch]$SwaggerConsolidation,
     [switch]$All = $false
 )
 
-$archifyHtml = "$PSScriptRoot\..\.archify\architecture-cash-flow-20261015-133255\cash-flow.html"
+$latestArchifyDir = Get-ChildItem "$PSScriptRoot\..\.archify\architecture-cash-flow-*" -Directory | Sort-Object Name -Descending | Select-Object -First 1
+if ($latestArchifyDir) {
+    $archifyHtml = Join-Path $latestArchifyDir.FullName "cash-flow.html"
+} else {
+    $archifyHtml = "$PSScriptRoot\..\.archify\architecture-cash-flow-20261019-132200\cash-flow.html"
+}
 $solidifyHtml = "$PSScriptRoot\..\.solidify\out\release-report.html"
 $sonarUrl = "http://localhost:9000/dashboard?id=desafio_tecnico_Verity"
 $swaggerTransactionsUrl = "http://localhost:5101/swagger"
@@ -27,7 +34,18 @@ Write-Host "       Abrindo Dashboards no Navegador Padrão          " -Foregroun
 Write-Host "======================================================" -ForegroundColor Cyan
 
 # Caso nenhum switch específico tenha sido passado, abre as ferramentas principais
-$noSpecificSwitch = -not ($Archify -or $Solidify -or $Sonar -or $Tests -or $Swagger -or $SwaggerTransactions -or $SwaggerConsolidation)
+$noSpecificSwitch = -not ($Archify -or $Solidify -or $Sonar -or $Tests -or $K6 -or $Load -or $Swagger -or $SwaggerTransactions -or $SwaggerConsolidation)
+
+if ($K6 -or $Load) {
+    if (Test-Path $solidifyHtml) {
+        Write-Host "Abrindo Aba de Testes de Carga K6 no Solidify..." -ForegroundColor Green
+        $uri = ([System.Uri](Resolve-Path $solidifyHtml).Path).AbsoluteUri + "#tab-k6"
+        Start-Process $uri
+    } else {
+        Write-Host "[AVISO] Arquivo do Solidify não encontrado em $solidifyHtml" -ForegroundColor DarkYellow
+    }
+    exit 0
+}
 
 if ($Tests) {
     if (Test-Path $solidifyHtml) {

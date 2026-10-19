@@ -6,8 +6,8 @@ using CashFlow.Consolidation.Domain.Repositories;
 
 public interface IDailyBalanceService
 {
-    Task<DailyBalanceDto?> GetDailyBalanceAsync(DateOnly date, CancellationToken ct = default);
-    Task<DailyBalanceDto> ProcessTransactionAsync(string type, decimal amount, DateOnly date, CancellationToken ct = default);
+    Task<DailyBalanceDto?> GetDailyBalanceAsync(DateOnly date);
+    Task<DailyBalanceDto> ProcessTransactionAsync(string type, decimal amount, DateOnly date);
 }
 
 public class DailyBalanceService : IDailyBalanceService
@@ -19,9 +19,9 @@ public class DailyBalanceService : IDailyBalanceService
         _repository = repository ?? throw new ArgumentNullException(nameof(repository));
     }
 
-    public async Task<DailyBalanceDto?> GetDailyBalanceAsync(DateOnly date, CancellationToken ct = default)
+    public async Task<DailyBalanceDto?> GetDailyBalanceAsync(DateOnly date)
     {
-        var balance = await _repository.GetByDateAsync(date, ct);
+        var balance = await _repository.GetByDateAsync(date);
         if (balance == null)
         {
             return null;
@@ -30,9 +30,9 @@ public class DailyBalanceService : IDailyBalanceService
         return MapToDto(balance);
     }
 
-    public async Task<DailyBalanceDto> ProcessTransactionAsync(string type, decimal amount, DateOnly date, CancellationToken ct = default)
+    public async Task<DailyBalanceDto> ProcessTransactionAsync(string type, decimal amount, DateOnly date)
     {
-        var balance = await _repository.GetByDateAsync(date, ct) ?? DailyBalance.Create(date);
+        var balance = await _repository.GetByDateAsync(date) ?? DailyBalance.Create(date);
 
         if (string.Equals(type, "Credit", StringComparison.OrdinalIgnoreCase))
         {
@@ -47,7 +47,7 @@ public class DailyBalanceService : IDailyBalanceService
             throw new ArgumentException($"Unsupported transaction type '{type}'.", nameof(type));
         }
 
-        await _repository.SaveOrUpdateAsync(balance, ct);
+        await _repository.SaveOrUpdateAsync(balance);
         return MapToDto(balance);
     }
 

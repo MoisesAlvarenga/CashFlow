@@ -5,6 +5,9 @@ namespace CashFlow.UnitTests.Transactions.Domain;
 
 public class OutboxMessageTests
 {
+    /// <summary>
+    /// Garante que a entidade OutboxMessage inicialize com Id gerado, strings vazias, contagem de retentativas zerada e status não processado.
+    /// </summary>
     [Fact]
     [Trait("Category", "Unit")]
     public void OutboxMessage_ShouldInitializeWithDefaults()
@@ -22,6 +25,9 @@ public class OutboxMessageTests
         Assert.Equal(0, message.RetryCount);
     }
 
+    /// <summary>
+    /// Garante que as propriedades de controle da Outbox (RetryCount, ProcessedAt, ErrorMessage, Payload) possam ser atualizadas pelo Worker.
+    /// </summary>
     [Fact]
     [Trait("Category", "Unit")]
     public void OutboxMessage_ShouldAllowMutatingProperties()

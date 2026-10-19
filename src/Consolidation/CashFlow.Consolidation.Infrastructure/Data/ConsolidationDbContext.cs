@@ -18,6 +18,7 @@ public class ConsolidationDbContext : DbContext
 
         modelBuilder.Entity<DailyBalance>(builder =>
         {
+            builder.ToTable("DailyBalances");
             builder.HasKey(d => d.Date);
             builder.Property(d => d.Date).IsRequired();
             builder.Property(d => d.TotalCredits).HasPrecision(18, 2).IsRequired();

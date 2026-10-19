@@ -1,11 +1,16 @@
 using System.Reflection;
+using CashFlow.Consolidation.Api.Context;
+using CashFlow.Consolidation.Api.Endpoints;
 using CashFlow.Consolidation.Application.DTOs;
+using CashFlow.Shared.Contracts.Context;
 using CashFlow.Consolidation.Application.Services;
 using CashFlow.Consolidation.Domain.Repositories;
 using CashFlow.Consolidation.Infrastructure.Data;
 using CashFlow.Consolidation.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi;
+using CashFlow.Consolidation.Api.Workers;
+using CashFlow.Shared.Contracts.Messaging;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,13 +26,11 @@ builder.Services.AddSwaggerGen(c =>
         Contact = new OpenApiContact
         {
             Name = "Equipe de Arquitetura & Engenharia Verity",
-            Email = "contato@verity.com.br",
-            Url = new Uri("https://github.com/verity")
+            Email = "contato@verity.com.br"
         },
         License = new OpenApiLicense
         {
-            Name = "MIT License",
-            Url = new Uri("https://opensource.org/licenses/MIT")
+            Name = "MIT License"
         }
     });
 
@@ -49,15 +52,48 @@ builder.Services.AddSwaggerGen(c =>
     }
 });
 
-// Persistence & Database (EF Core InMemory for portable zero-config dev/test, swappable for PostgreSQL in production)
+// Persistence & Database: PostgreSQL Code-First via Npgsql with automatic InMemory fallback
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<ConsolidationDbContext>(options =>
-    options.UseInMemoryDatabase("CashFlow_Consolidation"));
+{
+    if (!string.IsNullOrEmpty(connectionString))
+    {
+        options.UseNpgsql(connectionString, npgsqlOptions =>
+        {
+            npgsqlOptions.MigrationsAssembly(typeof(ConsolidationDbContext).Assembly.FullName);
+            npgsqlOptions.MigrationsHistoryTable("__EFMigrationsHistory_Consolidation");
+        });
+    }
+    else
+    {
+        options.UseInMemoryDatabase("CashFlow_Consolidation");
+    }
+});
+
+// Context & Cancellation: Decoupled CancellationToken Provider from HttpContext
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<ICancellationTokenProvider, HttpCancellationTokenProvider>();
 
 // Dependency Inversion: Register domain repositories and application services
 builder.Services.AddScoped<IDailyBalanceRepository, DailyBalanceRepository>();
 builder.Services.AddScoped<IDailyBalanceService, DailyBalanceService>();
 
+// RabbitMQ Messaging Configuration & Background Consumer
+builder.Services.Configure<RabbitMqOptions>(
+    builder.Configuration.GetSection(RabbitMqOptions.SectionName));
+builder.Services.AddHostedService<TransactionRegisteredConsumer>();
+
 var app = builder.Build();
+
+// Automatic Database Migration on startup (EF Core Code-First)
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<ConsolidationDbContext>();
+    if (dbContext.Database.IsRelational())
+    {
+        await dbContext.Database.MigrateAsync();
+    }
+}
 
 // Configure the HTTP request pipeline
 app.UseSwagger();
@@ -70,77 +106,7 @@ app.UseSwaggerUI(c =>
 
 app.UseHttpsRedirection();
 
-// Redirect root to Swagger UI for quick developer access
-app.MapGet("/", () => Results.Redirect("/swagger"))
-   .ExcludeFromDescription();
-
-// REST API Endpoints
-app.MapGet("/api/v1/daily-balances", async (
-    DateOnly? date,
-    IDailyBalanceService balanceService,
-    CancellationToken ct) =>
-{
-    var targetDate = date ?? DateOnly.FromDateTime(DateTime.UtcNow);
-    var balance = await balanceService.GetDailyBalanceAsync(targetDate, ct);
-
-    if (balance == null)
-    {
-        return Results.NotFound(new
-        {
-            error = "NotFound",
-            message = $"Nenhum saldo consolidado encontrado para a data {targetDate:yyyy-MM-dd}."
-        });
-    }
-
-    return Results.Ok(balance);
-})
-.WithName("GetDailyBalance")
-.WithTags("Consolidation")
-.WithSummary("Consulta o saldo diário consolidado por data")
-.WithDescription("Retorna o resumo consolidado contendo total de créditos, total de débitos, saldo líquido e total de transações processadas para o dia especificado. Se 'date' não for informado, assume a data atual em UTC.")
-.Produces<DailyBalanceDto>(StatusCodes.Status200OK, contentType: "application/json")
-.ProducesProblem(StatusCodes.Status404NotFound);
-
-app.MapPost("/api/v1/daily-balances/process", async (
-    ProcessTransactionRequest request,
-    IDailyBalanceService balanceService,
-    CancellationToken ct) =>
-{
-    try
-    {
-        var result = await balanceService.ProcessTransactionAsync(
-            request.Type,
-            request.Amount,
-            request.Date,
-            ct);
-
-        return Results.Ok(result);
-    }
-    catch (ArgumentException ex)
-    {
-        return Results.BadRequest(new { error = ex.Message });
-    }
-})
-.WithName("ProcessTransactionEvent")
-.WithTags("Consolidation")
-.WithSummary("Processa um evento de transação e atualiza o saldo diário")
-.WithDescription("Recebe os dados do lançamento financeiro, atualiza os acumuladores (crédito/débito) e recalcula o saldo líquido diário de forma atômica.")
-.Produces<DailyBalanceDto>(StatusCodes.Status200OK, contentType: "application/json")
-.ProducesProblem(StatusCodes.Status400BadRequest);
-
-app.MapGet("/health", () => Results.Ok(new { status = "Healthy", service = "Consolidation.Api", timestamp = DateTimeOffset.UtcNow }))
-   .WithName("HealthCheck")
-   .WithTags("Health")
-   .WithSummary("Verifica a saúde operacional do serviço de Consolidação")
-   .WithDescription("Retorna 200 OK com o estado do serviço e timestamp atual.")
-   .Produces(StatusCodes.Status200OK);
+// Map Minimal API Endpoints via extension method
+app.ConsolidationAPI();
 
 await app.RunAsync();
-
-/// <summary>
-/// Requisição para processamento de transação e consolidação de saldo diário.
-/// </summary>
-/// <param name="Type">Tipo de lançamento financeiro: "Credit" para crédito ou "Debit" para débito.</param>
-/// <param name="Amount">Valor monetário do lançamento (positivo).</param>
-/// <param name="Date">Data contábil do lançamento financeiro (YYYY-MM-DD).</param>
-public record ProcessTransactionRequest(string Type, decimal Amount, DateOnly Date);

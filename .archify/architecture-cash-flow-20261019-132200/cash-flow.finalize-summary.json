@@ -1,0 +1,48 @@
+{
+  "schemaVersion": 1,
+  "ok": true,
+  "command": "finalize",
+  "status": "pass",
+  "type": "architecture",
+  "quality": "showcase",
+  "specification": {
+    "path": "C:\\DEV\\desafio_tecnico_Verity\\.archify\\architecture-cash-flow-20261019-132200\\candidate.json",
+    "sha256": "d08a80e2d46db58849ec5685df9e00dd0e193b4bb4f30bac65aa02a111f7878d",
+    "bytes": 6505
+  },
+  "artifact": {
+    "path": "C:\\DEV\\desafio_tecnico_Verity\\.archify\\architecture-cash-flow-20261019-132200\\cash-flow.html",
+    "sha256": "91f400da6ae8abcc28412682d6912fcde92cc3737aeeb8e1d49f0df451e92ada",
+    "bytes": 767913
+  },
+  "gates": {
+    "validate": "pass",
+    "deliver": "pass",
+    "check": "pass",
+    "browser-check": "pass"
+  },
+  "diagnostics": [],
+  "diagnosticSummary": {
+    "total": 0,
+    "shown": 0,
+    "truncated": false
+  },
+  "evidence": {
+    "receipt": "C:\\DEV\\desafio_tecnico_Verity\\.archify\\architecture-cash-flow-20261019-132200\\cash-flow.finalize.json",
+    "summaryReceipt": "C:\\DEV\\desafio_tecnico_Verity\\.archify\\architecture-cash-flow-20261019-132200\\cash-flow.finalize-summary.json",
+    "browserCheckReceipt": "C:\\DEV\\desafio_tecnico_Verity\\.archify\\architecture-cash-flow-20261019-132200\\cash-flow.browser-check.json"
+  },
+  "update": {
+    "status": "unavailable",
+    "installedVersion": null,
+    "availableVersion": null,
+    "releaseNotes": null,
+    "checkedAt": null,
+    "source": null,
+    "noticeRequired": false,
+    "noticeText": null,
+    "reason": "timeout"
+  },
+  "visualReview": "not-requested",
+  "durationMs": 17106
+}

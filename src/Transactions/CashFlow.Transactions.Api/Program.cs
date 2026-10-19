@@ -1,6 +1,11 @@
 using System.Reflection;
+using CashFlow.Shared.Contracts.Context;
+using CashFlow.Transactions.Api.Context;
+using CashFlow.Transactions.Api.Endpoints;
 using CashFlow.Transactions.Application.Commands;
+using CashFlow.Transactions.Application.DTOs;
 using CashFlow.Transactions.Application.Handlers;
+using CashFlow.Transactions.Application.Queries;
 using CashFlow.Transactions.Application.Validators;
 using CashFlow.Transactions.Domain.Repositories;
 using CashFlow.Transactions.Infrastructure.Data;
@@ -8,6 +13,9 @@ using CashFlow.Transactions.Infrastructure.Repositories;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi;
+using CashFlow.Transactions.Api.Workers;
+using CashFlow.Shared.Contracts.Messaging;
+using CashFlow.Transactions.Api.Messaging;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,13 +31,11 @@ builder.Services.AddSwaggerGen(c =>
         Contact = new OpenApiContact
         {
             Name = "Equipe de Arquitetura & Engenharia Verity",
-            Email = "contato@verity.com.br",
-            Url = new Uri("https://github.com/verity")
+            Email = "contato@verity.com.br"
         },
         License = new OpenApiLicense
         {
-            Name = "MIT License",
-            Url = new Uri("https://opensource.org/licenses/MIT")
+            Name = "MIT License"
         }
     });
 
@@ -51,17 +57,56 @@ builder.Services.AddSwaggerGen(c =>
     }
 });
 
-// Persistence & Database (EF Core InMemory for portable zero-config dev/test, swappable for PostgreSQL in production)
+// Persistence & Database: PostgreSQL Code-First via Npgsql with automatic InMemory fallback
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<TransactionsDbContext>(options =>
-    options.UseInMemoryDatabase("CashFlow_Transactions"));
+{
+    if (!string.IsNullOrEmpty(connectionString))
+    {
+        options.UseNpgsql(connectionString, npgsqlOptions =>
+        {
+            npgsqlOptions.MigrationsAssembly(typeof(TransactionsDbContext).Assembly.FullName);
+            npgsqlOptions.MigrationsHistoryTable("__EFMigrationsHistory_Transactions");
+        });
+    }
+    else
+    {
+        options.UseInMemoryDatabase("CashFlow_Transactions");
+    }
+});
+
+// Context & Cancellation: Decoupled CancellationToken Provider from HttpContext
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<ICancellationTokenProvider, HttpCancellationTokenProvider>();
 
 // Dependency Inversion: Register domain repositories and application handlers
 builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
 builder.Services.AddScoped<IOutboxRepository, OutboxRepository>();
 builder.Services.AddScoped<IValidator<RegisterTransactionCommand>, RegisterTransactionCommandValidator>();
 builder.Services.AddScoped<IRegisterTransactionCommandHandler, RegisterTransactionCommandHandler>();
+builder.Services.AddScoped<IGetTransactionsQueryHandler, GetTransactionsQueryHandler>();
+
+// RabbitMQ Messaging Configuration
+builder.Services.Configure<RabbitMqOptions>(
+    builder.Configuration.GetSection(RabbitMqOptions.SectionName));
+builder.Services.AddSingleton<IRabbitMqPublisher, RabbitMqPublisher>();
+
+// Outbox Background Processor (Configurable interval via appsettings / env vars)
+builder.Services.Configure<OutboxProcessorOptions>(
+    builder.Configuration.GetSection(OutboxProcessorOptions.SectionName));
+builder.Services.AddHostedService<OutboxProcessorWorker>();
 
 var app = builder.Build();
+
+// Automatic Database Migration on startup (EF Core Code-First)
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<TransactionsDbContext>();
+    if (dbContext.Database.IsRelational())
+    {
+        await dbContext.Database.MigrateAsync();
+    }
+}
 
 // Configure the HTTP request pipeline
 app.UseSwagger();
@@ -74,43 +119,7 @@ app.UseSwaggerUI(c =>
 
 app.UseHttpsRedirection();
 
-// Redirect root to Swagger UI for quick developer access
-app.MapGet("/", () => Results.Redirect("/swagger"))
-   .ExcludeFromDescription();
-
-// REST API Endpoints
-app.MapPost("/api/v1/transactions", async (
-    RegisterTransactionCommand command,
-    IRegisterTransactionCommandHandler handler,
-    CancellationToken ct) =>
-{
-    try
-    {
-        var result = await handler.HandleAsync(command, ct);
-        return Results.Created($"/api/v1/transactions/{result.TransactionId}", result);
-    }
-    catch (ValidationException ex)
-    {
-        var errors = ex.Errors
-            .GroupBy(e => e.PropertyName)
-            .ToDictionary(g => g.Key, g => g.Select(e => e.ErrorMessage).ToArray());
-
-        return Results.ValidationProblem(errors);
-    }
-})
-.WithName("RegisterTransaction")
-.WithTags("Transactions")
-.WithSummary("Registra um lançamento financeiro de crédito ou débito")
-.WithDescription("Valida os dados com FluentValidation, persiste a transação atomicamente no banco de dados e gera uma mensagem de evento na tabela de Outbox para sincronização assíncrona.")
-.Produces<RegisterTransactionResult>(StatusCodes.Status201Created, contentType: "application/json")
-.ProducesValidationProblem(StatusCodes.Status400BadRequest)
-.ProducesProblem(StatusCodes.Status500InternalServerError);
-
-app.MapGet("/health", () => Results.Ok(new { status = "Healthy", service = "Transactions.Api", timestamp = DateTimeOffset.UtcNow }))
-   .WithName("HealthCheck")
-   .WithTags("Health")
-   .WithSummary("Verifica a saúde operacional do serviço")
-   .WithDescription("Retorna 200 OK com o estado do serviço e timestamp atual.")
-   .Produces(StatusCodes.Status200OK);
+// Map Minimal API Endpoints via extension method
+app.TransactionAPI();
 
 await app.RunAsync();

@@ -43,8 +43,8 @@ $beginArgs = @(
     "begin",
     "/k:$ProjectKey",
     "/d:sonar.host.url=$SonarUrl",
-    "/d:sonar.exclusions=**/.archify/**,**/.agents/**,**/.solidify/**,**/.specs/**,**/bin/**,**/obj/**,**/out/**",
-    "/d:sonar.coverage.exclusions=**/tests/**,**/Program.cs",
+    "/d:sonar.exclusions=**/.archify/**,**/.agents/**,**/.solidify/**,**/.specs/**,**/bin/**,**/obj/**,**/out/**,**/tests/**,**/.claude/**,**/.cursor/**,**/.windsurf/**,**/appsettings*.json",
+    "/d:sonar.coverage.exclusions=**/tests/**,**/Program.cs,**/Migrations/**",
     "/d:sonar.cs.opencover.reportsPaths=**/TestResults/**/coverage.opencover.xml,**/TestResults/**/coverage.cobertura.xml",
     "/d:sonar.cs.vstest.reportsPaths=**/TestResults/**/*.trx"
 )

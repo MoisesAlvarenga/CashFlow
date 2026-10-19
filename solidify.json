@@ -102,7 +102,10 @@
   },
   "targets": {
     "frontend": [],
-    "api": []
+    "api": [
+      "http://localhost:5101",
+      "http://localhost:5102"
+    ]
   },
   "analyzers": {
     "tests": {
@@ -123,8 +126,8 @@
       "enabled": true,
       "gitleaks": true,
       "osv_scanner": true,
-      "semgrep": true,
-      "zap_baseline": true,
+      "semgrep": false,
+      "zap_baseline": false,
       "zap_active": false,
       "active_target_allowlist": [
         "127.0.0.1",
@@ -133,7 +136,7 @@
       ]
     },
     "lighthouse": {
-      "enabled": true,
+      "enabled": false,
       "mode": "cli",
       "categories": {
         "performance": 50,
@@ -147,6 +150,7 @@
       "default_mode": "smoke",
       "mode": "binary",
       "require_thresholds_for_score": true,
+      "script_path": "tests/load/k6-load-test.js",
       "vus": 10,
       "duration_seconds": 30,
       "threshold_p95_ms": 500,

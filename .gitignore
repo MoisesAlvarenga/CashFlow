@@ -15,16 +15,27 @@
 Thumbs.db
 .vscode/
 
+## AI Agents & Scaffolding
+.claude/
+.cursor/
+.windsurf/
+
 ## Test / Coverage
 TestResults/
 *.trx
 coverage/
 *.lcov
 
-## Tools
+## Tools & Quality Gates
 .sonarqube/
-.solidify/
-out/
 .sonar_token
+.scannerwork/
+**/[.]scannerwork/
+out/
+.solidify/*
+!.solidify/out/
+!.solidify/out/*
 
-
+## Personal Study Guides (Keep Local)
+GUIA_ESTUDO_ENTREVISTA_TECNICA.md
+*ENTREVISTA*

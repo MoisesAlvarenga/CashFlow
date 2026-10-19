@@ -10,12 +10,21 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.6" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.2">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="RabbitMQ.Client" Version="7.2.2" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="10.3.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\CashFlow.Transactions.Application\CashFlow.Transactions.Application.csproj" />
     <ProjectReference Include="..\CashFlow.Transactions.Infrastructure\CashFlow.Transactions.Infrastructure.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Dockerfile" />
   </ItemGroup>
 
 </Project>

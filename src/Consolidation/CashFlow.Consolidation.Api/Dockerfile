@@ -24,8 +24,7 @@ RUN dotnet publish CashFlow.Consolidation.Api.csproj -c Release -o /app/publish
 FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS runtime
 WORKDIR /app
 COPY --from=build /app/publish ./
-USER app
+USER $APP_UID
 EXPOSE 8080
 ENV ASPNETCORE_URLS=http://+:8080
-ENV ASPNETCORE_ENVIRONMENT=Development
 ENTRYPOINT ["dotnet", "CashFlow.Consolidation.Api.dll"]
