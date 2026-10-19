@@ -24,44 +24,44 @@ flowchart TD
         Reports["Reports / BI Systems"]
     end
 
-    subgraph TransactionsService["Transactions Service (CashFlow.Transactions.Api)"]
-        TransactionsEndpoint["Minimal API Endpoint\nPOST /api/v1/transactions"]
+    subgraph TransactionsService["Transactions Service - CashFlow.Transactions.Api"]
+        TransactionsEndpoint["Minimal API Endpoint<br/>POST /api/v1/transactions"]
         TransactionHandler["RegisterTransactionCommandHandler"]
         TransactionRepo["TransactionRepository"]
-        OutboxTable["Outbox Table\n(Same ACID Transaction)"]
-        OutboxPublisher["OutboxProcessorWorker\n(BackgroundService)"]
-        DbTransactions[("Database\nTransactions & Outbox")]
+        OutboxTable["Outbox Table<br/>Same ACID Transaction"]
+        OutboxPublisher["OutboxProcessorWorker<br/>BackgroundService"]
+        DbTransactions[(Database<br/>Transactions e Outbox)]
     end
 
     subgraph Messaging["Message Broker"]
-        Queue["RabbitMQ Direct Exchange\ncashflow.transactions"]
-        DLQ["Dead Letter Queue (DLQ)"]
+        Queue["RabbitMQ Direct Exchange<br/>cashflow.transactions"]
+        DLQ["Dead Letter Queue - DLQ"]
     end
 
-    subgraph ConsolidationService["Consolidation Service (CashFlow.Consolidation.Api)"]
-        EventConsumer["TransactionRegisteredConsumer\n(RabbitMQ.Client BackgroundService)"]
-        DailyBalanceService["DailyBalanceService\n(Idempotent Aggregation)"]
+    subgraph ConsolidationService["Consolidation Service - CashFlow.Consolidation.Api"]
+        EventConsumer["TransactionRegisteredConsumer<br/>RabbitMQ.Client BackgroundService"]
+        DailyBalanceService["DailyBalanceService<br/>Idempotent Aggregation"]
         DailyBalanceRepo["DailyBalanceRepository"]
-        DbConsolidation[("PostgreSQL Database\nIndexed Daily Balances")]
-        DailyBalancesEndpoint["Minimal API Endpoint\nGET /api/v1/daily-balances"]
+        DbConsolidation[(PostgreSQL Database<br/>Indexed Daily Balances)]
+        DailyBalancesEndpoint["Minimal API Endpoint<br/>GET /api/v1/daily-balances"]
     end
 
-    Merchant -->|HTTP POST| TransactionsEndpoint
+    Merchant -->|"HTTP POST"| TransactionsEndpoint
     TransactionsEndpoint --> TransactionHandler
     TransactionHandler --> TransactionRepo
-    TransactionRepo -->|BeginTransaction / Commit| DbTransactions
-    TransactionHandler -->|Persists Event| OutboxTable
-    OutboxTable -.->|Persisted in same Db| DbTransactions
+    TransactionRepo -->|"BeginTransaction / Commit"| DbTransactions
+    TransactionHandler -->|"Persists Event"| OutboxTable
+    OutboxTable -.->|"Persisted in same Db"| DbTransactions
 
-    OutboxPublisher -->|Reads pending messages| OutboxTable
-    OutboxPublisher -->|Publishes event| Queue
-    Queue -->|Asynchronous consume| EventConsumer
-    Queue -.->|Failures after retries| DLQ
+    OutboxPublisher -->|"Reads pending messages"| OutboxTable
+    OutboxPublisher -->|"Publishes event"| Queue
+    Queue -->|"Asynchronous consume"| EventConsumer
+    Queue -.->|"Failures after retries"| DLQ
     EventConsumer --> DailyBalanceService
     DailyBalanceService --> DailyBalanceRepo
     DailyBalanceRepo --> DbConsolidation
 
-    Reports -->|HTTP GET| DailyBalancesEndpoint
+    Reports -->|"HTTP GET"| DailyBalancesEndpoint
     DailyBalancesEndpoint --> DailyBalanceRepo
 ```
 
@@ -77,7 +77,7 @@ sequenceDiagram
     participant Cons as Consolidation.Api (Worker)
     participant DB2 as DB Consolidation
 
-    Merchant->>API: POST /api/v1/transactions (Credit $100.00)
+    Merchant->>API: POST /api/v1/transactions (Credit 100.00)
     activate API
     API->>DB1: Begin ACID Transaction
     API->>DB1: INSERT INTO Transactions (Id, Amount, Type, Date)
@@ -86,12 +86,12 @@ sequenceDiagram
     API-->>Merchant: HTTP 201 Created (TransactionId)
     deactivate API
 
-    Note over Cons: Consolidation Service is OFFLINE ❌
+    Note over Cons: Consolidation Service is OFFLINE
     
     API->>Bus: Publish attempt or Broker offline
     Note over API,DB1: Message remains safely in Outbox with pending status. Merchant operations are unaffected.
 
-    Note over Cons: Consolidation Service RESTORES online ✔️
+    Note over Cons: Consolidation Service RESTORES online
     API->>Bus: OutboxPublisherWorker sends pending messages
     Bus->>Cons: Consumes TransactionRegisteredEvent
     activate Cons
@@ -112,7 +112,7 @@ As a new solution, there is no legacy internal code. Standard Microsoft .NET and
 | ----------------- | ------- | ----- |
 | `Microsoft.AspNetCore.OpenApi` / `Swashbuckle` | Interactive API documentation | OpenAPI / Swagger generation for both services |
 | `FluentValidation` | Decoupled input validation | Validates HTTP requests and command contracts |
-| `MassTransit` | Messaging facade & Outbox | Flexible bus configuration (RabbitMQ & InMemory TestHarness) |
+| `RabbitMQ.Client` | Native async messaging driver | Resilient async publishing and idempotent event consumption |
 | `Microsoft.EntityFrameworkCore` | ORM & Relational Data Access | Migrations, entity mapping, and transactional control |
 | `xUnit` + `FluentAssertions` + `Moq` | Automated Test Suite | High-readability unit and integration tests |
 

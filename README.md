@@ -120,49 +120,49 @@ O sistema foi arquitetado como **dois microsserviços autônomos**, desacoplados
 
 ```mermaid
 flowchart TD
-    subgraph Clientes["Clientes & Consumidores"]
+    subgraph Clientes["Clientes e Consumidores"]
         Merchant["Comerciante / Frontend"]
         Relatorios["Sistemas de Relatório / BI"]
     end
 
-    subgraph TransactionsService["Serviço de Lançamentos (CashFlow.Transactions.Api)"]
-        TransactionsEndpoint["Transactions Endpoint\nPOST /api/v1/transactions\nGET /api/v1/transactions"]
-        TransactionHandler["RegisterTransactionCommandHandler\nGetTransactionsQueryHandler"]
+    subgraph TransactionsService["Serviço de Lançamentos - CashFlow.Transactions.Api"]
+        TransactionsEndpoint["Transactions Endpoint<br/>POST /api/v1/transactions<br/>GET /api/v1/transactions"]
+        TransactionHandler["RegisterTransactionCommandHandler<br/>GetTransactionsQueryHandler"]
         TransactionRepo["TransactionRepository"]
-        OutboxTable["Tabela Outbox\n(Mesma Transação ACID)"]
-        OutboxPublisher["OutboxPublisherWorker\n(BackgroundService)"]
-        DbTransactions[("PostgreSQL 16\nTransactions & Outbox")]
+        OutboxTable["Tabela Outbox<br/>Mesma Transação ACID"]
+        OutboxPublisher["OutboxPublisherWorker<br/>BackgroundService"]
+        DbTransactions[(PostgreSQL 16<br/>Transactions e Outbox)]
     end
 
     subgraph Mensageria["Broker de Mensagens"]
-        Queue["RabbitMQ\nFila: transaction-registered-event"]
-        DLQ["Dead Letter Queue (DLQ)"]
+        Queue["RabbitMQ<br/>Fila: transaction-registered-event"]
+        DLQ["Dead Letter Queue - DLQ"]
     end
 
-    subgraph ConsolidationService["Serviço de Consolidação (CashFlow.Consolidation.Api)"]
+    subgraph ConsolidationService["Serviço de Consolidação - CashFlow.Consolidation.Api"]
         EventConsumer["TransactionRegisteredConsumer"]
-        DailyBalanceService["DailyBalanceService\n(Agregação Idempotente)"]
+        DailyBalanceService["DailyBalanceService<br/>Agregação Idempotente"]
         DailyBalanceRepo["DailyBalanceRepository"]
-        DbConsolidation[("PostgreSQL 16\nDaily Balances")]
-        DailyBalancesEndpoint["DailyBalances Endpoint\nGET /api/v1/daily-balances"]
+        DbConsolidation[(PostgreSQL 16<br/>Daily Balances)]
+        DailyBalancesEndpoint["DailyBalances Endpoint<br/>GET /api/v1/daily-balances"]
     end
 
-    Merchant -->|HTTP POST / GET| TransactionsEndpoint
+    Merchant -->|"HTTP POST / GET"| TransactionsEndpoint
     TransactionsEndpoint --> TransactionHandler
     TransactionHandler --> TransactionRepo
-    TransactionRepo -->|Commit ACID| DbTransactions
-    TransactionHandler -->|Grava Evento| OutboxTable
-    OutboxTable -.->|Persistido no mesmo DB| DbTransactions
+    TransactionRepo -->|"Commit ACID"| DbTransactions
+    TransactionHandler -->|"Grava Evento"| OutboxTable
+    OutboxTable -.->|"Persistido no mesmo DB"| DbTransactions
 
-    OutboxPublisher -->|Lê pendentes| OutboxTable
-    OutboxPublisher -->|Publica evento| Queue
-    Queue -->|Consumo assíncrono| EventConsumer
-    Queue -.->|Falhas pós-retries| DLQ
+    OutboxPublisher -->|"Lê pendentes"| OutboxTable
+    OutboxPublisher -->|"Publica evento"| Queue
+    Queue -->|"Consumo assíncrono"| EventConsumer
+    Queue -.->|"Falhas pós-retries"| DLQ
     EventConsumer --> DailyBalanceService
     DailyBalanceService --> DailyBalanceRepo
     DailyBalanceRepo --> DbConsolidation
 
-    Relatorios -->|HTTP GET| DailyBalancesEndpoint
+    Relatorios -->|"HTTP GET"| DailyBalancesEndpoint
     DailyBalancesEndpoint --> DailyBalanceRepo
 ```
 
