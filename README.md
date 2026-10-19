@@ -58,6 +58,12 @@ Todo o ciclo de engenharia deste projeto foi conduzido pelo paradigma **Spec-Dri
 
 ### 🤖 Engenharia Assistida por IA com Governança Arquitetural Humana (Human-in-the-Loop)
 
+> [!IMPORTANT]
+> **Posicionamento do Autor & Defesa Técnica:**
+> *"No desenvolvimento deste desafio, utilizei a metodologia **Spec-Driven Development (SDD)** com assistência de Inteligência Artificial no modelo **Human-in-the-Loop**.*
+> *Toda a concepção arquitetural — a decisão de desacoplar os microsserviços via **Transactional Outbox**, o uso do driver assíncrono nativo do **RabbitMQ v7**, a separação de responsabilidades via **CQRS** (projeção de leitura pura na consolidação e escrita transacional com consistência eventual), a garantia de **idempotência de ponta a ponta**, a otimização de consultas via índice composto no PostgreSQL (`IX_DailyBalances_Date`) e a infraestrutura segura em containers não-root — **foi pensada, desenhada e decidida por mim**.*
+> *A IA atuou estritamente como ferramenta de apoio e acelerador de produtividade (pair programming) para escrita de código boilerplate, esqueletos de DTOs e scaffolding de testes. Cada linha de código foi revisada criticamente por mim e submetida a Quality Gates automatizados rigorosos, resultando em **0 vulnerabilidades no SonarQube**, **51 testes unitários aprovados em ~260ms** e **0% de perda em testes de carga com K6**."*
+
 O projeto adotou as melhores práticas contemporâneas de **Engenharia de Software Assistida por Inteligência Artificial**:
 
 * **Governança Arquitetural 100% Humana**: Todas as decisões de arquitetura de software, seleção de padrões de projeto (Transactional Outbox, CQRS, Clean Architecture, SOLID), modelagem de dados no PostgreSQL, dimensionamento de buffer no RabbitMQ, concorrência e estratégias de idempotência foram **concebidas, estruturadas e decididas pelo Arquiteto / Desenvolvedor**, registradas nas Decisões Arquiteturais ([`.specs/STATE.md`](.specs/STATE.md)).
