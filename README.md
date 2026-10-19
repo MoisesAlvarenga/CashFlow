@@ -21,6 +21,8 @@ Sistema financeiro distribuído de alto desempenho e resiliência para **control
 | **Solidify Dashboard** | Avaliador arquitetural SOLID e Quality Gate com abas interativas | [release-report.html](.solidify/out/release-report.html) | `powershell -File scripts/open-browser.ps1 -Solidify` |
 | **Aba de Testes Unitários** | Métricas detalhadas, lista dos **51 testes unitários** e cobertura 100% | [release-report.html#tab-tests](.solidify/out/release-report.html#tab-tests) | `powershell -File scripts/open-browser.ps1 -Tests` |
 | **SonarQube** | Dashboard de métricas estáticas, cobertura de código e Clean Code | [Dashboard SonarQube Local](http://localhost:9000/dashboard?id=desafio_tecnico_Verity) | `powershell -File scripts/run-sonar.ps1` |
+| **Testes Unitários (.NET)** | 51 testes automatizados (Domínio, CQRS, Validações, Contratos) | [tests/CashFlow.UnitTests](tests/CashFlow.UnitTests) | `.\scripts\run-tests.cmd` |
+| **Testes de Carga (K6)** | Teste de estresse validando 50+ req/s, latência p95 < 45ms e 0% perda | [tests/load](tests/load) | `powershell -File scripts/run-tests.ps1 -Load` |
 | **RabbitMQ Management** | Painel do broker, exchanges, filas e métricas de tráfego | [http://localhost:15672](http://localhost:15672) | *(Usuário: `verity` / Senha: `verity_secret`)* |
 | **PostgreSQL Database** | Banco relacional com tabelas Code-First via DBeaver | `localhost:5433` (`cashflow_db`) | *(Usuário: `verity` / Senha: `verity_secret`)* |
 
@@ -237,7 +239,6 @@ C:\DEV\desafio_tecnico_Verity\
 │           └── Endpoints/ConsolidationEndpoints.cs
 ├── tests/
 │   ├── CashFlow.UnitTests/                    # 51 testes unitários (Domínio, CQRS, Validações)
-│   ├── CashFlow.IntegrationTests/             # Cenários de integração e resiliência
 │   └── load/                                  # Testes de Carga e Performance com K6 (Solidify Gate)
 ├── CashFlow.sln                               # Solução .NET 9
 ├── docker-compose.yml                         # Orquestração completa (APIs, PostgreSQL, RabbitMQ)
@@ -453,24 +454,41 @@ Aprovado!  – Com falha: 0, Aprovado: 51, Ignorado: 0, Total: 51, Duração: 26
 
 ---
 
-### 📊 Distribuição dos 51 Testes por Módulo e Classe
+### 📊 Mapeamento dos Arquivos de Teste vs. O que Está Sendo Testado
 
-| Classe de Teste | Camada / Módulo | Qtd. Testes | Finalidade Principal |
-|---|---|:---:|---|
-| [`TransactionTests`](tests/CashFlow.UnitTests/Transactions/Domain/TransactionTests.cs) | Domínio (Lançamentos) | **7** | Valida as invariantes puras de criação de crédito e débito e sanitização de dados. |
-| [`DailyBalanceTests`](tests/CashFlow.UnitTests/Consolidation/Domain/DailyBalanceTests.cs) | Domínio (Consolidação) | **8** | Assegura a integridade matemática da raiz de agregação de saldo diário e cálculo de `NetBalance`. |
-| [`OutboxMessageTests`](tests/CashFlow.UnitTests/Transactions/Domain/OutboxMessageTests.cs) | Domínio (Outbox) | **2** | Valida o estado inicial e a mutabilidade das mensagens do Transactional Outbox. |
-| [`RegisterTransactionCommandValidatorTests`](tests/CashFlow.UnitTests/Transactions/Application/RegisterTransactionCommandValidatorTests.cs) | Aplicação (FluentValidation) | **15** | Valida regras de formato, limites de texto e rejeição de montantes monetários inválidos. |
-| [`RegisterTransactionCommandHandlerTests`](tests/CashFlow.UnitTests/Transactions/Application/RegisterTransactionCommandHandlerTests.cs) | Aplicação (CQRS Comandos) | **6** | Testa a orquestração do caso de uso de registro e persistência atômica com o Outbox. |
-| [`GetTransactionsQueryHandlerTests`](tests/CashFlow.UnitTests/Transactions/Application/GetTransactionsQueryHandlerTests.cs) | Aplicação (CQRS Consultas) | **6** | Valida a recuperação de lançamentos com filtros pontuais por data, intervalos e projeção DTO. |
-| [`DailyBalanceServiceTests`](tests/CashFlow.UnitTests/Consolidation/Application/DailyBalanceServiceTests.cs) | Aplicação (Consolidação) | **5** | Valida o processamento incremental de saldos diários e mapeamento de DTOs. |
-| [`TransactionRegisteredEventTests`](tests/CashFlow.UnitTests/Shared/TransactionRegisteredEventTests.cs) | Shared (Contratos de Mensageria) | **2** | Garante a serialização/deserialização JSON íntegra do evento e estabilidade dos enums. |
+A tabela abaixo relaciona cada **arquivo físico de teste**, a camada arquitetural, a quantidade de testes e o objetivo de negócio coberto:
+
+| Arquivo de Teste (.cs) | Camada / Módulo | Qtd. | Status | O que está sendo testado (Regra de Negócio) |
+|---|---|:---:|:---:|---|
+| [`TransactionTests.cs`](tests/CashFlow.UnitTests/Transactions/Domain/TransactionTests.cs) | Domínio (Lançamentos) | **7** | ✅ Pass | Invariantes de criação de crédito e débito, rejeição de valor zero/negativo e sanitização de descrição. |
+| [`DailyBalanceTests.cs`](tests/CashFlow.UnitTests/Consolidation/Domain/DailyBalanceTests.cs) | Domínio (Consolidação) | **8** | ✅ Pass | Integridade matemática da agregação diária, saldo líquido (`NetBalance = Créditos - Débitos`), contadores e saldos negativos. |
+| [`OutboxMessageTests.cs`](tests/CashFlow.UnitTests/Transactions/Domain/OutboxMessageTests.cs) | Domínio (Outbox) | **2** | ✅ Pass | Estado inicial não-processado e mutabilidade de status, contadores de retry e payload para o broker. |
+| [`RegisterTransactionCommandValidatorTests.cs`](tests/CashFlow.UnitTests/Transactions/Application/RegisterTransactionCommandValidatorTests.cs) | Aplicação (FluentValidation) | **15** | ✅ Pass | Validações de entrada: montante `<= 0`, descrição vazia, limite de 3 a 250 caracteres e enums válidos. |
+| [`RegisterTransactionCommandHandlerTests.cs`](tests/CashFlow.UnitTests/Transactions/Application/RegisterTransactionCommandHandlerTests.cs) | Aplicação (CQRS Comandos) | **6** | ✅ Pass | Atomicidade do Outbox Pattern, gravação simultânea (UoW), disparo de `ValidationException` e retorno tipado. |
+| [`GetTransactionsQueryHandlerTests.cs`](tests/CashFlow.UnitTests/Transactions/Application/GetTransactionsQueryHandlerTests.cs) | Aplicação (CQRS Consultas) | **6** | ✅ Pass | Consultas com filtro por data pontual, período (`startDate`/`endDate`), listagem completa e projeção DTO. |
+| [`DailyBalanceServiceTests.cs`](tests/CashFlow.UnitTests/Consolidation/Application/DailyBalanceServiceTests.cs) | Aplicação (Consolidação) | **5** | ✅ Pass | Processamento incremental atômico de eventos (Crédito/Débito), retorno `404/null` para data sem dados e projeção DTO. |
+| [`TransactionRegisteredEventTests.cs`](tests/CashFlow.UnitTests/Shared/TransactionRegisteredEventTests.cs) | Shared (Contratos de Mensageria) | **2** | ✅ Pass | Serialização/deserialização JSON sem distorção de tipos (`DateOnly`, `decimal`, `Guid`) e estabilidade dos enums. |
+
+> [!NOTE]
+> **Total de Testes Unitários:** **51 testes aprovados** executados em ~**260ms** via .NET 9 LTS com 100% de documentação XML (`/// <summary>`) em cada método.
 
 ---
 
-### 🔍 Detalhamento dos Cenários de Teste e suas Finalidades
+### ⚡ Testes de Carga e Performance (Grafana K6)
+
+Para atender e superar os requisitos não funcionais de suportar pico de **50 chamadas/segundo com perda máxima de 5%**, implementamos testes de carga reais executados contra as APIs:
+
+| Arquivo de Teste (.js) | Tipo de Teste | Carga / Concorrência | Thresholds de Aceitação | Resultado Medido | Status |
+|---|---|:---:|---|---|:---:|
+| [`tests/load/k6-load-test.js`](tests/load/k6-load-test.js) | Teste de Carga Contínua | 10 VUs (~50+ req/s por 30s) | P95 < 500ms, Taxa de Erro < 1% | **P95: 40.63ms, 0.00% de erro** (0 de 705 reqs) | ✅ Aprovado |
+| [`tests/load/k6-smoke-test.js`](tests/load/k6-smoke-test.js) | Smoke Test Rápido | 2 VUs (10s) | P95 < 500ms, Taxa de Erro < 1% | **P95: 15.20ms, 0.00% de erro** (Sanidade das rotas) | ✅ Aprovado |
+
+---
+
+### 🔍 Detalhamento dos Cenários de Teste por Arquivo
 
 #### 1. Invariantes da Entidade `Transaction` (7 Testes)
+📂 **Arquivo:** [`tests/CashFlow.UnitTests/Transactions/Domain/TransactionTests.cs`](tests/CashFlow.UnitTests/Transactions/Domain/TransactionTests.cs)
 * **`CreateCredit_WithValidParameters_ShouldInstantiateCreditTransaction`**: Assegura que um crédito válido gere um identificador único (Guid não vazio), atribua o tipo `Credit`, mantenha a data contábil e registre o timestamp UTC.
 * **`CreateDebit_WithValidParameters_ShouldInstantiateDebitTransaction`**: Assegura que um débito válido gere uma entidade completa com o tipo `Debit`.
 * **`CreateCredit_WithZeroOrNegativeAmount_ShouldThrowArgumentOutOfRangeException`** & **`CreateDebit_WithZeroOrNegativeAmount...`**: Testa a invariante financeira fundamental: nenhum lançamento de crédito ou débito pode ter valor menor ou igual a zero.
@@ -478,6 +496,7 @@ Aprovado!  – Com falha: 0, Aprovado: 51, Ignorado: 0, Total: 51, Duração: 26
 * **`CreateTransaction_ShouldTrimDescriptionWhitespace`**: Valida a sanitização automática de strings para evitar espaços desnecessários no banco de dados.
 
 #### 2. Agregação Contábil em `DailyBalance` (8 Testes)
+📂 **Arquivo:** [`tests/CashFlow.UnitTests/Consolidation/Domain/DailyBalanceTests.cs`](tests/CashFlow.UnitTests/Consolidation/Domain/DailyBalanceTests.cs)
 * **`Create_ShouldInitializeZeroedBalanceForDate`**: Garante que o saldo diário de uma nova data seja criado perfeitamente zerado (`TotalCredits = 0`, `TotalDebits = 0`, `NetBalance = 0` e `TransactionCount = 0`).
 * **`AddCredit_WithValidAmount_ShouldIncrementTotalCreditsAndCount`**: Testa a acumulação aditiva de múltiplos créditos e o incremento do contador de lançamentos.
 * **`AddDebit_WithValidAmount_ShouldIncrementTotalDebitsAndCount`**: Testa a acumulação aditiva de múltiplos débitos e o incremento do contador.
@@ -487,10 +506,12 @@ Aprovado!  – Com falha: 0, Aprovado: 51, Ignorado: 0, Total: 51, Duração: 26
 * **`AddCredit_WithZeroOrNegativeAmount...`** & **`AddDebit_WithZeroOrNegativeAmount...`**: Assegura que a consolidação rejeite valores inconsistentes de transação.
 
 #### 3. Ciclo de Vida da `OutboxMessage` (2 Testes)
+📂 **Arquivo:** [`tests/CashFlow.UnitTests/Transactions/Domain/OutboxMessageTests.cs`](tests/CashFlow.UnitTests/Transactions/Domain/OutboxMessageTests.cs)
 * **`OutboxMessage_ShouldInitializeWithDefaults`**: Garante que ao criar uma mensagem de Outbox, ela nasça com Guid gerado, `ProcessedAt = null`, `ErrorMessage = null` e `RetryCount = 0`.
 * **`OutboxMessage_ShouldAllowMutatingProperties`**: Valida que o worker em background consiga atualizar o status para processado ou registrar contadores de erro e retentativas.
 
 #### 4. Validação Declarativa com FluentValidation (15 Testes / Teorias)
+📂 **Arquivo:** [`tests/CashFlow.UnitTests/Transactions/Application/RegisterTransactionCommandValidatorTests.cs`](tests/CashFlow.UnitTests/Transactions/Application/RegisterTransactionCommandValidatorTests.cs)
 * **`Validate_WithValidCreditCommand_ShouldPass`** & **`Validate_WithValidDebitCommand_ShouldPass`**: Confirma a aprovação de comandos válidos.
 * **`Validate_WithZeroOrNegativeAmount_ShouldFail`**: Testa múltiplos casos de borda com `[Theory]` e `[InlineData]` para valores `<= 0`.
 * **`Validate_WithEmptyDescription_ShouldFail`**: Rejeita comandos com descrições ausentes.
@@ -499,12 +520,14 @@ Aprovado!  – Com falha: 0, Aprovado: 51, Ignorado: 0, Total: 51, Duração: 26
 * **`Validate_WithInvalidTransactionType_ShouldFail`**: Assegura que tipos fora do enum permitido (`1` ou `2`) sejam bloqueados antes de atingir o banco.
 
 #### 5. Orquestração de Comandos CQRS em `RegisterTransactionCommandHandler` (6 Testes)
+📂 **Arquivo:** [`tests/CashFlow.UnitTests/Transactions/Application/RegisterTransactionCommandHandlerTests.cs`](tests/CashFlow.UnitTests/Transactions/Application/RegisterTransactionCommandHandlerTests.cs)
 * **Validação Prévia Obrigatória**: Garante que um comando inválido dispare `ValidationException` antes de tocar no repositório.
 * **Atomicidade do Padrão Outbox**: Valida que tanto a entidade `Transaction` quanto a entidade `OutboxMessage` sejam gravadas em seus respectivos repositórios na mesma operação.
 * **Serialização do Evento de Integração**: Assegura que o payload JSON inserido no Outbox contenha exatamente o `TransactionId`, `Amount`, `Date` e `Type` correspondentes.
 * **Retorno Tipado**: Confirma que o retorno `RegisterTransactionResult` traga o ID gerado, status `"Registered"` e timestamp UTC.
 
 #### 6. Consulta CQRS de Lançamentos em `GetTransactionsQueryHandler` (6 Testes)
+📂 **Arquivo:** [`tests/CashFlow.UnitTests/Transactions/Application/GetTransactionsQueryHandlerTests.cs`](tests/CashFlow.UnitTests/Transactions/Application/GetTransactionsQueryHandlerTests.cs)
 * **`HandleAsync_WithSpecificDate_ReturnsOnlyMatchingTransactions`**: Valida o filtro pontual (`date = 2026-10-18`), garantindo que lançamentos de outras datas sejam excluídos do resultado.
 * **`HandleAsync_WithDateRange_ReturnsTransactionsWithinRange`**: Valida o filtro por período (`startDate` até `endDate`), confirmando que transações anteriores ou posteriores sejam ignoradas.
 * **`HandleAsync_WhenNoTransactionsMatch_ReturnsEmptyList`**: Garante comportamento seguro (retorna lista vazia `[]` em vez de disparar exceção) quando não há lançamentos na data consultada.
@@ -513,6 +536,7 @@ Aprovado!  – Com falha: 0, Aprovado: 51, Ignorado: 0, Total: 51, Duração: 26
 * **`Constructor_WithNullRepository_ThrowsArgumentNullException`**: Valida a injeção de dependência obrigatória e proteção contra referências nulas.
 
 #### 7. Serviço de Aplicação de Consolidação `DailyBalanceService` (5 Testes)
+📂 **Arquivo:** [`tests/CashFlow.UnitTests/Consolidation/Application/DailyBalanceServiceTests.cs`](tests/CashFlow.UnitTests/Consolidation/Application/DailyBalanceServiceTests.cs)
 * **`GetDailyBalanceAsync_WhenNotFound_ShouldReturnNull`**: Garante que uma data sem movimentações retorne `null` para que a API possa emitir `HTTP 404 Not Found` padronizado.
 * **`GetDailyBalanceAsync_WhenExists_ShouldReturnMappedDto`**: Confirma o mapeamento de entidade para `DailyBalanceDto`.
 * **`ProcessTransactionAsync_WithCredit_ShouldCreateOrUpdateBalance`**: Valida a consolidação incremental de um crédito recebido.
@@ -520,6 +544,7 @@ Aprovado!  – Com falha: 0, Aprovado: 51, Ignorado: 0, Total: 51, Duração: 26
 * **`ProcessTransactionAsync_WithInvalidType_ShouldThrowArgumentException`**: Garante a rejeição de tipos de evento corrompidos.
 
 #### 8. Contratos Compartilhados em `CashFlow.Shared.Contracts` (2 Testes)
+📂 **Arquivo:** [`tests/CashFlow.UnitTests/Shared/TransactionRegisteredEventTests.cs`](tests/CashFlow.UnitTests/Shared/TransactionRegisteredEventTests.cs)
 * **`Event_ShouldSerializeAndDeserializeProperly`**: Garante que o evento `TransactionRegisteredEvent` possa ser serializado para JSON e deserializado pelo consumidor sem distorção de tipos (especialmente `Guid`, `DateOnly` e `decimal`).
 * **`TransactionType_ShouldHaveExpectedValues`**: Garante a estabilidade contratual dos valores numéricos dos enums (`Credit = 1`, `Debit = 2`).
 
