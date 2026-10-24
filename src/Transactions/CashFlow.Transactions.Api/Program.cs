@@ -82,6 +82,7 @@ builder.Services.AddScoped<ICancellationTokenProvider, HttpCancellationTokenProv
 // Dependency Inversion: Register domain repositories and application handlers
 builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
 builder.Services.AddScoped<IOutboxRepository, OutboxRepository>();
+builder.Services.AddScoped<ITransactionsUnitOfWork, TransactionsUnitOfWork>();
 builder.Services.AddScoped<IValidator<RegisterTransactionCommand>, RegisterTransactionCommandValidator>();
 builder.Services.AddScoped<IRegisterTransactionCommandHandler, RegisterTransactionCommandHandler>();
 builder.Services.AddScoped<IGetTransactionsQueryHandler, GetTransactionsQueryHandler>();

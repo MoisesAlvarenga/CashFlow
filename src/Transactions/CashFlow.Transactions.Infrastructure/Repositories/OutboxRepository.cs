@@ -23,7 +23,6 @@ public class OutboxRepository : IOutboxRepository
     {
         var ct = _tokenProvider.Token;
         await _dbContext.OutboxMessages.AddAsync(message, ct);
-        await _dbContext.SaveChangesAsync(ct);
     }
 
     public async Task<IReadOnlyList<OutboxMessage>> GetPendingMessagesAsync(int batchSize)

@@ -23,7 +23,6 @@ public class TransactionRepository : ITransactionRepository
     {
         var ct = _tokenProvider.Token;
         await _dbContext.Transactions.AddAsync(transaction, ct);
-        await _dbContext.SaveChangesAsync(ct);
     }
 
     public async Task<Transaction?> GetByIdAsync(Guid id)

@@ -63,6 +63,18 @@ public class RegisterTransactionCommandHandlerTests
         }
     }
 
+    private class FakeTransactionsUnitOfWork(Action? onSave = null) : ITransactionsUnitOfWork
+    {
+        public int SaveChangesCallCount { get; private set; }
+
+        public Task SaveChangesAsync()
+        {
+            SaveChangesCallCount++;
+            onSave?.Invoke();
+            return Task.CompletedTask;
+        }
+    }
+
     /// <summary>
     /// Garante a persistência atômica da transação de crédito e da respectiva mensagem Outbox para publicação no RabbitMQ.
     /// </summary>
@@ -73,8 +85,13 @@ public class RegisterTransactionCommandHandlerTests
         // Arrange
         var txRepo = new FakeTransactionRepository();
         var outboxRepo = new FakeOutboxRepository();
+        var unitOfWork = new FakeTransactionsUnitOfWork(() =>
+        {
+            Assert.Single(txRepo.Added);
+            Assert.Single(outboxRepo.Messages);
+        });
         var validator = new RegisterTransactionCommandValidator();
-        var handler = new RegisterTransactionCommandHandler(txRepo, outboxRepo, validator);
+        var handler = new RegisterTransactionCommandHandler(txRepo, outboxRepo, unitOfWork, validator);
 
         var command = new RegisterTransactionCommand(
             Type: TransactionType.Credit,
@@ -110,6 +127,7 @@ public class RegisterTransactionCommandHandlerTests
         Assert.Equal(savedTx.Id, deserializedEvent.TransactionId);
         Assert.Equal("Credit", deserializedEvent.Type);
         Assert.Equal(500.00m, deserializedEvent.Amount);
+        Assert.Equal(1, unitOfWork.SaveChangesCallCount);
     }
 
     /// <summary>
@@ -122,8 +140,9 @@ public class RegisterTransactionCommandHandlerTests
         // Arrange
         var txRepo = new FakeTransactionRepository();
         var outboxRepo = new FakeOutboxRepository();
+        var unitOfWork = new FakeTransactionsUnitOfWork();
         var validator = new RegisterTransactionCommandValidator();
-        var handler = new RegisterTransactionCommandHandler(txRepo, outboxRepo, validator);
+        var handler = new RegisterTransactionCommandHandler(txRepo, outboxRepo, unitOfWork, validator);
 
         var command = new RegisterTransactionCommand(
             Type: TransactionType.Debit,
@@ -140,6 +159,7 @@ public class RegisterTransactionCommandHandlerTests
         Assert.Single(txRepo.Added);
         Assert.Equal(TransactionType.Debit, txRepo.Added[0].Type);
         Assert.Single(outboxRepo.Messages);
+        Assert.Equal(1, unitOfWork.SaveChangesCallCount);
     }
 
     /// <summary>
@@ -152,8 +172,9 @@ public class RegisterTransactionCommandHandlerTests
         // Arrange
         var txRepo = new FakeTransactionRepository();
         var outboxRepo = new FakeOutboxRepository();
+        var unitOfWork = new FakeTransactionsUnitOfWork();
         var validator = new RegisterTransactionCommandValidator();
-        var handler = new RegisterTransactionCommandHandler(txRepo, outboxRepo, validator);
+        var handler = new RegisterTransactionCommandHandler(txRepo, outboxRepo, unitOfWork, validator);
 
         var invalidCommand = new RegisterTransactionCommand(
             Type: TransactionType.Credit,
@@ -166,5 +187,6 @@ public class RegisterTransactionCommandHandlerTests
         await Assert.ThrowsAsync<ValidationException>(() => handler.HandleAsync(invalidCommand));
         Assert.Empty(txRepo.Added);
         Assert.Empty(outboxRepo.Messages);
+        Assert.Equal(0, unitOfWork.SaveChangesCallCount);
     }
 }
