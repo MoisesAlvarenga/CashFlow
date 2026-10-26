@@ -1,6 +1,6 @@
 # Cash Flow & Daily Consolidation System (Desafio Técnico Verity)
 
-Sistema financeiro distribuído de alto desempenho e resiliência para **controle de fluxo de caixa com lançamentos de crédito e débito** e **consolidação diária de saldos**, desenvolvido em **.NET 9 (Standard Term Support - STS)** com **C# 13**, **PostgreSQL 16** e **RabbitMQ**, fundamentado em **Clean Architecture**, **Domain-Driven Design (DDD)**, **CQRS**, **Entity Framework Core Code-First** e mensageria desacoplada com o padrão **Transactional Outbox**.
+Sistema financeiro distribuído de alto desempenho e resiliência para **controle de fluxo de caixa com lançamentos de crédito e débito** e **consolidação diária de saldos**, desenvolvido em **.NET 10 (Long Term Support - LTS)** com **C# 13**, orquestrado com **.NET Aspire**, **PostgreSQL 16** e **RabbitMQ**, fundamentado em **Clean Architecture**, **Domain-Driven Design (DDD)**, **CQRS**, **Entity Framework Core Code-First** e mensageria desacoplada com o padrão **Transactional Outbox**.
 
 ---
 
@@ -15,6 +15,7 @@ Sistema financeiro distribuído de alto desempenho e resiliência para **control
 
 | Componente / Ferramenta | Finalidade | Link Direto / Porta | Credenciais / Comando |
 |---|---|---|---|
+| **.NET Aspire Dashboard** | Painel central de telemetria, logs estruturados, tracing e containers | [http://localhost:15180](http://localhost:15180) | `dotnet run --project src/Aspire/CashFlow.AppHost` |
 | **Swagger - Lançamentos** | OpenAPI 3.0 interativo para cadastro e consulta paginada de transações | [http://localhost:5101/swagger](http://localhost:5101/swagger) | `powershell -File scripts/open-browser.ps1 -SwaggerTransactions` |
 | **Swagger - Consolidação** | OpenAPI 3.0 interativo para consulta de saldo diário consolidado | [http://localhost:5102/swagger](http://localhost:5102/swagger) | `powershell -File scripts/open-browser.ps1 -SwaggerConsolidation` |
 | **RabbitMQ Management** | Painel do broker, exchanges, filas e Dead Letter Queue (DLQ) | [http://localhost:15672](http://localhost:15672) | Usuário: `verity` / Senha: `verity_secret` |
@@ -29,9 +30,16 @@ Sistema financeiro distribuído de alto desempenho e resiliência para **control
 
 ### Pré-requisitos
 * [Docker Desktop](https://www.docker.com/products/docker-desktop/) instalado e ativo;
-* [.NET 9 SDK](https://dotnet.microsoft.com/download/dotnet/9.0) (necessário apenas para execução local fora do Docker).
+* [.NET 10 SDK](https://dotnet.microsoft.com/download/dotnet/10.0) (necessário para execução local ou orquestração via .NET Aspire).
 
-### Execução em 2 Comandos (Docker Compose)
+### Opção 1: Execução via .NET Aspire (Recomendado para Desenvolvimento)
+
+```bash
+# Executa o AppHost do Aspire com Dashboard, Traces, Métricas e orquestração de dependências
+dotnet run --project src/Aspire/CashFlow.AppHost
+```
+
+### Opção 2: Execução em 2 Comandos (Docker Compose)
 
 ```bash
 # 1. Subir todos os serviços (PostgreSQL, RabbitMQ, Transactions API e Consolidation API)

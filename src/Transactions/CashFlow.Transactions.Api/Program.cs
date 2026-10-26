@@ -27,6 +27,9 @@ using OpenTelemetry.Trace;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// .NET Aspire Service Defaults: telemetria OTLP, health checks, service discovery e resiliência
+builder.AddServiceDefaults();
+
 // Observabilidade padronizada com OpenTelemetry (Distributed Tracing + Métricas + Exportador OTLP)
 builder.Services.AddOpenTelemetry()
     .ConfigureResource(resource => resource.AddService(
@@ -34,12 +37,9 @@ builder.Services.AddOpenTelemetry()
         serviceVersion: TelemetryConstants.ServiceVersion))
     .WithTracing(tracing => tracing
         .AddSource(TelemetryConstants.TransactionsServiceName)
-        .AddAspNetCoreInstrumentation(opts => opts.RecordException = true)
-        .AddOtlpExporter())
+        .AddAspNetCoreInstrumentation(opts => opts.RecordException = true))
     .WithMetrics(metrics => metrics
-        .AddMeter(TelemetryConstants.TransactionsServiceName)
-        .AddAspNetCoreInstrumentation()
-        .AddOtlpExporter());
+        .AddMeter(TelemetryConstants.TransactionsServiceName));
 
 // Add services to the container
 builder.Services.AddEndpointsApiExplorer();
@@ -195,6 +195,9 @@ app.UseAuthorization();
 
 // Map Minimal API Endpoints via extension method
 app.TransactionAPI();
+
+// Map default health and liveness endpoints for Aspire
+app.MapDefaultEndpoints();
 
 await app.RunAsync();
 
