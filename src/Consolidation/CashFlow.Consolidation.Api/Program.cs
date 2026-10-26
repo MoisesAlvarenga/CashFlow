@@ -112,3 +112,8 @@ app.UseHttpsRedirection();
 app.ConsolidationAPI();
 
 await app.RunAsync();
+
+namespace CashFlow.Consolidation.Api
+{
+    public partial class Program { }
+}

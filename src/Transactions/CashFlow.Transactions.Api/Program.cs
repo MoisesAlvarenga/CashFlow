@@ -125,3 +125,8 @@ app.UseHttpsRedirection();
 app.TransactionAPI();
 
 await app.RunAsync();
+
+namespace CashFlow.Transactions.Api
+{
+    public partial class Program { }
+}
