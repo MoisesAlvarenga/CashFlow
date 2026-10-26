@@ -9,11 +9,13 @@ using CashFlow.Shared.Contracts.Events;
 /// <param name="Amount">Valor monetário da transação. Deve ser estritamente maior que zero com até 2 casas decimais.</param>
 /// <param name="Date">Data contábil da transação (formato YYYY-MM-DD).</param>
 /// <param name="Description">Descrição detalhada do lançamento (entre 3 e 250 caracteres).</param>
+/// <param name="IdempotencyKey">Chave opcional de idempotência enviada via cabeçalho HTTP Idempotency-Key ou no corpo.</param>
 public record RegisterTransactionCommand(
     TransactionType Type,
     decimal Amount,
     DateOnly Date,
-    string Description
+    string Description,
+    string? IdempotencyKey = null
 );
 
 /// <summary>

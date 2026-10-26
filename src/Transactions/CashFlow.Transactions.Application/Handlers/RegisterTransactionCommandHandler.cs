@@ -19,19 +19,23 @@ public class RegisterTransactionCommandHandler : IRegisterTransactionCommandHand
     private readonly IOutboxRepository _outboxRepository;
     private readonly ITransactionsUnitOfWork _unitOfWork;
     private readonly IValidator<RegisterTransactionCommand> _validator;
+    private readonly IIdempotencyRepository? _idempotencyRepository;
     private readonly ICancellationTokenProvider _tokenProvider;
+    private static readonly JsonSerializerOptions JsonOptions = new() { PropertyNameCaseInsensitive = true };
 
     public RegisterTransactionCommandHandler(
         ITransactionRepository transactionRepository,
         IOutboxRepository outboxRepository,
         ITransactionsUnitOfWork unitOfWork,
         IValidator<RegisterTransactionCommand> validator,
+        IIdempotencyRepository? idempotencyRepository = null,
         ICancellationTokenProvider? tokenProvider = null)
     {
         _transactionRepository = transactionRepository ?? throw new ArgumentNullException(nameof(transactionRepository));
         _outboxRepository = outboxRepository ?? throw new ArgumentNullException(nameof(outboxRepository));
         _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
         _validator = validator ?? throw new ArgumentNullException(nameof(validator));
+        _idempotencyRepository = idempotencyRepository;
         _tokenProvider = tokenProvider ?? DefaultCancellationTokenProvider.Instance;
     }
 
@@ -42,6 +46,22 @@ public class RegisterTransactionCommandHandler : IRegisterTransactionCommandHand
         if (!validationResult.IsValid)
         {
             throw new ValidationException(validationResult.Errors);
+        }
+
+        var normalizedKey = command.IdempotencyKey?.Trim();
+
+        // 1. Verifica se já existe resposta armazenada para a Idempotency-Key
+        if (!string.IsNullOrEmpty(normalizedKey) && _idempotencyRepository != null)
+        {
+            var existingRecord = await _idempotencyRepository.GetByKeyAsync(normalizedKey, ct);
+            if (existingRecord != null && !string.IsNullOrEmpty(existingRecord.ResponsePayload))
+            {
+                var cachedResult = JsonSerializer.Deserialize<RegisterTransactionResult>(existingRecord.ResponsePayload, JsonOptions);
+                if (cachedResult != null)
+                {
+                    return cachedResult;
+                }
+            }
         }
 
         var transaction = command.Type == TransactionType.Credit
@@ -67,14 +87,46 @@ public class RegisterTransactionCommandHandler : IRegisterTransactionCommandHand
             RetryCount = 0
         };
 
-        await _transactionRepository.AddAsync(transaction);
-        await _outboxRepository.AddMessageAsync(outboxMessage);
-        await _unitOfWork.SaveChangesAsync();
-
-        return new RegisterTransactionResult(
+        var result = new RegisterTransactionResult(
             TransactionId: transaction.Id,
             Status: "Registered",
             RegisteredAt: transaction.CreatedAt
         );
+
+        await _transactionRepository.AddAsync(transaction);
+        await _outboxRepository.AddMessageAsync(outboxMessage);
+
+        if (!string.IsNullOrEmpty(normalizedKey) && _idempotencyRepository != null)
+        {
+            var idempotencyRecord = new IdempotencyRecord(
+                key: normalizedKey,
+                transactionId: transaction.Id,
+                responsePayload: JsonSerializer.Serialize(result),
+                statusCode: 201
+            );
+            await _idempotencyRepository.AddAsync(idempotencyRecord, ct);
+        }
+
+        try
+        {
+            await _unitOfWork.SaveChangesAsync();
+        }
+        catch (Exception) when (!string.IsNullOrEmpty(normalizedKey) && _idempotencyRepository != null)
+        {
+            // Tratamento de concorrência: duas requisições simultâneas com a mesma chave
+            var existingRecord = await _idempotencyRepository.GetByKeyAsync(normalizedKey, ct);
+            if (existingRecord != null && !string.IsNullOrEmpty(existingRecord.ResponsePayload))
+            {
+                var cachedResult = JsonSerializer.Deserialize<RegisterTransactionResult>(existingRecord.ResponsePayload, JsonOptions);
+                if (cachedResult != null)
+                {
+                    return cachedResult;
+                }
+            }
+
+            throw;
+        }
+
+        return result;
     }
 }

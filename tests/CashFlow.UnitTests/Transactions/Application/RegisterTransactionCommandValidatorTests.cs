@@ -152,4 +152,52 @@ public class RegisterTransactionCommandValidatorTests
         Assert.False(result.IsValid);
         Assert.Contains(result.Errors, e => e.PropertyName == nameof(RegisterTransactionCommand.Type));
     }
+
+    /// <summary>
+    /// Garante que uma chave de idempotência válida passe pela validação.
+    /// </summary>
+    [Fact]
+    [Trait("Category", "Unit")]
+    public void Validate_WithValidIdempotencyKey_ShouldPass()
+    {
+        // Arrange
+        var command = new RegisterTransactionCommand(
+            Type: TransactionType.Credit,
+            Amount: 100.00m,
+            Date: new DateOnly(2026, 10, 16),
+            Description: "Valid description",
+            IdempotencyKey: "req-12345-abcde"
+        );
+
+        // Act
+        var result = _validator.Validate(command);
+
+        // Assert
+        Assert.True(result.IsValid);
+    }
+
+    /// <summary>
+    /// Garante que chaves de idempotência com mais de 128 caracteres sejam rejeitadas.
+    /// </summary>
+    [Fact]
+    [Trait("Category", "Unit")]
+    public void Validate_WithIdempotencyKeyExceeding128Characters_ShouldFail()
+    {
+        // Arrange
+        var longKey = new string('k', 129);
+        var command = new RegisterTransactionCommand(
+            Type: TransactionType.Credit,
+            Amount: 100.00m,
+            Date: new DateOnly(2026, 10, 16),
+            Description: "Valid description",
+            IdempotencyKey: longKey
+        );
+
+        // Act
+        var result = _validator.Validate(command);
+
+        // Assert
+        Assert.False(result.IsValid);
+        Assert.Contains(result.Errors, e => e.PropertyName == nameof(RegisterTransactionCommand.IdempotencyKey));
+    }
 }

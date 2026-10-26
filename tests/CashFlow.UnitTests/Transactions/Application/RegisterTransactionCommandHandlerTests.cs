@@ -75,6 +75,23 @@ public class RegisterTransactionCommandHandlerTests
         }
     }
 
+    private class FakeIdempotencyRepository : IIdempotencyRepository
+    {
+        public readonly Dictionary<string, IdempotencyRecord> Records = new();
+
+        public Task<IdempotencyRecord?> GetByKeyAsync(string key, CancellationToken cancellationToken = default)
+        {
+            Records.TryGetValue(key, out var record);
+            return Task.FromResult<IdempotencyRecord?>(record);
+        }
+
+        public Task AddAsync(IdempotencyRecord record, CancellationToken cancellationToken = default)
+        {
+            Records[record.Key] = record;
+            return Task.CompletedTask;
+        }
+    }
+
     /// <summary>
     /// Garante a persistência atômica da transação de crédito e da respectiva mensagem Outbox para publicação no RabbitMQ.
     /// </summary>
@@ -188,5 +205,143 @@ public class RegisterTransactionCommandHandlerTests
         Assert.Empty(txRepo.Added);
         Assert.Empty(outboxRepo.Messages);
         Assert.Equal(0, unitOfWork.SaveChangesCallCount);
+    }
+
+    /// <summary>
+    /// Garante que, ao enviar uma nova chave de idempotência, a transação, o outbox e o registro de idempotência sejam persistidos.
+    /// </summary>
+    [Fact]
+    [Trait("Category", "Unit")]
+    public async Task HandleAsync_WithNewIdempotencyKey_ShouldSaveRecordAndReturnResult()
+    {
+        // Arrange
+        var txRepo = new FakeTransactionRepository();
+        var outboxRepo = new FakeOutboxRepository();
+        var idempotencyRepo = new FakeIdempotencyRepository();
+        var unitOfWork = new FakeTransactionsUnitOfWork();
+        var validator = new RegisterTransactionCommandValidator();
+        var handler = new RegisterTransactionCommandHandler(txRepo, outboxRepo, unitOfWork, validator, idempotencyRepo);
+
+        var command = new RegisterTransactionCommand(
+            Type: TransactionType.Credit,
+            Amount: 250.00m,
+            Date: new DateOnly(2026, 10, 16),
+            Description: "Payment with idempotency key",
+            IdempotencyKey: "unique-key-12345"
+        );
+
+        // Act
+        var result = await handler.HandleAsync(command);
+
+        // Assert
+        Assert.NotNull(result);
+        Assert.Single(txRepo.Added);
+        Assert.Single(outboxRepo.Messages);
+        Assert.True(idempotencyRepo.Records.ContainsKey("unique-key-12345"));
+
+        var record = idempotencyRepo.Records["unique-key-12345"];
+        Assert.Equal(result.TransactionId, record.TransactionId);
+        Assert.Equal(201, record.StatusCode);
+        Assert.Contains(result.TransactionId.ToString(), record.ResponsePayload);
+        Assert.Equal(1, unitOfWork.SaveChangesCallCount);
+    }
+
+    /// <summary>
+    /// Garante que, ao reenviar uma chave de idempotência já existente, o resultado anterior em cache seja retornado sem gerar nova transação.
+    /// </summary>
+    [Fact]
+    [Trait("Category", "Unit")]
+    public async Task HandleAsync_WithExistingIdempotencyKey_ShouldReturnCachedResultWithoutCallingDatabaseOrOutbox()
+    {
+        // Arrange
+        var txRepo = new FakeTransactionRepository();
+        var outboxRepo = new FakeOutboxRepository();
+        var idempotencyRepo = new FakeIdempotencyRepository();
+        var unitOfWork = new FakeTransactionsUnitOfWork();
+        var validator = new RegisterTransactionCommandValidator();
+        var handler = new RegisterTransactionCommandHandler(txRepo, outboxRepo, unitOfWork, validator, idempotencyRepo);
+
+        var existingTxId = Guid.NewGuid();
+        var existingDate = DateTimeOffset.UtcNow.AddMinutes(-5);
+        var cachedPayload = JsonSerializer.Serialize(new RegisterTransactionResult(
+            TransactionId: existingTxId,
+            Status: "Registered",
+            RegisteredAt: existingDate
+        ));
+
+        await idempotencyRepo.AddAsync(new IdempotencyRecord(
+            key: "already-processed-key",
+            transactionId: existingTxId,
+            responsePayload: cachedPayload,
+            statusCode: 201
+        ));
+
+        var duplicateCommand = new RegisterTransactionCommand(
+            Type: TransactionType.Credit,
+            Amount: 250.00m,
+            Date: new DateOnly(2026, 10, 16),
+            Description: "Duplicate attempt",
+            IdempotencyKey: "already-processed-key"
+        );
+
+        // Act
+        var result = await handler.HandleAsync(duplicateCommand);
+
+        // Assert
+        Assert.NotNull(result);
+        Assert.Equal(existingTxId, result.TransactionId);
+        Assert.Equal("Registered", result.Status);
+        Assert.Empty(txRepo.Added);
+        Assert.Empty(outboxRepo.Messages);
+        Assert.Equal(0, unitOfWork.SaveChangesCallCount);
+    }
+
+    /// <summary>
+    /// Garante que, em caso de concorrência com chave duplicada, a colisão seja tratada e retorne o registro persistido pela requisição concorrente.
+    /// </summary>
+    [Fact]
+    [Trait("Category", "Unit")]
+    public async Task HandleAsync_WithConcurrentDuplicateKey_ShouldCatchConflictAndReturnExistingRecord()
+    {
+        // Arrange
+        var txRepo = new FakeTransactionRepository();
+        var outboxRepo = new FakeOutboxRepository();
+        var idempotencyRepo = new FakeIdempotencyRepository();
+        var concurrentTxId = Guid.NewGuid();
+        var cachedPayload = JsonSerializer.Serialize(new RegisterTransactionResult(
+            TransactionId: concurrentTxId,
+            Status: "Registered",
+            RegisteredAt: DateTimeOffset.UtcNow
+        ));
+
+        var unitOfWork = new FakeTransactionsUnitOfWork(() =>
+        {
+            // Simula uma requisição concorrente que inseriu o registro no exato momento do SaveChangesAsync
+            idempotencyRepo.Records["concurrent-race-key"] = new IdempotencyRecord(
+                key: "concurrent-race-key",
+                transactionId: concurrentTxId,
+                responsePayload: cachedPayload,
+                statusCode: 201
+            );
+            throw new InvalidOperationException("Duplicate primary key violation");
+        });
+
+        var validator = new RegisterTransactionCommandValidator();
+        var handler = new RegisterTransactionCommandHandler(txRepo, outboxRepo, unitOfWork, validator, idempotencyRepo);
+
+        var command = new RegisterTransactionCommand(
+            Type: TransactionType.Debit,
+            Amount: 100.00m,
+            Date: new DateOnly(2026, 10, 16),
+            Description: "Concurrent request",
+            IdempotencyKey: "concurrent-race-key"
+        );
+
+        // Act
+        var result = await handler.HandleAsync(command);
+
+        // Assert
+        Assert.NotNull(result);
+        Assert.Equal(concurrentTxId, result.TransactionId);
     }
 }

@@ -24,5 +24,10 @@ public class RegisterTransactionCommandValidator : AbstractValidator<RegisterTra
         RuleFor(x => x.Date)
             .NotEmpty()
             .WithMessage("Transaction date is required.");
+
+        RuleFor(x => x.IdempotencyKey)
+            .MaximumLength(128)
+            .WithMessage("IdempotencyKey cannot exceed 128 characters.")
+            .When(x => !string.IsNullOrEmpty(x.IdempotencyKey));
     }
 }

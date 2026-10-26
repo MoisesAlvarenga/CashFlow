@@ -33,11 +33,20 @@ public static class TransactionEndpoints
         // POST /api/v1/transactions - Registrar lançamento financeiro
         app.MapPost("/api/v1/transactions", async (
             RegisterTransactionCommand command,
+            HttpContext context,
             IRegisterTransactionCommandHandler handler) =>
         {
+            var idempotencyKey = context.Request.Headers["Idempotency-Key"].FirstOrDefault()
+                ?? context.Request.Headers["X-Idempotency-Key"].FirstOrDefault()
+                ?? command.IdempotencyKey;
+
+            var effectiveCommand = !string.IsNullOrWhiteSpace(idempotencyKey)
+                ? command with { IdempotencyKey = idempotencyKey.Trim() }
+                : command;
+
             try
             {
-                var result = await handler.HandleAsync(command);
+                var result = await handler.HandleAsync(effectiveCommand);
                 return Results.Created($"/api/v1/transactions/{result.TransactionId}", result);
             }
             catch (ValidationException ex)
@@ -52,7 +61,7 @@ public static class TransactionEndpoints
         .WithName("RegisterTransaction")
         .WithTags("Transactions")
         .WithSummary("Registra um lançamento financeiro de crédito ou débito")
-        .WithDescription("Valida os dados com FluentValidation, persiste a transação atomicamente no banco de dados e gera uma mensagem de evento na tabela de Outbox para sincronização assíncrona.")
+        .WithDescription("Valida os dados com FluentValidation, persiste a transação atomicamente no banco de dados e gera uma mensagem de evento na tabela de Outbox para sincronização assíncrona. Suporta o cabeçalho 'Idempotency-Key' para garantir que requisições repetidas retornem o mesmo resultado sem duplicar lançamentos.")
         .Produces<RegisterTransactionResult>(StatusCodes.Status201Created, contentType: "application/json")
         .ProducesValidationProblem(StatusCodes.Status400BadRequest)
         .ProducesProblem(StatusCodes.Status500InternalServerError);

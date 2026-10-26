@@ -12,6 +12,7 @@ public class TransactionsDbContext : DbContext
 
     public DbSet<Transaction> Transactions => Set<Transaction>();
     public DbSet<OutboxMessage> OutboxMessages => Set<OutboxMessage>();
+    public DbSet<IdempotencyRecord> IdempotencyRecords => Set<IdempotencyRecord>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -40,6 +41,18 @@ public class TransactionsDbContext : DbContext
             builder.Property(o => o.ErrorMessage).HasMaxLength(1000).IsRequired(false);
             builder.Property(o => o.RetryCount).IsRequired();
             builder.HasIndex(o => o.ProcessedAt).HasDatabaseName("IX_OutboxMessages_ProcessedAt");
+        });
+
+        modelBuilder.Entity<IdempotencyRecord>(builder =>
+        {
+            builder.ToTable("IdempotencyRecords");
+            builder.HasKey(r => r.Key).HasName("PK_IdempotencyRecords");
+            builder.Property(r => r.Key).HasMaxLength(128).IsRequired();
+            builder.Property(r => r.TransactionId).IsRequired();
+            builder.Property(r => r.ResponsePayload).IsRequired();
+            builder.Property(r => r.StatusCode).IsRequired();
+            builder.Property(r => r.CreatedAt).IsRequired();
+            builder.HasIndex(r => r.CreatedAt).HasDatabaseName("IX_IdempotencyRecords_CreatedAt");
         });
     }
 }

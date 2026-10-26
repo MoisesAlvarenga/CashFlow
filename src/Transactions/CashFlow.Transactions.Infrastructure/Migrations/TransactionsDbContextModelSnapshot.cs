@@ -22,6 +22,34 @@ namespace CashFlow.Transactions.Infrastructure.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("CashFlow.Transactions.Domain.Entities.IdempotencyRecord", b =>
+                {
+                    b.Property<string>("Key")
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("ResponsePayload")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("StatusCode")
+                        .HasColumnType("integer");
+
+                    b.Property<Guid>("TransactionId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Key")
+                        .HasName("PK_IdempotencyRecords");
+
+                    b.HasIndex("CreatedAt")
+                        .HasDatabaseName("IX_IdempotencyRecords_CreatedAt");
+
+                    b.ToTable("IdempotencyRecords", (string)null);
+                });
+
             modelBuilder.Entity("CashFlow.Transactions.Domain.Entities.OutboxMessage", b =>
                 {
                     b.Property<Guid>("Id")
