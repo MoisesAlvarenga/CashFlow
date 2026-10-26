@@ -106,11 +106,31 @@ Todas as decisões técnicas de alto impacto estão formalmente documentadas na 
 * [**ADR-001: Padrão Transactional Outbox e Prevenção do Dual-Write**](docs/adrs/ADR-001-transactional-outbox-and-dual-write.md): Persistência atômica entre transação de negócio, outbox e chave de idempotência.
 * [**ADR-002: Topologia RabbitMQ com Publisher Confirms, Conexão Reutilizável e DLQ**](docs/adrs/ADR-002-rabbitmq-dlq-and-publisher-confirms.md): Confirmação de entrega em disco, política de retry com Polly e descarte seguro de poison messages para a Dead Letter Queue.
 * [**ADR-003: Idempotência do Consumidor e Upsert Atômico no Saldo Diário**](docs/adrs/ADR-003-consumer-idempotency-and-atomic-upsert.md): Deduplicação via `ConsumedMessages` e consolidação com `INSERT ... ON CONFLICT DO UPDATE` (zero atualizações perdidas sob concorrência).
-* [**ADR-004: Decisão de Runtime .NET 9 STS e Alinhamento com .NET 10 LTS**](docs/adrs/ADR-004-runtime-sts-vs-lts-policy.md): Justificativa para .NET 9 STS (recursos C# 13, JIT Dynamic PGO, Server GC) e alinhamento com .NET 10 LTS corporativo.
+* [**ADR-004: Decisão de Runtime .NET 10 LTS e Orquestração .NET Aspire**](docs/adrs/ADR-004-runtime-sts-vs-lts-policy.md): Governança de 36 meses de suporte oficial (LTS) corporativo combinada ao ecossistema .NET Aspire.
 * [**ADR-005: Autenticação e Autorização via JWT Bearer Token**](docs/adrs/ADR-005-jwt-bearer-authentication.md): Segurança sem estado (RFC 7519), geração de claims e proteção de rotas com `.RequireAuthorization()`.
 * [**ADR-006: Observabilidade com OpenTelemetry, Distributed Tracing W3C e Métricas**](docs/adrs/ADR-006-opentelemetry-distributed-tracing.md): Rastreamento ponta a ponta com propagação de contexto W3C sobre AMQP e contadores de métricas.
 
 > A documentação detalhada da arquitetura, diagramas e modelos está disponível em [**`docs/architecture/overview.md`**](docs/architecture/overview.md).
+
+---
+
+## 📐 Metodologia de Engenharia: Spec-Driven Development (SDD)
+
+O desenvolvimento deste sistema foi conduzido integralmente sob o paradigma **Spec-Driven Development (SDD)** (*Desenvolvimento Orientado por Especificação*). 
+
+Em vez de iniciar pela escrita direta de código, toda a solução foi governada por artefatos formais na pasta [`.specs/`](.specs/):
+
+| Artefato | Localização | Finalidade |
+|---|---|---|
+| **Especificação Funcional** | [`.specs/.../spec.md`](.specs/features/fluxo-caixa-consolidado/spec.md) | User Stories, critérios de aceitação formais (EARS/Gherkin), requisitos não-funcionais e SLAs |
+| **Design Técnico** | [`.specs/.../design.md`](.specs/features/fluxo-caixa-consolidado/design.md) | Modelagem de dados, contratos de integração JSON, fluxos de sequência e mitigação de falhas |
+| **Plano de Execução** | [`.specs/.../tasks.md`](.specs/features/fluxo-caixa-consolidado/tasks.md) | Decomposição sequencial de tarefas, matriz de cobertura de testes e portões de qualidade |
+| **Registros Arquiteturais** | [`docs/adrs/`](docs/adrs/) | 6 decisões arquiteturais formais (Outbox, DLQ, Idempotência, .NET 10 LTS, JWT, OpenTelemetry) |
+
+### Governança Humana e Aceleração com IA (Human-in-the-Loop)
+* **Engenheiro/Arquiteto Humano**: Define os requisitos de negócio, critérios de aceitação, escolhas de design e restrições arquiteturais;
+* **IA como Copiloto Executor**: Acelera a codificação e geração de testes de forma estritamente guiada pela especificação;
+* **Quality Gates Determinísticos**: 100% das regras e casos de borda são validados por suítes automatizadas de testes unitários, testes de integração reais com Testcontainers, testes de carga K6 e auditoria SOLID via Solidify.
 
 ---
 
@@ -198,6 +218,7 @@ k6 run tests/load/k6-load-test.js
 Para um aprofundamento técnico completo, consulte os documentos dedicados:
 
 * 🏛️ [**Arquitetura do Sistema**](docs/architecture/overview.md): Visão detalhada de camadas, topologia e modelos.
+* 📐 [**Metodologia Spec-Driven Development (SDD)**](.specs/features/fluxo-caixa-consolidado/): Especificações funcionais (`spec.md`), design técnico (`design.md`) e tarefas (`tasks.md`).
 * 📋 [**Architecture Decision Records (ADRs)**](docs/adrs/): Justificativas e impactos das 6 decisões arquiteturais centrais.
 * 🧪 [**Testes, Benchmarks e Quality Gates**](docs/operations/testing-and-benchmarks.md): Relatórios de testes unitários, de integração e testes de carga K6.
 * 🗄️ [**Guia de Banco de Dados e DBeaver**](docs/operations/dbeaver-and-database.md): Modelagem física, migrações EF Core e queries de auditoria.

@@ -28,7 +28,7 @@ Lojistas precisam gerenciar com precisão seu fluxo financeiro diário, registra
 
 | Assumption / decision | Chosen default | Rationale | Confirmed? |
 | --------------------- | -------------- | --------- | ---------- |
-| Versão da plataforma C# / .NET | .NET 9 (STS) / C# 13 | Plataforma moderna, estável e com suporte de alto desempenho nativo no ambiente de desenvolvimento (compatível com .NET 8 LTS) | Sim |
+| Versão da plataforma C# / .NET | .NET 10 (LTS) / C# 13 | Plataforma de suporte de longo prazo (36 meses) para ambientes corporativos com orquestração .NET Aspire | Sim |
 | Estratégia de desacoplamento entre serviços | Mensageria assíncrona orientada a eventos (ex: RabbitMQ / MassTransit) com Outbox Pattern | Garante que lançamentos são salvos com sucesso mesmo se o consumidor de consolidação estiver inoperante | Sim |
 | Modelo de persistência dos lançamentos | Banco relacional com transação atômica e idempotência por identificador único | Previne duplicidade de lançamentos e garante consistência dos créditos e débitos | Sim |
 | Mecanismo de consolidação diária | Processamento de eventos por data de competência com agregação de saldos e cache/materialized view | Permite consultas de saldo em milissegundos mesmo sob carga de 50 chamadas/s | Sim |
