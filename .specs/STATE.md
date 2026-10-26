@@ -11,11 +11,11 @@
 - **Data**: 2026-10-15
 - **Status**: Ativo / Implementado
 
-### AD-002: .NET 9 LTS com Clean Architecture e SOLID
-- **Decisão**: Utilização de .NET 9 LTS / C# 13 com Clean Architecture (Domain, Application, Infrastructure, Api) e aplicação estrita dos 5 princípios SOLID.
+### AD-002: .NET 9 (STS) com Clean Architecture e SOLID
+- **Decisão**: Utilização de .NET 9 (Standard Term Support - STS) com C# 13, Clean Architecture (Domain, Application, Infrastructure, Api) e aplicação estrita dos 5 princípios SOLID.
 - **Autor / Responsável**: Decisão tomada pelo Arquiteto / Desenvolvedor.
-- **Motivo**: Requisito técnico mandatório (C#, Clean Code, SOLID, isolamento de camadas entre infra, aplicação e domínio).
-- **Trade-off**: Criação de múltiplos projetos e interfaces no início da solução, compensada por testabilidade determinística (51 testes em ~260ms) e manutenibilidade.
+- **Motivo**: Requisito técnico mandatório (C#, Clean Code, SOLID, isolamento de camadas entre infra, aplicação e domínio) e aproveitamento dos recursos mais recentes do runtime e C# 13, com compatibilidade garantida para .NET 8 LTS.
+- **Trade-off**: Ciclo de vida STS (18 meses) em relação ao LTS (36 meses), compensado pelo ganho de vazão do Server GC, suporte a recursos modernos de linguagem e caminho de migração direto para .NET 10 LTS.
 - **Escopo**: Estrutura dos projetos C# e regras de negócio.
 - **Data**: 2026-10-15
 - **Status**: Ativo / Implementado

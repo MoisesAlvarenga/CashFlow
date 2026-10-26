@@ -1,6 +1,6 @@
 # Cash Flow & Daily Consolidation System (Desafio Técnico Verity)
 
-Sistema financeiro distribuído de alto desempenho e resiliência para **controle de fluxo de caixa com lançamentos de crédito e débito** e **consolidação diária de saldos**, desenvolvido em **.NET 9 LTS** com **C# 13**, **PostgreSQL 16** e **RabbitMQ**, fundamentado em **Clean Architecture**, **Domain-Driven Design (DDD)**, **CQRS**, **Entity Framework Core Code-First** e mensageria desacoplada com o padrão **Transactional Outbox**.
+Sistema financeiro distribuído de alto desempenho e resiliência para **controle de fluxo de caixa com lançamentos de crédito e débito** e **consolidação diária de saldos**, desenvolvido em **.NET 9 (Standard Term Support - STS)** com **C# 13**, **PostgreSQL 16** e **RabbitMQ**, fundamentado em **Clean Architecture**, **Domain-Driven Design (DDD)**, **CQRS**, **Entity Framework Core Code-First** e mensageria desacoplada com o padrão **Transactional Outbox**.
 
 ---
 
@@ -209,7 +209,7 @@ O sistema segrega explicitamente operações de escrita de operações de leitur
 
 | Tecnologia | Papel no Projeto | Por que foi escolhida? (Justificativa Técnica) |
 |---|---|---|
-| **.NET 9 LTS / C# 13** | Linguagem e Runtime | Maior throughput e menor consumo de memória entre runtimes modernos. Suporte nativo a *Minimal APIs*, tipos modernos (`DateOnly`, `record`), imutabilidade e alto paralelismo assíncrono. |
+| **.NET 9 (STS) / C# 13** | Linguagem e Runtime | Maior throughput e menor consumo de memória entre runtimes modernos. .NET 9 é uma versão **Standard Term Support (STS - 18 meses de suporte)** que traz recursos de ponta do C# 13 (*params collections*, tipo `System.Threading.Lock`, otimizações de *Dynamic PGO* e escape analysis). A solução foi arquitetada de forma desacoplada, possuindo compatibilidade direta para compilação em **.NET 8 LTS (Long Term Support - 36 meses)** caso a política corporativa exija janelas estendidas de suporte. |
 | **PostgreSQL 16** | Banco de Dados Relacional | Confiabilidade ACID comprovada para dados financeiros, suporte nativo a `UUID`, tipos `date` e `timestamptz`, e controle de concorrência com MVCC. |
 | **Entity Framework Core 9** | ORM e Code-First | Produtividade com consultas LINQ fortemente tipadas, controle versionado do esquema via Migrations no Git e separação de modelos de escrita e leitura (`AsNoTracking`). |
 | **Npgsql 9** | Provedor PostgreSQL EF Core | Provedor oficial open-source de altíssimo desempenho com suporte de primeira classe às novidades do PostgreSQL 16 e do .NET 9. |
@@ -487,7 +487,10 @@ A tabela abaixo relaciona cada **arquivo físico de teste**, a camada arquitetur
 | [`TransactionRegisteredEventTests.cs`](tests/CashFlow.UnitTests/Shared/TransactionRegisteredEventTests.cs) | Shared (Contratos de Mensageria) | **2** | ✅ Pass | Serialização/deserialização JSON sem distorção de tipos (`DateOnly`, `decimal`, `Guid`) e estabilidade dos enums. |
 
 > [!NOTE]
-> **Total de Testes Unitários:** **51 testes aprovados** executados em ~**260ms** via .NET 9 LTS com 100% de documentação XML (`/// <summary>`) em cada método.
+> **Total de Testes Unitários:** **74 testes aprovados** executados em ~**230ms** via **.NET 9 (STS)** com 100% de documentação XML (`/// <summary>`) em cada método.
+> 
+> **Política de Suporte do .NET (LTS vs STS)**:
+> Conforme a cadência oficial da Microsoft, versões ímpares (.NET 7, .NET 9) possuem suporte **STS (Standard Term Support - 18 meses)**, enquanto versões pares (.NET 6, .NET 8, .NET 10) possuem suporte **LTS (Long Term Support - 36 meses)**. O projeto adota .NET 9 STS para usufruir de ganhos de runtime no JIT, Server GC e recursos modernos do C# 13, mantendo arquitetura 100% aderente para compilação em .NET 8 LTS se requerido por políticas corporativas.
 
 ---
 
