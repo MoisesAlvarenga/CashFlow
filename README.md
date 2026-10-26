@@ -30,23 +30,42 @@ Sistema financeiro distribuído de alto desempenho e resiliência para **control
 ## 🚀 Como Executar o Projeto (Quickstart)
 
 ### Pré-requisitos
-* [Docker Desktop](https://www.docker.com/products/docker-desktop/) instalado e ativo;
-* [.NET 10 SDK](https://dotnet.microsoft.com/download/dotnet/10.0) (necessário para execução local ou orquestração via .NET Aspire).
+* [.NET 10 SDK](https://dotnet.microsoft.com/download/dotnet/10.0) instalado;
+* [Docker Desktop](https://www.docker.com/products/docker-desktop/) (ou Podman) ativo para provisionamento dos serviços de infraestrutura (PostgreSQL, RabbitMQ e Redis).
 
-### Opção 1: Execução via .NET Aspire (Recomendado para Desenvolvimento)
+---
+
+### Opção 1: Execução via .NET Aspire (Padrão Recomendado para Desenvolvimento)
+
+O **.NET Aspire** é o orquestrador cloud-native oficial da Microsoft que oferece a melhor experiência de desenvolvimento:
+* **Execução Nativa**: Os microsserviços (`Transactions API` e `Consolidation API`) rodam como **processos .NET nativos** gerenciados pelo `AppHost` — garantindo **Hot Reload**, depuração com breakpoints instantânea e menor consumo de recursos (sem rebuildar Dockerfiles);
+* **Infraestrutura Automatizada**: O Aspire provisiona automaticamente os containers do PostgreSQL, RabbitMQ e Redis via Docker/Podman com volumes persistentes (`WithLifetime(ContainerLifetime.Persistent)`);
+* **Injeção Automática de Dependências**: As connection strings e referências entre serviços são injetadas automaticamente via código C# (`.WithReference(...)`), sem necessidade de configuração manual de portas;
+* **Dashboard Unificado**: Painel central na porta **`15180`** com traces distribuídos OpenTelemetry W3C, métricas e logs em tempo real.
 
 ```bash
-# Executa o AppHost do Aspire com Dashboard, Traces, Métricas e orquestração de dependências
+# Executa o AppHost do Aspire
 dotnet run --project src/Aspire/CashFlow.AppHost
 ```
 
-### Opção 2: Execução em 2 Comandos (Docker Compose)
+Após executar, acesse o painel central do Aspire:
+* **Aspire Dashboard**: [http://localhost:15180](http://localhost:15180) (lista os serviços, links dinâmicos para o Swagger de cada API, traces e métricas).
+
+> [!TIP]
+> **Dica para Windows / Docker Desktop**:
+> Caso utilize o Docker Desktop no Windows, certifique-se de que o modo **Resource Saver** não esteja pausando o daemon (em *Docker Desktop > Settings > General > desmarque "Resource Saver"* ou garanta que o Docker Desktop esteja aberto na bandeja do sistema).
+
+---
+
+### Opção 2: Execução Conteinerizada Completa (Docker Compose)
+
+Ideal para servidores de integração contínua (CI/CD), ambientes de homologação ou máquinas onde o SDK do .NET 10 não esteja instalado (exigindo apenas o Docker):
 
 ```bash
-# 1. Subir todos os serviços (PostgreSQL, RabbitMQ, Transactions API e Consolidation API)
+# 1. Subir todos os serviços (PostgreSQL, RabbitMQ, Redis, Transactions API e Consolidation API)
 docker compose up -d --build
 
-# 2. Verificar os logs dos serviços
+# 2. Acompanhar os logs estruturados
 docker compose logs -f
 ```
 

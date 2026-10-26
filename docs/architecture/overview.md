@@ -53,6 +53,14 @@ flowchart LR
     ConsolidationApi -->|Consulta Saldo| ConsolidationDb
 ```
 
+### Orquestração Cloud-Native com .NET Aspire (`src/Aspire/CashFlow.AppHost`)
+
+O projeto implementa orquestração moderna via **.NET Aspire 13** em .NET 10 LTS:
+* **Execução dos Microsserviços**: As APIs rodam como **processos nativos do sistema operacional**, proporcionando Hot Reload, consumo reduzido de memória e depuração transparente no IDE;
+* **Gerenciamento de Infraestrutura**: Contêineres de PostgreSQL, RabbitMQ e Redis são provisionados automaticamente com volumes persistentes (`ContainerLifetime.Persistent`), garantindo que dados e filas sejam mantidos entre reinicializações;
+* **Descoberta e Injeção de Dependências**: Comunicação tipada e injeção automática de connection strings via `.WithReference(...)`;
+* **Observabilidade Unificada**: Painel do Aspire Dashboard na porta **15180**, centralizando traces OpenTelemetry W3C, métricas em tempo real e logs de todos os nós do sistema.
+
 ---
 
 ## 3. Modelo de Dados Relacional (PostgreSQL)
