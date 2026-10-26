@@ -3,12 +3,13 @@ using Microsoft.Extensions.Configuration;
 var builder = DistributedApplication.CreateBuilder(args);
 
 // 1. Infraestrutura: Suporte resiliente a Containers (Docker/Podman) ou Connection Strings existentes
-var existingPostgres = builder.Configuration.GetConnectionString("DefaultConnection") 
+var existingPostgres = builder.Configuration.GetConnectionString("transactionsdb")
+    ?? builder.Configuration.GetConnectionString("DefaultConnection") 
     ?? builder.Configuration.GetConnectionString("postgres");
-var existingRabbit = builder.Configuration.GetConnectionString("RabbitMq") 
-    ?? builder.Configuration.GetConnectionString("rabbitmq");
-var existingRedis = builder.Configuration.GetConnectionString("Redis") 
-    ?? builder.Configuration.GetConnectionString("redis");
+var existingRabbit = builder.Configuration.GetConnectionString("rabbitmq")
+    ?? builder.Configuration.GetConnectionString("RabbitMq");
+var existingRedis = builder.Configuration.GetConnectionString("redis")
+    ?? builder.Configuration.GetConnectionString("Redis");
 
 IResourceBuilder<IResourceWithConnectionString> transactionsDb;
 IResourceBuilder<IResourceWithConnectionString> consolidationDb;
@@ -17,7 +18,7 @@ IResourceBuilder<IResourceWithConnectionString> redis;
 
 if (!string.IsNullOrEmpty(existingPostgres))
 {
-    var pgConn = builder.AddConnectionString("transactionsdb", "DefaultConnection");
+    var pgConn = builder.AddConnectionString("transactionsdb");
     transactionsDb = pgConn;
     consolidationDb = pgConn;
 }
@@ -33,7 +34,7 @@ else
 
 if (!string.IsNullOrEmpty(existingRabbit))
 {
-    rabbitmq = builder.AddConnectionString("rabbitmq", "RabbitMq");
+    rabbitmq = builder.AddConnectionString("rabbitmq");
 }
 else
 {
@@ -45,7 +46,7 @@ else
 
 if (!string.IsNullOrEmpty(existingRedis))
 {
-    redis = builder.AddConnectionString("redis", "Redis");
+    redis = builder.AddConnectionString("redis");
 }
 else
 {
