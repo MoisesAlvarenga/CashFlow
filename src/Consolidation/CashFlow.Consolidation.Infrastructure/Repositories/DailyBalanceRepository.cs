@@ -19,17 +19,17 @@ public class DailyBalanceRepository : IDailyBalanceRepository
         _tokenProvider = tokenProvider ?? DefaultCancellationTokenProvider.Instance;
     }
 
-    public async Task<DailyBalance?> GetByDateAsync(DateOnly date)
+    public async Task<DailyBalance?> GetByDateAsync(DateOnly date, CancellationToken cancellationToken = default)
     {
-        var ct = _tokenProvider.Token;
+        var ct = cancellationToken.CanBeCanceled ? cancellationToken : _tokenProvider.Token;
         return await _dbContext.DailyBalances
             .AsNoTracking()
             .FirstOrDefaultAsync(d => d.Date == date, ct);
     }
 
-    public async Task SaveOrUpdateAsync(DailyBalance dailyBalance)
+    public async Task SaveOrUpdateAsync(DailyBalance dailyBalance, CancellationToken cancellationToken = default)
     {
-        var ct = _tokenProvider.Token;
+        var ct = cancellationToken.CanBeCanceled ? cancellationToken : _tokenProvider.Token;
         var existing = await _dbContext.DailyBalances.FindAsync([dailyBalance.Date], ct);
         if (existing == null)
         {
@@ -39,7 +39,5 @@ public class DailyBalanceRepository : IDailyBalanceRepository
         {
             _dbContext.Entry(existing).CurrentValues.SetValues(dailyBalance);
         }
-
-        await _dbContext.SaveChangesAsync(ct);
     }
 }

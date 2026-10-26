@@ -88,11 +88,25 @@ public class TransactionRegisteredConsumer : BackgroundService
                             using var scope = _scopeFactory.CreateScope();
                             var balanceService = scope.ServiceProvider.GetRequiredService<IDailyBalanceService>();
 
-                            await balanceService.ProcessTransactionAsync(evt.Type, evt.Amount, evt.Date);
+                            var applied = await balanceService.ProcessTransactionAsync(
+                                evt.TransactionId,
+                                evt.Type,
+                                evt.Amount,
+                                evt.Date,
+                                stoppingToken);
 
-                            _logger.LogInformation(
-                                "RabbitMQ: Evento de transação {TransactionId} ({Type} de R$ {Amount}) consumido e consolidado para {Date}.",
-                                evt.TransactionId, evt.Type, evt.Amount, evt.Date);
+                            if (applied)
+                            {
+                                _logger.LogInformation(
+                                    "RabbitMQ: Evento de transação {TransactionId} ({Type} de R$ {Amount}) consumido e consolidado para {Date}.",
+                                    evt.TransactionId, evt.Type, evt.Amount, evt.Date);
+                            }
+                            else
+                            {
+                                _logger.LogInformation(
+                                    "RabbitMQ: Evento da transação {TransactionId} já consolidado; ignorando duplicata.",
+                                    evt.TransactionId);
+                            }
                         }
 
                         await channel.BasicAckAsync(ea.DeliveryTag, multiple: false, cancellationToken: stoppingToken);

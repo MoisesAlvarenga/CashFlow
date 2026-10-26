@@ -76,6 +76,8 @@ builder.Services.AddScoped<ICancellationTokenProvider, HttpCancellationTokenProv
 
 // Dependency Inversion: Register domain repositories and application services
 builder.Services.AddScoped<IDailyBalanceRepository, DailyBalanceRepository>();
+builder.Services.AddScoped<IConsumedMessageRepository, ConsumedMessageRepository>();
+builder.Services.AddScoped<IConsolidationUnitOfWork, ConsolidationUnitOfWork>();
 builder.Services.AddScoped<IDailyBalanceService, DailyBalanceService>();
 
 // RabbitMQ Messaging Configuration & Background Consumer

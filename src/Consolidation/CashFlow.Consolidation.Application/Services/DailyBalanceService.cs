@@ -3,20 +3,33 @@ namespace CashFlow.Consolidation.Application.Services;
 using CashFlow.Consolidation.Application.DTOs;
 using CashFlow.Consolidation.Domain.Entities;
 using CashFlow.Consolidation.Domain.Repositories;
+using CashFlow.Shared.Contracts.Events;
 
 public interface IDailyBalanceService
 {
     Task<DailyBalanceDto?> GetDailyBalanceAsync(DateOnly date);
-    Task<DailyBalanceDto> ProcessTransactionAsync(string type, decimal amount, DateOnly date);
+    Task<bool> ProcessTransactionAsync(
+        Guid transactionId,
+        string type,
+        decimal amount,
+        DateOnly date,
+        CancellationToken cancellationToken = default);
 }
 
 public class DailyBalanceService : IDailyBalanceService
 {
     private readonly IDailyBalanceRepository _repository;
+    private readonly IConsumedMessageRepository _consumedMessageRepository;
+    private readonly IConsolidationUnitOfWork _unitOfWork;
 
-    public DailyBalanceService(IDailyBalanceRepository repository)
+    public DailyBalanceService(
+        IDailyBalanceRepository repository,
+        IConsumedMessageRepository consumedMessageRepository,
+        IConsolidationUnitOfWork unitOfWork)
     {
         _repository = repository ?? throw new ArgumentNullException(nameof(repository));
+        _consumedMessageRepository = consumedMessageRepository ?? throw new ArgumentNullException(nameof(consumedMessageRepository));
+        _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
     }
 
     public async Task<DailyBalanceDto?> GetDailyBalanceAsync(DateOnly date)
@@ -30,9 +43,24 @@ public class DailyBalanceService : IDailyBalanceService
         return MapToDto(balance);
     }
 
-    public async Task<DailyBalanceDto> ProcessTransactionAsync(string type, decimal amount, DateOnly date)
+    public async Task<bool> ProcessTransactionAsync(
+        Guid transactionId,
+        string type,
+        decimal amount,
+        DateOnly date,
+        CancellationToken cancellationToken = default)
     {
-        var balance = await _repository.GetByDateAsync(date) ?? DailyBalance.Create(date);
+        if (transactionId == Guid.Empty)
+        {
+            throw new ArgumentException("Transaction ID cannot be empty.", nameof(transactionId));
+        }
+
+        if (await _consumedMessageRepository.ExistsAsync(transactionId, cancellationToken))
+        {
+            return false;
+        }
+
+        var balance = await _repository.GetByDateAsync(date, cancellationToken) ?? DailyBalance.Create(date);
 
         if (string.Equals(type, "Credit", StringComparison.OrdinalIgnoreCase))
         {
@@ -47,8 +75,12 @@ public class DailyBalanceService : IDailyBalanceService
             throw new ArgumentException($"Unsupported transaction type '{type}'.", nameof(type));
         }
 
-        await _repository.SaveOrUpdateAsync(balance);
-        return MapToDto(balance);
+        await _repository.SaveOrUpdateAsync(balance, cancellationToken);
+        await _consumedMessageRepository.AddAsync(
+            new ConsumedMessage(transactionId, nameof(TransactionRegisteredEvent)),
+            cancellationToken);
+
+        return await _unitOfWork.SaveChangesAsync(cancellationToken);
     }
 
     private static DailyBalanceDto MapToDto(DailyBalance balance)

@@ -11,6 +11,7 @@ public class ConsolidationDbContext : DbContext
     }
 
     public DbSet<DailyBalance> DailyBalances => Set<DailyBalance>();
+    public DbSet<ConsumedMessage> ConsumedMessages => Set<ConsumedMessage>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -26,6 +27,15 @@ public class ConsolidationDbContext : DbContext
             builder.Property(d => d.TransactionCount).IsRequired();
             builder.Property(d => d.UpdatedAt).IsRequired();
             builder.Ignore(d => d.NetBalance);
+        });
+
+        modelBuilder.Entity<ConsumedMessage>(builder =>
+        {
+            builder.ToTable("ConsumedMessages");
+            builder.HasKey(message => message.TransactionId).HasName("PK_ConsumedMessages");
+            builder.Property(message => message.TransactionId).IsRequired();
+            builder.Property(message => message.EventType).HasMaxLength(150).IsRequired();
+            builder.Property(message => message.ConsumedAt).IsRequired();
         });
     }
 }

@@ -22,6 +22,26 @@ namespace CashFlow.Consolidation.Infrastructure.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("CashFlow.Consolidation.Domain.Entities.ConsumedMessage", b =>
+                {
+                    b.Property<Guid>("TransactionId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTimeOffset>("ConsumedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("EventType")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("character varying(150)");
+
+                    b.HasKey("TransactionId")
+                        .HasName("PK_ConsumedMessages");
+
+                    b.ToTable("ConsumedMessages", (string)null);
+                });
+
             modelBuilder.Entity("CashFlow.Consolidation.Domain.Entities.DailyBalance", b =>
                 {
                     b.Property<DateOnly>("Date")
