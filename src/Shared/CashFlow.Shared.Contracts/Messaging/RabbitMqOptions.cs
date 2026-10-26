@@ -42,4 +42,24 @@ public class RabbitMqOptions
     /// Routing Key para roteamento de eventos de transação registrada.
     /// </summary>
     public string RoutingKey { get; set; } = "transaction.registered";
+
+    /// <summary>
+    /// Nome da Dead Letter Exchange (DLX) para mensagens rejeitadas.
+    /// </summary>
+    public string DeadLetterExchangeName { get; set; } = "cashflow.transactions.dlx";
+
+    /// <summary>
+    /// Nome da Dead Letter Queue (DLQ) para mensagens com falha definitiva.
+    /// </summary>
+    public string DeadLetterQueueName { get; set; } = "cashflow.consolidation.daily-balances.dlq";
+
+    /// <summary>
+    /// Routing Key para roteamento de mensagens rejeitadas para a Dead Letter Queue.
+    /// </summary>
+    public string DeadLetterRoutingKey { get; set; } = "transaction.consolidation.dead";
+
+    /// <summary>
+    /// Quantidade máxima de tentativas locais antes do encaminhamento para a Dead Letter Queue.
+    /// </summary>
+    public int MaxRetryAttempts { get; set; } = 3;
 }
