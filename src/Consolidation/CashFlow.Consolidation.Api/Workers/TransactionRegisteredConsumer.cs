@@ -1,9 +1,11 @@
 namespace CashFlow.Consolidation.Api.Workers;
 
+using System.Diagnostics;
 using System.Net.Sockets;
 using System.Text;
 using System.Text.Json;
 using CashFlow.Consolidation.Application.Services;
+using CashFlow.Shared.Contracts.Diagnostics;
 using CashFlow.Shared.Contracts.Events;
 using CashFlow.Shared.Contracts.Messaging;
 using Microsoft.Extensions.Options;
@@ -63,6 +65,20 @@ public class TransactionRegisteredConsumer : BackgroundService
                 consumer.ReceivedAsync += async (sender, ea) =>
                 {
                     var deliveryTag = ea.DeliveryTag;
+                    var parentContext = RabbitMqTraceContextPropagator.ExtractTraceContext(ea.BasicProperties?.Headers);
+                    using var activity = TelemetryConstants.ConsolidationActivitySource.StartActivity(
+                        "RabbitMQ.Consume",
+                        ActivityKind.Consumer,
+                        parentContext.ActivityContext);
+
+                    activity?.SetTag("messaging.system", "rabbitmq");
+                    activity?.SetTag("messaging.destination", options.QueueName);
+                    activity?.SetTag("messaging.destination_kind", "queue");
+                    if (ea.BasicProperties?.CorrelationId != null)
+                    {
+                        activity?.SetTag("messaging.correlation_id", ea.BasicProperties.CorrelationId);
+                    }
+
                     try
                     {
                         var body = ea.Body.ToArray();
@@ -75,6 +91,9 @@ public class TransactionRegisteredConsumer : BackgroundService
                             await channel.BasicNackAsync(deliveryTag, multiple: false, requeue: false, cancellationToken: stoppingToken);
                             return;
                         }
+
+                        activity?.SetTag("cashflow.transaction_id", evt.TransactionId.ToString());
+                        activity?.SetTag("cashflow.transaction_type", evt.Type);
 
                         var maxAttempts = options.MaxRetryAttempts;
                         var attempt = 0;
@@ -111,6 +130,7 @@ public class TransactionRegisteredConsumer : BackgroundService
                                     "Falha definitiva ao processar transação {TransactionId} após {Attempt} tentativa(s). Encaminhando mensagem para a DLQ ({DlqQueue}).",
                                     evt.TransactionId, attempt, options.DeadLetterQueueName);
 
+                                activity?.SetStatus(ActivityStatusCode.Error, ex.Message);
                                 await channel.BasicNackAsync(deliveryTag, multiple: false, requeue: false, cancellationToken: stoppingToken);
                                 return;
                             }
@@ -118,12 +138,14 @@ public class TransactionRegisteredConsumer : BackgroundService
 
                         if (applied)
                         {
+                            TelemetryConstants.TransactionsConsumedCounter.Add(1);
                             _logger.LogInformation(
                                 "RabbitMQ: Evento de transação {TransactionId} ({Type} de R$ {Amount}) consumido e consolidado para {Date}.",
                                 evt.TransactionId, evt.Type, evt.Amount, evt.Date);
                         }
                         else
                         {
+                            TelemetryConstants.TransactionsDuplicateCounter.Add(1);
                             _logger.LogInformation(
                                 "RabbitMQ: Evento da transação {TransactionId} já consolidado; ignorando duplicata.",
                                 evt.TransactionId);
@@ -133,11 +155,13 @@ public class TransactionRegisteredConsumer : BackgroundService
                     }
                     catch (JsonException jsonEx)
                     {
+                        activity?.SetStatus(ActivityStatusCode.Error, jsonEx.Message);
                         _logger.LogError(jsonEx, "Erro irrecuperável de desserialização JSON (Poison Message). Encaminhando para DLQ.");
                         await channel.BasicNackAsync(deliveryTag, multiple: false, requeue: false, cancellationToken: stoppingToken);
                     }
                     catch (Exception ex)
                     {
+                        activity?.SetStatus(ActivityStatusCode.Error, ex.Message);
                         _logger.LogError(ex, "Erro inesperado ao consumir mensagem do RabbitMQ. Encaminhando para DLQ.");
                         await channel.BasicNackAsync(deliveryTag, multiple: false, requeue: false, cancellationToken: stoppingToken);
                     }

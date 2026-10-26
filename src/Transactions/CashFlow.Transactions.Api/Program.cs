@@ -1,6 +1,7 @@
 using System.Reflection;
 using System.Text;
 using CashFlow.Shared.Contracts.Context;
+using CashFlow.Shared.Contracts.Diagnostics;
 using CashFlow.Shared.Contracts.Messaging;
 using CashFlow.Shared.Contracts.Security;
 using CashFlow.Transactions.Api.Context;
@@ -20,8 +21,25 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
+using OpenTelemetry.Metrics;
+using OpenTelemetry.Resources;
+using OpenTelemetry.Trace;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Observabilidade padronizada com OpenTelemetry (Distributed Tracing + Métricas + Exportador OTLP)
+builder.Services.AddOpenTelemetry()
+    .ConfigureResource(resource => resource.AddService(
+        serviceName: TelemetryConstants.TransactionsServiceName,
+        serviceVersion: TelemetryConstants.ServiceVersion))
+    .WithTracing(tracing => tracing
+        .AddSource(TelemetryConstants.TransactionsServiceName)
+        .AddAspNetCoreInstrumentation(opts => opts.RecordException = true)
+        .AddOtlpExporter())
+    .WithMetrics(metrics => metrics
+        .AddMeter(TelemetryConstants.TransactionsServiceName)
+        .AddAspNetCoreInstrumentation()
+        .AddOtlpExporter());
 
 // Add services to the container
 builder.Services.AddEndpointsApiExplorer();

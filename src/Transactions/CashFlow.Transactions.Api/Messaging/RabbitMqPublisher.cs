@@ -1,7 +1,9 @@
 namespace CashFlow.Transactions.Api.Messaging;
 
+using System.Diagnostics;
 using System.Net.Sockets;
 using System.Text;
+using CashFlow.Shared.Contracts.Diagnostics;
 using CashFlow.Shared.Contracts.Messaging;
 using Microsoft.Extensions.Options;
 using Polly;
@@ -68,13 +70,31 @@ public class RabbitMqPublisher : IRabbitMqPublisher, IAsyncDisposable
 
             await EnsureTopologyAsync(connection, channel, options, cancellationToken);
 
+            using var activity = TelemetryConstants.TransactionsActivitySource.StartActivity(
+                "RabbitMQ.Publish",
+                ActivityKind.Producer);
+
+            activity?.SetTag("messaging.system", "rabbitmq");
+            activity?.SetTag("messaging.destination", options.ExchangeName);
+            activity?.SetTag("messaging.destination_kind", "exchange");
+            activity?.SetTag("messaging.rabbitmq.routing_key", options.RoutingKey);
+
             var body = Encoding.UTF8.GetBytes(payload);
             var properties = new BasicProperties
             {
                 DeliveryMode = DeliveryModes.Persistent,
                 ContentType = "application/json",
-                Timestamp = new AmqpTimestamp(DateTimeOffset.UtcNow.ToUnixTimeSeconds())
+                Timestamp = new AmqpTimestamp(DateTimeOffset.UtcNow.ToUnixTimeSeconds()),
+                Headers = new Dictionary<string, object?>()
             };
+
+            // Injeta o W3C TraceContext (traceparent/tracestate) para rastreabilidade distribuída
+            RabbitMqTraceContextPropagator.InjectTraceContext(properties.Headers, activity);
+
+            if (activity != null)
+            {
+                properties.CorrelationId = activity.TraceId.ToString();
+            }
 
             await channel.BasicPublishAsync(
                 exchange: options.ExchangeName,
@@ -83,6 +103,8 @@ public class RabbitMqPublisher : IRabbitMqPublisher, IAsyncDisposable
                 basicProperties: properties,
                 body: body,
                 cancellationToken: cancellationToken);
+
+            TelemetryConstants.TransactionsPublishedCounter.Add(1);
 
             _logger.LogInformation(
                 "RabbitMQ: Mensagem publicada com sucesso com Publisher Confirms (Exchange: {Exchange}, RoutingKey: {RoutingKey}).",

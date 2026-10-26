@@ -2,6 +2,7 @@ namespace CashFlow.Transactions.Application.Handlers;
 
 using System.Text.Json;
 using CashFlow.Shared.Contracts.Context;
+using CashFlow.Shared.Contracts.Diagnostics;
 using CashFlow.Shared.Contracts.Events;
 using CashFlow.Transactions.Application.Commands;
 using CashFlow.Transactions.Domain.Entities;
@@ -127,6 +128,7 @@ public class RegisterTransactionCommandHandler : IRegisterTransactionCommandHand
             throw;
         }
 
+        TelemetryConstants.TransactionsRegisteredCounter.Add(1);
         return result;
     }
 }
