@@ -17,6 +17,34 @@ public class DailyBalanceServiceTests
             return Task.FromResult(balance);
         }
 
+        public Task ApplyTransactionAtomicAsync(
+            DateOnly date,
+            string type,
+            decimal amount,
+            CancellationToken cancellationToken = default)
+        {
+            if (!Storage.TryGetValue(date, out var balance))
+            {
+                balance = DailyBalance.Create(date);
+                Storage[date] = balance;
+            }
+
+            if (string.Equals(type, "Credit", StringComparison.OrdinalIgnoreCase))
+            {
+                balance.AddCredit(amount);
+            }
+            else if (string.Equals(type, "Debit", StringComparison.OrdinalIgnoreCase))
+            {
+                balance.AddDebit(amount);
+            }
+            else
+            {
+                throw new ArgumentException($"Unsupported transaction type '{type}'.", nameof(type));
+            }
+
+            return Task.CompletedTask;
+        }
+
         public Task SaveOrUpdateAsync(DailyBalance dailyBalance, CancellationToken cancellationToken = default)
         {
             Storage[dailyBalance.Date] = dailyBalance;
@@ -45,6 +73,12 @@ public class DailyBalanceServiceTests
         public Task<bool> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
             return Task.FromResult(true);
+        }
+
+        public async Task<bool> ExecuteInTransactionAsync(Func<Task> operation, CancellationToken cancellationToken = default)
+        {
+            await operation();
+            return await SaveChangesAsync(cancellationToken);
         }
     }
 
@@ -111,7 +145,7 @@ public class DailyBalanceServiceTests
     }
 
     /// <summary>
-    /// Garante que o recebimento de evento de crédito crie um novo saldo diário se inexistente e acumule o valor corretamente.
+    /// Garante que o recebimento de evento de crédito crie um novo saldo diário se inexistente e acumule o valor corretamente via upsert atômico.
     /// </summary>
     [Fact]
     [Trait("Category", "Unit")]
@@ -175,6 +209,47 @@ public class DailyBalanceServiceTests
             service.ProcessTransactionAsync(
                 Guid.NewGuid(),
                 "UnknownType",
+                100.00m,
+                new DateOnly(2026, 10, 16)));
+    }
+
+    /// <summary>
+    /// Garante a rejeição de valores menores ou iguais a zero para proteção de integridade dos cálculos.
+    /// </summary>
+    [Theory]
+    [InlineData(0)]
+    [InlineData(-10)]
+    [InlineData(-0.01)]
+    [Trait("Category", "Unit")]
+    public async Task ProcessTransactionAsync_WithNonPositiveAmount_ShouldThrowArgumentOutOfRangeException(decimal invalidAmount)
+    {
+        // Arrange
+        var (service, _, _) = CreateService();
+
+        // Act & Assert
+        await Assert.ThrowsAsync<ArgumentOutOfRangeException>(() =>
+            service.ProcessTransactionAsync(
+                Guid.NewGuid(),
+                "Credit",
+                invalidAmount,
+                new DateOnly(2026, 10, 16)));
+    }
+
+    /// <summary>
+    /// Garante que TransactionId vazio seja rejeitado com ArgumentException.
+    /// </summary>
+    [Fact]
+    [Trait("Category", "Unit")]
+    public async Task ProcessTransactionAsync_WithEmptyTransactionId_ShouldThrowArgumentException()
+    {
+        // Arrange
+        var (service, _, _) = CreateService();
+
+        // Act & Assert
+        await Assert.ThrowsAsync<ArgumentException>(() =>
+            service.ProcessTransactionAsync(
+                Guid.Empty,
+                "Credit",
                 100.00m,
                 new DateOnly(2026, 10, 16)));
     }

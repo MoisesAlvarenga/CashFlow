@@ -55,32 +55,29 @@ public class DailyBalanceService : IDailyBalanceService
             throw new ArgumentException("Transaction ID cannot be empty.", nameof(transactionId));
         }
 
+        if (amount <= 0)
+        {
+            throw new ArgumentOutOfRangeException(nameof(amount), "Amount must be strictly positive.");
+        }
+
+        if (!string.Equals(type, "Credit", StringComparison.OrdinalIgnoreCase) &&
+            !string.Equals(type, "Debit", StringComparison.OrdinalIgnoreCase))
+        {
+            throw new ArgumentException($"Unsupported transaction type '{type}'.", nameof(type));
+        }
+
         if (await _consumedMessageRepository.ExistsAsync(transactionId, cancellationToken))
         {
             return false;
         }
 
-        var balance = await _repository.GetByDateAsync(date, cancellationToken) ?? DailyBalance.Create(date);
-
-        if (string.Equals(type, "Credit", StringComparison.OrdinalIgnoreCase))
+        return await _unitOfWork.ExecuteInTransactionAsync(async () =>
         {
-            balance.AddCredit(amount);
-        }
-        else if (string.Equals(type, "Debit", StringComparison.OrdinalIgnoreCase))
-        {
-            balance.AddDebit(amount);
-        }
-        else
-        {
-            throw new ArgumentException($"Unsupported transaction type '{type}'.", nameof(type));
-        }
-
-        await _repository.SaveOrUpdateAsync(balance, cancellationToken);
-        await _consumedMessageRepository.AddAsync(
-            new ConsumedMessage(transactionId, nameof(TransactionRegisteredEvent)),
-            cancellationToken);
-
-        return await _unitOfWork.SaveChangesAsync(cancellationToken);
+            await _repository.ApplyTransactionAtomicAsync(date, type, amount, cancellationToken);
+            await _consumedMessageRepository.AddAsync(
+                new ConsumedMessage(transactionId, nameof(TransactionRegisteredEvent)),
+                cancellationToken);
+        }, cancellationToken);
     }
 
     private static DailyBalanceDto MapToDto(DailyBalance balance)
