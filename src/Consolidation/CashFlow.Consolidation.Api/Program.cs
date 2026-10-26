@@ -7,6 +7,7 @@ using CashFlow.Consolidation.Application.DTOs;
 using CashFlow.Consolidation.Application.Services;
 using CashFlow.Consolidation.Domain.Repositories;
 using CashFlow.Consolidation.Infrastructure.Data;
+using CashFlow.Consolidation.Infrastructure.Caching;
 using CashFlow.Consolidation.Infrastructure.Repositories;
 using CashFlow.Shared.Contracts.Context;
 using CashFlow.Shared.Contracts.Diagnostics;
@@ -148,6 +149,26 @@ builder.Services.AddScoped<IDailyBalanceRepository, DailyBalanceRepository>();
 builder.Services.AddScoped<IConsumedMessageRepository, ConsumedMessageRepository>();
 builder.Services.AddScoped<IConsolidationUnitOfWork, ConsolidationUnitOfWork>();
 builder.Services.AddScoped<IDailyBalanceService, DailyBalanceService>();
+
+// Redis Distributed Cache Configuration (EVO-02)
+var redisConnectionString = builder.Configuration.GetConnectionString("redis")
+    ?? builder.Configuration.GetConnectionString("Redis")
+    ?? builder.Configuration["Redis:ConnectionString"];
+
+if (!string.IsNullOrWhiteSpace(redisConnectionString))
+{
+    builder.Services.AddStackExchangeRedisCache(options =>
+    {
+        options.Configuration = redisConnectionString;
+        options.InstanceName = "CashFlow:";
+    });
+}
+else
+{
+    builder.Services.AddDistributedMemoryCache();
+}
+
+builder.Services.AddSingleton<IDailyBalanceCacheService, RedisDailyBalanceCacheService>();
 
 // RabbitMQ Messaging Configuration & Background Consumer
 builder.Services.Configure<RabbitMqOptions>(

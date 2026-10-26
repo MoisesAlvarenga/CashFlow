@@ -43,6 +43,22 @@ services:
     networks:
       - cashflow-net
 
+  redis:
+    image: redis:7-alpine
+    container_name: cashflow-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - cashflow_redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+    networks:
+      - cashflow-net
+
   transactions-api:
     build:
       context: .
@@ -79,6 +95,7 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=cashflow_db;Username=verity;Password=verity_secret
+      - ConnectionStrings__Redis=redis:6379
       - RabbitMq__Host=rabbitmq
       - RabbitMq__Username=verity
       - RabbitMq__Password=verity_secret
@@ -86,6 +103,8 @@ services:
       postgres:
         condition: service_healthy
       rabbitmq:
+        condition: service_healthy
+      redis:
         condition: service_healthy
     networks:
       - cashflow-net
@@ -118,6 +137,7 @@ networks:
 volumes:
   cashflow_postgres_data:
   cashflow_rabbitmq_data:
+  cashflow_redis_data:
   verity_sonarqube_data:
   verity_sonarqube_extensions:
   verity_sonarqube_logs:

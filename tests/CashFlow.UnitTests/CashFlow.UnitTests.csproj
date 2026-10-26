@@ -24,6 +24,7 @@
     <ProjectReference Include="..\..\src\Transactions\CashFlow.Transactions.Application\CashFlow.Transactions.Application.csproj" />
     <ProjectReference Include="..\..\src\Consolidation\CashFlow.Consolidation.Domain\CashFlow.Consolidation.Domain.csproj" />
     <ProjectReference Include="..\..\src\Consolidation\CashFlow.Consolidation.Application\CashFlow.Consolidation.Application.csproj" />
+    <ProjectReference Include="..\..\src\Consolidation\CashFlow.Consolidation.Infrastructure\CashFlow.Consolidation.Infrastructure.csproj" />
     <ProjectReference Include="..\..\src\Aspire\CashFlow.ServiceDefaults\CashFlow.ServiceDefaults.csproj" />
   </ItemGroup>
 

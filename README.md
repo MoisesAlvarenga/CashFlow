@@ -20,6 +20,7 @@ Sistema financeiro distribuído de alto desempenho e resiliência para **control
 | **Swagger - Consolidação** | OpenAPI 3.0 interativo para consulta de saldo diário consolidado | [http://localhost:5102/swagger](http://localhost:5102/swagger) | `powershell -File scripts/open-browser.ps1 -SwaggerConsolidation` |
 | **RabbitMQ Management** | Painel do broker, exchanges, filas e Dead Letter Queue (DLQ) | [http://localhost:15672](http://localhost:15672) | Usuário: `verity` / Senha: `verity_secret` |
 | **PostgreSQL Database** | Banco de dados relacional com schema Code-First | `localhost:5433` (`cashflow_db`) | Usuário: `verity` / Senha: `verity_secret` |
+| **Redis Cache** | Cache distribuído em memória para saldo diário consolidado | `localhost:6379` | `redis-cli ping` |
 | **Archify** | Diagrama interativo de arquitetura de software (fluxos, C4, resiliência) | [cash-flow.html](.archify/architecture-cash-flow-20261019-132200/cash-flow.html) | `powershell -File scripts/open-browser.ps1 -Archify` |
 | **Solidify Dashboard** | Avaliador arquitetural SOLID e Quality Gate com abas interativas | [release-report.html](.solidify/out/release-report.html) | `powershell -File scripts/open-browser.ps1 -Solidify` |
 | **SonarQube** | Métricas estáticas, cobertura de código e análise Clean Code | [Dashboard SonarQube](http://localhost:9000/dashboard?id=desafio_tecnico_Verity) | `powershell -File scripts/run-sonar.ps1` |
@@ -171,7 +172,7 @@ A solução foi submetida a rigorosos testes de unidade, integração e carga:
 
 | Tipo de Teste | Quantidade / Carga | Cobertura / SLA | Status |
 |---|:---:|:---:|:---:|
-| **Testes Unitários** (`CashFlow.UnitTests`) | **77 testes** em ~800ms | Domínio, CQRS, Validações, Paginação, Telemetria, JWT e Health Checks | ✅ 100% Aprovados |
+| **Testes Unitários** (`CashFlow.UnitTests`) | **85 testes** em ~900ms | Domínio, CQRS, Validações, Paginação, Telemetria, JWT, Health Checks e Cache Redis | ✅ 100% Aprovados |
 | **Testes de Integração** (`CashFlow.IntegrationTests`) | **15 testes** com Testcontainers | Dual-Write ACID, Deduplicação, 30 tasks concorrentes, DLQ e Health Checks | ✅ Aprovados |
 | **Testes de Carga K6** (`tests/load`) | **50+ req/s** contínuas por 30s | p95 < 500ms, Taxa de Erro < 1% (**Medido: p95 = 40.63ms, 0% erro**) | ✅ Aprovados |
 

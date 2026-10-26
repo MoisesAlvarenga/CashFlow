@@ -7,7 +7,7 @@ using CashFlow.Shared.Contracts.Events;
 
 public interface IDailyBalanceService
 {
-    Task<DailyBalanceDto?> GetDailyBalanceAsync(DateOnly date);
+    Task<DailyBalanceDto?> GetDailyBalanceAsync(DateOnly date, CancellationToken cancellationToken = default);
     Task<bool> ProcessTransactionAsync(
         Guid transactionId,
         string type,
@@ -21,26 +21,48 @@ public class DailyBalanceService : IDailyBalanceService
     private readonly IDailyBalanceRepository _repository;
     private readonly IConsumedMessageRepository _consumedMessageRepository;
     private readonly IConsolidationUnitOfWork _unitOfWork;
+    private readonly IDailyBalanceCacheService? _cacheService;
 
     public DailyBalanceService(
         IDailyBalanceRepository repository,
         IConsumedMessageRepository consumedMessageRepository,
-        IConsolidationUnitOfWork unitOfWork)
+        IConsolidationUnitOfWork unitOfWork,
+        IDailyBalanceCacheService? cacheService = null)
     {
         _repository = repository ?? throw new ArgumentNullException(nameof(repository));
         _consumedMessageRepository = consumedMessageRepository ?? throw new ArgumentNullException(nameof(consumedMessageRepository));
         _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
+        _cacheService = cacheService;
     }
 
-    public async Task<DailyBalanceDto?> GetDailyBalanceAsync(DateOnly date)
+    public async Task<DailyBalanceDto?> GetDailyBalanceAsync(DateOnly date, CancellationToken cancellationToken = default)
     {
+        // 1. Consulta ao Cache Distribuído (Cache-Aside)
+        if (_cacheService != null)
+        {
+            var cached = await _cacheService.GetAsync(date, cancellationToken);
+            if (cached != null)
+            {
+                return cached;
+            }
+        }
+
+        // 2. Consulta à base de dados relacional (Cache Miss)
         var balance = await _repository.GetByDateAsync(date);
         if (balance == null)
         {
             return null;
         }
 
-        return MapToDto(balance);
+        var dto = MapToDto(balance);
+
+        // 3. População assíncrona do Cache
+        if (_cacheService != null)
+        {
+            await _cacheService.SetAsync(dto, cancellationToken: cancellationToken);
+        }
+
+        return dto;
     }
 
     public async Task<bool> ProcessTransactionAsync(
@@ -71,13 +93,21 @@ public class DailyBalanceService : IDailyBalanceService
             return false;
         }
 
-        return await _unitOfWork.ExecuteInTransactionAsync(async () =>
+        var applied = await _unitOfWork.ExecuteInTransactionAsync(async () =>
         {
             await _repository.ApplyTransactionAtomicAsync(date, type, amount, cancellationToken);
             await _consumedMessageRepository.AddAsync(
                 new ConsumedMessage(transactionId, nameof(TransactionRegisteredEvent)),
                 cancellationToken);
         }, cancellationToken);
+
+        // 4. Invalidação proativa do Cache para garantir consistência imediata
+        if (applied && _cacheService != null)
+        {
+            await _cacheService.RemoveAsync(date, cancellationToken);
+        }
+
+        return applied;
     }
 
     private static DailyBalanceDto MapToDto(DailyBalance balance)
