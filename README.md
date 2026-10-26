@@ -171,8 +171,8 @@ A solução foi submetida a rigorosos testes de unidade, integração e carga:
 
 | Tipo de Teste | Quantidade / Carga | Cobertura / SLA | Status |
 |---|:---:|:---:|:---:|
-| **Testes Unitários** (`CashFlow.UnitTests`) | **74 testes** em ~230ms | Domínio, CQRS, Validações, Paginação, Telemetria e JWT | ✅ 100% Aprovados |
-| **Testes de Integração** (`CashFlow.IntegrationTests`) | **12 testes** com Testcontainers | Dual-Write ACID, Deduplicação, 30 tasks concorrentes e DLQ | ✅ Aprovados |
+| **Testes Unitários** (`CashFlow.UnitTests`) | **77 testes** em ~800ms | Domínio, CQRS, Validações, Paginação, Telemetria, JWT e Health Checks | ✅ 100% Aprovados |
+| **Testes de Integração** (`CashFlow.IntegrationTests`) | **15 testes** com Testcontainers | Dual-Write ACID, Deduplicação, 30 tasks concorrentes, DLQ e Health Checks | ✅ Aprovados |
 | **Testes de Carga K6** (`tests/load`) | **50+ req/s** contínuas por 30s | p95 < 500ms, Taxa de Erro < 1% (**Medido: p95 = 40.63ms, 0% erro**) | ✅ Aprovados |
 
 ### Comandos para Execução dos Testes
