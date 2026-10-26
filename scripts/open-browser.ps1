@@ -6,6 +6,7 @@
     sejam abertos no navegador (Chrome, Edge, etc.) em vez de abrirem no editor de texto da IDE.
 #>
 param(
+    [switch]$Aspire,
     [switch]$Archify,
     [switch]$Solidify,
     [switch]$Sonar,
@@ -24,6 +25,7 @@ if ($latestArchifyDir) {
 } else {
     $archifyHtml = "$PSScriptRoot\..\.archify\architecture-cash-flow-20261019-132200\cash-flow.html"
 }
+$aspireUrl = "https://localhost:17180"
 $solidifyHtml = "$PSScriptRoot\..\.solidify\out\release-report.html"
 $sonarUrl = "http://localhost:9000/dashboard?id=desafio_tecnico_Verity"
 $swaggerTransactionsUrl = "http://localhost:5101/swagger"
@@ -32,6 +34,12 @@ $swaggerConsolidationUrl = "http://localhost:5102/swagger"
 Write-Host "======================================================" -ForegroundColor Cyan
 Write-Host "       Abrindo Dashboards no Navegador Padrão          " -ForegroundColor Cyan
 Write-Host "======================================================" -ForegroundColor Cyan
+
+if ($Aspire) {
+    Write-Host "Abrindo Painel Central do .NET Aspire no Navegador..." -ForegroundColor Green
+    Start-Process $aspireUrl
+    exit 0
+}
 
 # Caso nenhum switch específico tenha sido passado, abre as ferramentas principais
 $noSpecificSwitch = -not ($Archify -or $Solidify -or $Sonar -or $Tests -or $K6 -or $Load -or $Swagger -or $SwaggerTransactions -or $SwaggerConsolidation)

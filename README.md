@@ -15,7 +15,7 @@ Sistema financeiro distribuído de alto desempenho e resiliência para **control
 
 | Componente / Ferramenta | Finalidade | Link Direto / Porta | Credenciais / Comando |
 |---|---|---|---|
-| **.NET Aspire Dashboard** | Painel central de telemetria, logs estruturados, tracing e containers | [http://localhost:15180](http://localhost:15180) | `dotnet run --project src/Aspire/CashFlow.AppHost` |
+| **.NET Aspire Dashboard** | Painel central de telemetria, logs estruturados, tracing e containers | [https://localhost:17180](https://localhost:17180) | `powershell -File scripts/open-browser.ps1 -Aspire` |
 | **Swagger - Lançamentos** | OpenAPI 3.0 interativo para cadastro e consulta paginada de transações | [http://localhost:5101/swagger](http://localhost:5101/swagger) | `powershell -File scripts/open-browser.ps1 -SwaggerTransactions` |
 | **Swagger - Consolidação** | OpenAPI 3.0 interativo para consulta de saldo diário consolidado | [http://localhost:5102/swagger](http://localhost:5102/swagger) | `powershell -File scripts/open-browser.ps1 -SwaggerConsolidation` |
 | **RabbitMQ Management** | Painel do broker, exchanges, filas e Dead Letter Queue (DLQ) | [http://localhost:15672](http://localhost:15672) | Usuário: `verity` / Senha: `verity_secret` |
