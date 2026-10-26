@@ -1,5 +1,6 @@
 namespace CashFlow.Transactions.Api.Endpoints;
 
+using CashFlow.Shared.Contracts.Common;
 using CashFlow.Shared.Contracts.Security;
 using CashFlow.Transactions.Application.Commands;
 using CashFlow.Transactions.Application.DTOs;
@@ -90,22 +91,38 @@ public static class TransactionEndpoints
         .ProducesProblem(StatusCodes.Status500InternalServerError)
         .RequireAuthorization();
 
-        // GET /api/v1/transactions - Consultar lançamentos com filtros opcionais de data
+        // GET /api/v1/transactions - Consultar lançamentos paginados com filtros opcionais de data
         app.MapGet("/api/v1/transactions", async (
             DateOnly? date,
             DateOnly? startDate,
             DateOnly? endDate,
+            int? page,
+            int? pageSize,
             IGetTransactionsQueryHandler handler) =>
         {
-            var query = new GetTransactionsQuery(date, startDate, endDate);
+            var actualPage = page ?? GetTransactionsQuery.DefaultPage;
+            var actualPageSize = pageSize ?? GetTransactionsQuery.DefaultPageSize;
+
+            if (actualPage < 1)
+            {
+                return Results.BadRequest(new { error = "O parâmetro 'page' deve ser maior ou igual a 1." });
+            }
+
+            if (actualPageSize < 1 || actualPageSize > GetTransactionsQuery.MaxPageSize)
+            {
+                return Results.BadRequest(new { error = $"O parâmetro 'pageSize' deve estar entre 1 e {GetTransactionsQuery.MaxPageSize}." });
+            }
+
+            var query = new GetTransactionsQuery(date, startDate, endDate, actualPage, actualPageSize);
             var transactions = await handler.HandleAsync(query);
             return Results.Ok(transactions);
         })
         .WithName("GetTransactions")
         .WithTags("Transactions")
-        .WithSummary("Consulta os lançamentos financeiros com filtro de data")
-        .WithDescription("Retorna a lista de transações registradas, permitindo filtrar por uma data pontual ('date') ou intervalo de datas ('startDate' e 'endDate'). Caso nenhum parâmetro seja enviado, lista todos os lançamentos em ordem cronológica decrescente. Requer autenticação JWT.")
-        .Produces<IReadOnlyList<TransactionDto>>(StatusCodes.Status200OK, contentType: "application/json")
+        .WithSummary("Consulta os lançamentos financeiros com filtro de data e paginação")
+        .WithDescription("Retorna a lista paginada de transações registradas, permitindo filtrar por uma data pontual ('date') ou intervalo de datas ('startDate' e 'endDate'). Suporta navegação por páginas com 'page' (padrão 1) e 'pageSize' (padrão 20, máximo 100). Requer autenticação JWT.")
+        .Produces<PagedResult<TransactionDto>>(StatusCodes.Status200OK, contentType: "application/json")
+        .ProducesProblem(StatusCodes.Status400BadRequest)
         .ProducesProblem(StatusCodes.Status401Unauthorized)
         .RequireAuthorization();
 

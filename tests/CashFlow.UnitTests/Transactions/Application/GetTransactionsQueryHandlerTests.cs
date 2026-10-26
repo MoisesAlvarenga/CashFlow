@@ -1,3 +1,4 @@
+using CashFlow.Shared.Contracts.Common;
 using CashFlow.Transactions.Application.DTOs;
 using CashFlow.Transactions.Application.Handlers;
 using CashFlow.Transactions.Application.Queries;
@@ -31,6 +32,17 @@ public class GetTransactionsQueryHandlerTests
             if (endDate.HasValue) query = query.Where(t => t.Date <= endDate.Value);
             return Task.FromResult<IReadOnlyList<Transaction>>(query.ToList());
         }
+
+        public Task<(IReadOnlyList<Transaction> Items, int TotalCount)> GetPagedByFilterAsync(
+            DateOnly? startDate, DateOnly? endDate, int page, int pageSize)
+        {
+            var query = Transactions.AsEnumerable();
+            if (startDate.HasValue) query = query.Where(t => t.Date >= startDate.Value);
+            if (endDate.HasValue) query = query.Where(t => t.Date <= endDate.Value);
+            var list = query.ToList();
+            var items = list.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+            return Task.FromResult<(IReadOnlyList<Transaction> Items, int TotalCount)>((items, list.Count));
+        }
     }
 
     /// <summary>
@@ -56,8 +68,9 @@ public class GetTransactionsQueryHandlerTests
 
         // Assert
         Assert.NotNull(result);
-        Assert.Equal(2, result.Count);
-        Assert.All(result, t => Assert.Equal(date1, t.Date));
+        Assert.Equal(2, result.TotalCount);
+        Assert.Equal(2, result.Items.Count);
+        Assert.All(result.Items, t => Assert.Equal(date1, t.Date));
     }
 
     /// <summary>
@@ -83,9 +96,10 @@ public class GetTransactionsQueryHandlerTests
         var result = await handler.HandleAsync(query);
 
         // Assert
-        Assert.Single(result);
-        Assert.Equal(200m, result[0].Amount);
-        Assert.Equal(date2, result[0].Date);
+        var item = Assert.Single(result.Items);
+        Assert.Equal(1, result.TotalCount);
+        Assert.Equal(200m, item.Amount);
+        Assert.Equal(date2, item.Date);
     }
 
     /// <summary>
@@ -106,7 +120,9 @@ public class GetTransactionsQueryHandlerTests
 
         // Assert
         Assert.NotNull(result);
-        Assert.Empty(result);
+        Assert.Empty(result.Items);
+        Assert.Equal(0, result.TotalCount);
+        Assert.Equal(0, result.TotalPages);
     }
 
     /// <summary>
@@ -127,7 +143,81 @@ public class GetTransactionsQueryHandlerTests
         var result = await handler.HandleAsync(query);
 
         // Assert
-        Assert.Equal(2, result.Count);
+        Assert.Equal(2, result.TotalCount);
+        Assert.Equal(2, result.Items.Count);
+        Assert.Equal(1, result.Page);
+        Assert.Equal(20, result.PageSize);
+        Assert.False(result.HasPreviousPage);
+        Assert.False(result.HasNextPage);
+    }
+
+    /// <summary>
+    /// Garante que a paginação funcione adequadamente dividindo os registros e calculando metadados de paginação.
+    /// </summary>
+    [Fact]
+    public async Task HandleAsync_WithPagination_SplitsRecordsAndCalculatesMetadataCorrectly()
+    {
+        // Arrange
+        var repo = new FakeTransactionRepository();
+        var baseDate = new DateOnly(2026, 10, 1);
+        for (int i = 1; i <= 25; i++)
+        {
+            repo.Transactions.Add(Transaction.CreateCredit(i * 10m, baseDate.AddDays(i), $"Venda {i}"));
+        }
+
+        var handler = new GetTransactionsQueryHandler(repo);
+
+        // Act - Página 1 de tamanho 10
+        var page1 = await handler.HandleAsync(new GetTransactionsQuery(Page: 1, PageSize: 10));
+
+        // Assert - Página 1
+        Assert.Equal(25, page1.TotalCount);
+        Assert.Equal(3, page1.TotalPages);
+        Assert.Equal(1, page1.Page);
+        Assert.Equal(10, page1.PageSize);
+        Assert.Equal(10, page1.Items.Count);
+        Assert.False(page1.HasPreviousPage);
+        Assert.True(page1.HasNextPage);
+
+        // Act - Página 2 de tamanho 10
+        var page2 = await handler.HandleAsync(new GetTransactionsQuery(Page: 2, PageSize: 10));
+
+        // Assert - Página 2
+        Assert.Equal(10, page2.Items.Count);
+        Assert.Equal(2, page2.Page);
+        Assert.True(page2.HasPreviousPage);
+        Assert.True(page2.HasNextPage);
+
+        // Act - Página 3 de tamanho 10
+        var page3 = await handler.HandleAsync(new GetTransactionsQuery(Page: 3, PageSize: 10));
+
+        // Assert - Página 3 (restante: 5 itens)
+        Assert.Equal(5, page3.Items.Count);
+        Assert.Equal(3, page3.Page);
+        Assert.True(page3.HasPreviousPage);
+        Assert.False(page3.HasNextPage);
+    }
+
+    /// <summary>
+    /// Garante que parâmetros de paginação inválidos (ex: menores que 1 ou excedendo limite de 100) sejam normalizados com segurança.
+    /// </summary>
+    [Fact]
+    public async Task HandleAsync_WithInvalidPaginationParameters_NormalizesToSafeDefaults()
+    {
+        // Arrange
+        var repo = new FakeTransactionRepository();
+        repo.Transactions.Add(Transaction.CreateCredit(100m, new DateOnly(2026, 10, 1), "Venda 1"));
+
+        var handler = new GetTransactionsQueryHandler(repo);
+
+        // Act
+        var resultZero = await handler.HandleAsync(new GetTransactionsQuery(Page: 0, PageSize: -5));
+        var resultExcessive = await handler.HandleAsync(new GetTransactionsQuery(Page: 1, PageSize: 500));
+
+        // Assert
+        Assert.Equal(GetTransactionsQuery.DefaultPage, resultZero.Page);
+        Assert.Equal(GetTransactionsQuery.DefaultPageSize, resultZero.PageSize);
+        Assert.Equal(GetTransactionsQuery.MaxPageSize, resultExcessive.PageSize);
     }
 
     /// <summary>
@@ -149,7 +239,7 @@ public class GetTransactionsQueryHandlerTests
         var result = await handler.HandleAsync(query);
 
         // Assert
-        var dto = Assert.Single(result);
+        var dto = Assert.Single(result.Items);
         Assert.Equal(transaction.Id, dto.Id);
         Assert.Equal("Credit", dto.Type);
         Assert.Equal(1500.75m, dto.Amount);

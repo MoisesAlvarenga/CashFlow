@@ -53,4 +53,32 @@ public class TransactionRepository : ITransactionRepository
             .ThenByDescending(t => t.CreatedAt)
             .ToListAsync(ct);
     }
+
+    public async Task<(IReadOnlyList<Transaction> Items, int TotalCount)> GetPagedByFilterAsync(
+        DateOnly? startDate, DateOnly? endDate, int page, int pageSize)
+    {
+        var ct = _tokenProvider.Token;
+        var query = _dbContext.Transactions.AsNoTracking().AsQueryable();
+
+        if (startDate.HasValue)
+        {
+            query = query.Where(t => t.Date >= startDate.Value);
+        }
+
+        if (endDate.HasValue)
+        {
+            query = query.Where(t => t.Date <= endDate.Value);
+        }
+
+        var totalCount = await query.CountAsync(ct);
+
+        var items = await query
+            .OrderByDescending(t => t.Date)
+            .ThenByDescending(t => t.CreatedAt)
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync(ct);
+
+        return (items, totalCount);
+    }
 }

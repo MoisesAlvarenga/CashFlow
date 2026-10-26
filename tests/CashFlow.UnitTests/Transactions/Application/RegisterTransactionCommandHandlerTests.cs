@@ -34,6 +34,17 @@ public class RegisterTransactionCommandHandlerTests
             if (endDate.HasValue) query = query.Where(t => t.Date <= endDate.Value);
             return Task.FromResult<IReadOnlyList<Transaction>>(query.ToList());
         }
+
+        public Task<(IReadOnlyList<Transaction> Items, int TotalCount)> GetPagedByFilterAsync(
+            DateOnly? startDate, DateOnly? endDate, int page, int pageSize)
+        {
+            var query = Added.AsEnumerable();
+            if (startDate.HasValue) query = query.Where(t => t.Date >= startDate.Value);
+            if (endDate.HasValue) query = query.Where(t => t.Date <= endDate.Value);
+            var list = query.ToList();
+            var items = list.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+            return Task.FromResult<(IReadOnlyList<Transaction> Items, int TotalCount)>((items, list.Count));
+        }
     }
 
     private class FakeOutboxRepository : IOutboxRepository

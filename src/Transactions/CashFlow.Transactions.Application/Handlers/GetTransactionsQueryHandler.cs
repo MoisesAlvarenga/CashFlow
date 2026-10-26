@@ -1,19 +1,20 @@
 namespace CashFlow.Transactions.Application.Handlers;
 
+using CashFlow.Shared.Contracts.Common;
 using CashFlow.Transactions.Application.DTOs;
 using CashFlow.Transactions.Application.Queries;
 using CashFlow.Transactions.Domain.Repositories;
 
 /// <summary>
-/// Contrato do manipulador de consulta de lançamentos financeiros.
+/// Contrato do manipulador de consulta paginada de lançamentos financeiros.
 /// </summary>
 public interface IGetTransactionsQueryHandler
 {
-    Task<IReadOnlyList<TransactionDto>> HandleAsync(GetTransactionsQuery query);
+    Task<PagedResult<TransactionDto>> HandleAsync(GetTransactionsQuery query);
 }
 
 /// <summary>
-/// Implementação do manipulador de consulta de lançamentos com filtro por data.
+/// Implementação do manipulador de consulta de lançamentos com filtro por data e paginação.
 /// </summary>
 public class GetTransactionsQueryHandler : IGetTransactionsQueryHandler
 {
@@ -24,14 +25,20 @@ public class GetTransactionsQueryHandler : IGetTransactionsQueryHandler
         _transactionRepository = transactionRepository ?? throw new ArgumentNullException(nameof(transactionRepository));
     }
 
-    public async Task<IReadOnlyList<TransactionDto>> HandleAsync(GetTransactionsQuery query)
+    public async Task<PagedResult<TransactionDto>> HandleAsync(GetTransactionsQuery query)
     {
         var startDate = query.Date ?? query.StartDate;
         var endDate = query.Date ?? query.EndDate;
 
-        var transactions = await _transactionRepository.GetByFilterAsync(startDate, endDate);
+        var page = query.Page < 1 ? GetTransactionsQuery.DefaultPage : query.Page;
+        var pageSize = query.PageSize < 1
+            ? GetTransactionsQuery.DefaultPageSize
+            : Math.Min(query.PageSize, GetTransactionsQuery.MaxPageSize);
 
-        return transactions.Select(t => new TransactionDto(
+        var (transactions, totalCount) = await _transactionRepository.GetPagedByFilterAsync(
+            startDate, endDate, page, pageSize);
+
+        var dtos = transactions.Select(t => new TransactionDto(
             t.Id,
             t.Type.ToString(),
             t.Amount,
@@ -39,5 +46,7 @@ public class GetTransactionsQueryHandler : IGetTransactionsQueryHandler
             t.Description,
             t.CreatedAt
         )).ToList();
+
+        return PagedResult<TransactionDto>.Create(dtos, page, pageSize, totalCount);
     }
 }
