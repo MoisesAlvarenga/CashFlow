@@ -1,16 +1,20 @@
 using System.Reflection;
+using System.Text;
 using CashFlow.Consolidation.Api.Context;
 using CashFlow.Consolidation.Api.Endpoints;
+using CashFlow.Consolidation.Api.Workers;
 using CashFlow.Consolidation.Application.DTOs;
-using CashFlow.Shared.Contracts.Context;
 using CashFlow.Consolidation.Application.Services;
 using CashFlow.Consolidation.Domain.Repositories;
 using CashFlow.Consolidation.Infrastructure.Data;
 using CashFlow.Consolidation.Infrastructure.Repositories;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.OpenApi;
-using CashFlow.Consolidation.Api.Workers;
+using CashFlow.Shared.Contracts.Context;
 using CashFlow.Shared.Contracts.Messaging;
+using CashFlow.Shared.Contracts.Security;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -50,7 +54,54 @@ builder.Services.AddSwaggerGen(c =>
             c.IncludeXmlComments(xmlPath, includeControllerXmlComments: true);
         }
     }
+
+    // Configuração de segurança JWT Bearer no Swagger UI
+    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Name = "Authorization",
+        Type = SecuritySchemeType.Http,
+        Scheme = "Bearer",
+        BearerFormat = "JWT",
+        In = ParameterLocation.Header,
+        Description = "Insira o token JWT gerado via POST /api/v1/auth/token no formato: Bearer {seu_token}"
+    });
+
+    c.AddSecurityRequirement(document => new()
+    {
+        [new OpenApiSecuritySchemeReference("Bearer", document)] = []
+    });
 });
+
+// Authentication & Authorization: JWT Bearer Token validation
+var jwtSection = builder.Configuration.GetSection(JwtOptions.SectionName);
+builder.Services.Configure<JwtOptions>(jwtSection);
+var jwtOptions = jwtSection.Get<JwtOptions>() ?? new JwtOptions();
+
+builder.Services.AddSingleton<IJwtTokenService, JwtTokenService>();
+
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+    options.RequireHttpsMetadata = false;
+    options.SaveToken = true;
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOptions.SecretKey)),
+        ValidateIssuer = true,
+        ValidIssuer = jwtOptions.Issuer,
+        ValidateAudience = true,
+        ValidAudience = jwtOptions.Audience,
+        ValidateLifetime = true,
+        ClockSkew = TimeSpan.Zero
+    };
+});
+
+builder.Services.AddAuthorization();
 
 // Persistence & Database: PostgreSQL Code-First via Npgsql with automatic InMemory fallback
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
@@ -107,6 +158,9 @@ app.UseSwaggerUI(c =>
 });
 
 app.UseHttpsRedirection();
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 // Map Minimal API Endpoints via extension method
 app.ConsolidationAPI();

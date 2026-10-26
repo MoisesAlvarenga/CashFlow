@@ -1,9 +1,11 @@
 namespace CashFlow.IntegrationTests.Transactions;
 
 using System.Net;
+using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using CashFlow.IntegrationTests.Fixtures;
 using CashFlow.Shared.Contracts.Events;
+using CashFlow.Shared.Contracts.Security;
 using CashFlow.Transactions.Application.Commands;
 using CashFlow.Transactions.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
@@ -20,13 +22,48 @@ public class TransactionsDualWriteIntegrationTests : IClassFixture<PostgreSqlFix
         _fixture = fixture;
     }
 
+    private static async Task<string> AuthenticateClientAsync(HttpClient client)
+    {
+        var tokenReq = new TokenRequest("integration-tester", "verity-secret");
+        var tokenRes = await client.PostAsJsonAsync("/api/v1/auth/token", tokenReq);
+        tokenRes.EnsureSuccessStatusCode();
+        var tokenObj = await tokenRes.Content.ReadFromJsonAsync<TokenResponse>();
+        return tokenObj!.AccessToken;
+    }
+
     [DockerFact]
-    public async Task PostTransaction_WithValidPayload_ShouldPersistTransactionAndOutboxAtomicallyInPostgreSql()
+    public async Task PostTransaction_WithoutAuthorization_ShouldReturn401Unauthorized()
     {
         // Arrange
         using var factory = new TransactionsWebApplicationFactory(_fixture.ConnectionString);
         await factory.InitializeDatabaseAsync();
         var client = factory.CreateClient();
+
+        var command = new
+        {
+            Type = "Credit",
+            Amount = 100.00m,
+            Date = "2026-10-26",
+            Description = "Anonymous request"
+        };
+
+        // Act
+        var response = await client.PostAsJsonAsync("/api/v1/transactions", command);
+
+        // Assert
+        response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
+    }
+
+    [DockerFact]
+    public async Task PostTransaction_WithValidPayloadAndJwtToken_ShouldPersistTransactionAndOutboxAtomicallyInPostgreSql()
+    {
+        // Arrange
+        using var factory = new TransactionsWebApplicationFactory(_fixture.ConnectionString);
+        await factory.InitializeDatabaseAsync();
+        var client = factory.CreateClient();
+
+        var token = await AuthenticateClientAsync(client);
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
         var idempotencyKey = $"test-key-{Guid.NewGuid()}";
         client.DefaultRequestHeaders.Add("Idempotency-Key", idempotencyKey);
@@ -77,6 +114,9 @@ public class TransactionsDualWriteIntegrationTests : IClassFixture<PostgreSqlFix
         using var factory = new TransactionsWebApplicationFactory(_fixture.ConnectionString);
         await factory.InitializeDatabaseAsync();
         var client = factory.CreateClient();
+
+        var token = await AuthenticateClientAsync(client);
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
         var sharedKey = $"idempotent-repeat-{Guid.NewGuid()}";
         client.DefaultRequestHeaders.Add("Idempotency-Key", sharedKey);

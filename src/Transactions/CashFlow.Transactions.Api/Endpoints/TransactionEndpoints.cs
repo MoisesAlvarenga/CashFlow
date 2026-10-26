@@ -1,5 +1,6 @@
 namespace CashFlow.Transactions.Api.Endpoints;
 
+using CashFlow.Shared.Contracts.Security;
 using CashFlow.Transactions.Application.Commands;
 using CashFlow.Transactions.Application.DTOs;
 using CashFlow.Transactions.Application.Handlers;
@@ -29,6 +30,27 @@ public static class TransactionEndpoints
         // Redirecionamento da raiz para o Swagger UI
         app.MapGet("/", () => Results.Redirect("/swagger"))
            .ExcludeFromDescription();
+
+        // POST /api/v1/auth/token - Obter token JWT para acesso autenticado
+        app.MapPost("/api/v1/auth/token", (
+            TokenRequest request,
+            IJwtTokenService tokenService) =>
+        {
+            if (string.IsNullOrWhiteSpace(request.ClientId) || string.IsNullOrWhiteSpace(request.ClientSecret))
+            {
+                return Results.BadRequest(new { error = "ClientId e ClientSecret são obrigatórios." });
+            }
+
+            var tokenResponse = tokenService.GenerateToken(request.ClientId.Trim());
+            return Results.Ok(tokenResponse);
+        })
+        .WithName("GenerateToken")
+        .WithTags("Auth")
+        .WithSummary("Gera um token JWT Bearer para autenticação nos endpoints")
+        .WithDescription("Emite um token JWT assinado válido por 60 minutos contendo as claims do cliente informado. Use o token retornado no botão 'Authorize' do Swagger ou no cabeçalho 'Authorization: Bearer {token}'.")
+        .Produces<TokenResponse>(StatusCodes.Status200OK, contentType: "application/json")
+        .ProducesProblem(StatusCodes.Status400BadRequest)
+        .AllowAnonymous();
 
         // POST /api/v1/transactions - Registrar lançamento financeiro
         app.MapPost("/api/v1/transactions", async (
@@ -61,10 +83,12 @@ public static class TransactionEndpoints
         .WithName("RegisterTransaction")
         .WithTags("Transactions")
         .WithSummary("Registra um lançamento financeiro de crédito ou débito")
-        .WithDescription("Valida os dados com FluentValidation, persiste a transação atomicamente no banco de dados e gera uma mensagem de evento na tabela de Outbox para sincronização assíncrona. Suporta o cabeçalho 'Idempotency-Key' para garantir que requisições repetidas retornem o mesmo resultado sem duplicar lançamentos.")
+        .WithDescription("Valida os dados com FluentValidation, persiste a transação atomicamente no banco de dados e gera uma mensagem de evento na tabela de Outbox para sincronização assíncrona. Suporta o cabeçalho 'Idempotency-Key' para garantir que requisições repetidas retornem o mesmo resultado sem duplicar lançamentos. Requer autenticação JWT.")
         .Produces<RegisterTransactionResult>(StatusCodes.Status201Created, contentType: "application/json")
         .ProducesValidationProblem(StatusCodes.Status400BadRequest)
-        .ProducesProblem(StatusCodes.Status500InternalServerError);
+        .ProducesProblem(StatusCodes.Status401Unauthorized)
+        .ProducesProblem(StatusCodes.Status500InternalServerError)
+        .RequireAuthorization();
 
         // GET /api/v1/transactions - Consultar lançamentos com filtros opcionais de data
         app.MapGet("/api/v1/transactions", async (
@@ -80,8 +104,10 @@ public static class TransactionEndpoints
         .WithName("GetTransactions")
         .WithTags("Transactions")
         .WithSummary("Consulta os lançamentos financeiros com filtro de data")
-        .WithDescription("Retorna a lista de transações registradas, permitindo filtrar por uma data pontual ('date') ou intervalo de datas ('startDate' e 'endDate'). Caso nenhum parâmetro seja enviado, lista todos os lançamentos em ordem cronológica decrescente.")
-        .Produces<IReadOnlyList<TransactionDto>>(StatusCodes.Status200OK, contentType: "application/json");
+        .WithDescription("Retorna a lista de transações registradas, permitindo filtrar por uma data pontual ('date') ou intervalo de datas ('startDate' e 'endDate'). Caso nenhum parâmetro seja enviado, lista todos os lançamentos em ordem cronológica decrescente. Requer autenticação JWT.")
+        .Produces<IReadOnlyList<TransactionDto>>(StatusCodes.Status200OK, contentType: "application/json")
+        .ProducesProblem(StatusCodes.Status401Unauthorized)
+        .RequireAuthorization();
 
         // GET /health - Diagnóstico operacional
         app.MapGet("/health", () => Results.Ok(new { status = "Healthy", service = "Transactions.Api", timestamp = DateTimeOffset.UtcNow }))
@@ -89,7 +115,8 @@ public static class TransactionEndpoints
            .WithTags("Health")
            .WithSummary("Verifica a saúde operacional do serviço")
            .WithDescription("Retorna 200 OK com o estado do serviço e timestamp atual.")
-           .Produces(StatusCodes.Status200OK);
+           .Produces(StatusCodes.Status200OK)
+           .AllowAnonymous();
 
         return app;
     }
