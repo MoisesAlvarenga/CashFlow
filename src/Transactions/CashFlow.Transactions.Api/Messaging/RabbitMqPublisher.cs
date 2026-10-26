@@ -1,8 +1,11 @@
 namespace CashFlow.Transactions.Api.Messaging;
 
+using System.Net.Sockets;
 using System.Text;
 using CashFlow.Shared.Contracts.Messaging;
 using Microsoft.Extensions.Options;
+using Polly;
+using Polly.Retry;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Exceptions;
 
@@ -11,10 +14,14 @@ public interface IRabbitMqPublisher
     Task PublishAsync(string payload, CancellationToken cancellationToken = default);
 }
 
-public class RabbitMqPublisher : IRabbitMqPublisher
+public class RabbitMqPublisher : IRabbitMqPublisher, IAsyncDisposable
 {
     private readonly IOptionsMonitor<RabbitMqOptions> _optionsMonitor;
     private readonly ILogger<RabbitMqPublisher> _logger;
+    private readonly AsyncRetryPolicy _retryPolicy;
+    private readonly SemaphoreSlim _connectionLock = new(1, 1);
+    private IConnection? _connection;
+    private bool _disposed;
 
     public RabbitMqPublisher(
         IOptionsMonitor<RabbitMqOptions> optionsMonitor,
@@ -22,34 +29,108 @@ public class RabbitMqPublisher : IRabbitMqPublisher
     {
         _optionsMonitor = optionsMonitor ?? throw new ArgumentNullException(nameof(optionsMonitor));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+
+        // Política de resiliência via Polly: 3 retentativas com backoff exponencial para falhas transitórias
+        _retryPolicy = Policy
+            .Handle<BrokerUnreachableException>()
+            .Or<SocketException>()
+            .Or<TimeoutException>()
+            .Or<AlreadyClosedException>()
+            .Or<ConnectFailureException>()
+            .Or<PublishException>()
+            .WaitAndRetryAsync(
+                retryCount: 3,
+                sleepDurationProvider: attempt => TimeSpan.FromMilliseconds(200 * Math.Pow(2, attempt)), // 400ms, 800ms, 1600ms
+                onRetry: (exception, timeSpan, retryCount, _) =>
+                {
+                    _logger.LogWarning(exception,
+                        "Tentativa {RetryCount} de publicação no RabbitMQ falhou. Nova tentativa em {Delay}ms...",
+                        retryCount, timeSpan.TotalMilliseconds);
+                });
     }
 
     public async Task PublishAsync(string payload, CancellationToken cancellationToken = default)
     {
+        ObjectDisposedException.ThrowIf(_disposed, this);
+
         var options = _optionsMonitor.CurrentValue;
-        var factory = new ConnectionFactory
+
+        await _retryPolicy.ExecuteAsync(async () =>
         {
-            HostName = options.Host,
-            Port = options.Port,
-            UserName = options.Username,
-            Password = options.Password
-        };
+            var connection = await GetOrCreateConnectionAsync(options, cancellationToken);
 
-        await using var connection = await factory.CreateConnectionAsync(cancellationToken);
-        await using var channel = await connection.CreateChannelAsync(cancellationToken: cancellationToken);
+            // Cria canal com confirmação de publicação habilitada (Publisher Confirms)
+            var channelOptions = new CreateChannelOptions(
+                publisherConfirmationsEnabled: true,
+                publisherConfirmationTrackingEnabled: true);
 
-        await EnsureTopologyAsync(connection, channel, options, cancellationToken);
+            await using var channel = await connection.CreateChannelAsync(channelOptions, cancellationToken);
 
-        var body = Encoding.UTF8.GetBytes(payload);
+            await EnsureTopologyAsync(connection, channel, options, cancellationToken);
 
-        await channel.BasicPublishAsync(
-            exchange: options.ExchangeName,
-            routingKey: options.RoutingKey,
-            body: body,
-            cancellationToken: cancellationToken);
+            var body = Encoding.UTF8.GetBytes(payload);
+            var properties = new BasicProperties
+            {
+                DeliveryMode = DeliveryModes.Persistent,
+                ContentType = "application/json",
+                Timestamp = new AmqpTimestamp(DateTimeOffset.UtcNow.ToUnixTimeSeconds())
+            };
 
-        _logger.LogInformation("Mensagem publicada com sucesso no RabbitMQ (Exchange: {Exchange}, Queue: {Queue}).",
-            options.ExchangeName, options.QueueName);
+            await channel.BasicPublishAsync(
+                exchange: options.ExchangeName,
+                routingKey: options.RoutingKey,
+                mandatory: true,
+                basicProperties: properties,
+                body: body,
+                cancellationToken: cancellationToken);
+
+            _logger.LogInformation(
+                "RabbitMQ: Mensagem publicada com sucesso com Publisher Confirms (Exchange: {Exchange}, RoutingKey: {RoutingKey}).",
+                options.ExchangeName, options.RoutingKey);
+        });
+    }
+
+    private async Task<IConnection> GetOrCreateConnectionAsync(RabbitMqOptions options, CancellationToken cancellationToken)
+    {
+        if (_connection is { IsOpen: true })
+        {
+            return _connection;
+        }
+
+        await _connectionLock.WaitAsync(cancellationToken);
+        try
+        {
+            if (_connection is { IsOpen: true })
+            {
+                return _connection;
+            }
+
+            if (_connection != null)
+            {
+                await _connection.DisposeAsync();
+                _connection = null;
+            }
+
+            var factory = new ConnectionFactory
+            {
+                HostName = options.Host,
+                Port = options.Port,
+                UserName = options.Username,
+                Password = options.Password,
+                AutomaticRecoveryEnabled = true,
+                NetworkRecoveryInterval = TimeSpan.FromSeconds(5)
+            };
+
+            _logger.LogInformation("Estabelecendo conexão persistente (Singleton) com o RabbitMQ em {Host}:{Port}...",
+                options.Host, options.Port);
+
+            _connection = await factory.CreateConnectionAsync(cancellationToken);
+            return _connection;
+        }
+        finally
+        {
+            _connectionLock.Release();
+        }
     }
 
     private async Task EnsureTopologyAsync(
@@ -129,5 +210,26 @@ public class RabbitMqPublisher : IRabbitMqPublisher
             exchange: options.ExchangeName,
             routingKey: options.RoutingKey,
             cancellationToken: cancellationToken);
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        if (_disposed) return;
+        _disposed = true;
+
+        if (_connection != null)
+        {
+            try
+            {
+                await _connection.DisposeAsync();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWarning(ex, "Erro ao encerrar a conexão do RabbitMQ.");
+            }
+        }
+
+        _connectionLock.Dispose();
+        GC.SuppressFinalize(this);
     }
 }
