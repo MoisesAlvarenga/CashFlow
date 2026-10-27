@@ -9,11 +9,11 @@ docker stop cashflow-transactions-api cashflow-consolidation-api 2>nul
 
 echo.
 echo [2/3] Abrindo Transactions API (Porta 5101) em novo terminal...
-start "CashFlow - Transactions API (5101)" "%~dp0run-transactions-api.cmd"
+start "CashFlow - Transactions API (5101)" cmd /k "%~dp0run-transactions-api.cmd"
 
 echo.
 echo [3/3] Abrindo Consolidation API (Porta 5102) em novo terminal...
-start "CashFlow - Consolidation API (5102)" "%~dp0run-consolidation-api.cmd"
+start "CashFlow - Consolidation API (5102)" cmd /k "%~dp0run-consolidation-api.cmd"
 
 echo.
 echo ======================================================

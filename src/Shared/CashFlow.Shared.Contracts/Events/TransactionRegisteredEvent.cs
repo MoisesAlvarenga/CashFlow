@@ -1,8 +1,11 @@
 namespace CashFlow.Shared.Contracts.Events;
 
+using System.Text.Json.Serialization;
+
 /// <summary>
 /// Tipo de operação financeira: Crédito (Credit = 1) ou Débito (Debit = 2).
 /// </summary>
+[JsonConverter(typeof(JsonStringEnumConverter))]
 public enum TransactionType
 {
     /// <summary>Crédito - Entrada financeira positiva no fluxo de caixa.</summary>
