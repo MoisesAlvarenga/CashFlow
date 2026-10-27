@@ -145,17 +145,21 @@ public static class Extensions
     public static WebApplication MapDefaultEndpoints(this WebApplication app)
     {
         // Endpoint detalhado de prontidão (Readiness) com diagnóstico JSON completo
-        app.MapHealthChecks("/health", new HealthCheckOptions
+        var healthOptions = new HealthCheckOptions
         {
             Predicate = _ => true,
             ResponseWriter = WriteHealthResponseAsync
-        });
+        };
+        app.MapHealthChecks("/health", healthOptions);
+        app.MapHealthChecks("/health/ready", healthOptions);
 
         // Endpoint leve de vivacidade (Liveness)
-        app.MapHealthChecks("/alive", new HealthCheckOptions
+        var aliveOptions = new HealthCheckOptions
         {
             Predicate = r => r.Tags.Contains("live")
-        });
+        };
+        app.MapHealthChecks("/alive", aliveOptions);
+        app.MapHealthChecks("/health/live", aliveOptions);
 
         return app;
     }

@@ -18,9 +18,8 @@ IResourceBuilder<IResourceWithConnectionString> redis;
 
 if (!string.IsNullOrEmpty(existingPostgres))
 {
-    var pgConn = builder.AddConnectionString("transactionsdb");
-    transactionsDb = pgConn;
-    consolidationDb = pgConn;
+    transactionsDb = builder.AddConnectionString("transactionsdb");
+    consolidationDb = builder.AddConnectionString("consolidationdb");
 }
 else
 {

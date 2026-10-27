@@ -1,4 +1,5 @@
 using System.Reflection;
+using System.Security.Claims;
 using System.Text;
 using CashFlow.Consolidation.Api.Context;
 using CashFlow.Consolidation.Api.Endpoints;
@@ -9,6 +10,7 @@ using CashFlow.Consolidation.Domain.Repositories;
 using CashFlow.Consolidation.Infrastructure.Data;
 using CashFlow.Consolidation.Infrastructure.Caching;
 using CashFlow.Consolidation.Infrastructure.Repositories;
+using CashFlow.Consolidation.Infrastructure.Services;
 using CashFlow.Shared.Contracts.Context;
 using CashFlow.Shared.Contracts.Diagnostics;
 using CashFlow.Shared.Contracts.Messaging;
@@ -116,14 +118,18 @@ builder.Services.AddAuthentication(options =>
         ValidateAudience = true,
         ValidAudience = jwtOptions.Audience,
         ValidateLifetime = true,
-        ClockSkew = TimeSpan.Zero
+        ClockSkew = TimeSpan.Zero,
+        RoleClaimType = ClaimTypes.Role,
+        NameClaimType = ClaimTypes.Name
     };
 });
 
 builder.Services.AddAuthorization();
 
 // Persistence & Database: PostgreSQL Code-First via Npgsql with automatic InMemory fallback
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+var connectionString = builder.Configuration.GetConnectionString("consolidationdb")
+    ?? builder.Configuration.GetConnectionString("transactionsdb")
+    ?? builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<ConsolidationDbContext>(options =>
 {
     if (!string.IsNullOrEmpty(connectionString))
@@ -145,6 +151,8 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<ICancellationTokenProvider, HttpCancellationTokenProvider>();
 
 // Dependency Inversion: Register domain repositories and application services
+builder.Services.AddSingleton<ISecretHasher, SecretHasher>();
+builder.Services.AddScoped<IClientAuthService, ConsolidationClientAuthService>();
 builder.Services.AddScoped<IDailyBalanceRepository, DailyBalanceRepository>();
 builder.Services.AddScoped<IConsumedMessageRepository, ConsumedMessageRepository>();
 builder.Services.AddScoped<IConsolidationUnitOfWork, ConsolidationUnitOfWork>();
@@ -177,7 +185,7 @@ builder.Services.AddHostedService<TransactionRegisteredConsumer>();
 
 var app = builder.Build();
 
-// Automatic Database Migration on startup (EF Core Code-First)
+// Automatic Database Migration and Client Seeding on startup (EF Core Code-First)
 using (var scope = app.Services.CreateScope())
 {
     var dbContext = scope.ServiceProvider.GetRequiredService<ConsolidationDbContext>();
@@ -185,6 +193,8 @@ using (var scope = app.Services.CreateScope())
     {
         await dbContext.Database.MigrateAsync();
     }
+    var hasher = scope.ServiceProvider.GetRequiredService<ISecretHasher>();
+    await ApiClientSeeder.SeedAsync(dbContext, hasher);
 }
 
 // Configure the HTTP request pipeline

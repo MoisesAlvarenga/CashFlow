@@ -155,13 +155,47 @@ Em vez de iniciar pela escrita direta de código, toda a solução foi governada
 
 ## 📡 Guia Rápido de Endpoints da API
 
-Todas as rotas de negócio exigem autenticação via **JWT Bearer Token**. Para obter um token, utilize o endpoint público de autenticação disponível em ambas as APIs.
+Todas as rotas de negócio exigem autenticação via **JWT Bearer Token**. Para obter um token, utilize o endpoint público de autenticação disponível em ambas as APIs (`POST /api/v1/auth/token`).
+
+### 🔐 Segurança e Clientes Cadastrados no Banco de Dados
+
+A autenticação é protegida por validação estrita de credenciais contra a tabela **`ApiClients`** no PostgreSQL (`cashflow_db`).
+* **Padrões Criptográficos de Segurança (OWASP com BCrypt)**:
+  * O segredo (`ClientSecret`) **nunca é armazenado em texto plano**;
+  * Utiliza algoritmo de derivação adaptativo **BCrypt (via `BCrypt.Net-Next`)** com **Work Factor 11**, garantindo custo computacional resistente a ataques de força bruta e rainbow tables com salt criptográfico integrado;
+  * A verificação em runtime é realizada em **tempo constante** pelo algoritmo do BCrypt, prevenindo ataques de temporização (*timing attacks*);
+  * Caso as credenciais sejam inválidas, incorretas ou o cliente esteja inativo, a API retorna **`401 Unauthorized`**.
+
+#### 📋 Credenciais Pré-Cadastradas no Banco para Avaliação
+
+> [!NOTE]
+> Para facilitar os testes por quem está avaliando o projeto, **a senha de todos os clientes pré-cadastrados é padronizada como `verity-secret`**.
+
+| ClientId | ClientSecret | Perfil / Descrição | Roles | Uso |
+|---|---|---|---|---|
+| **`verity-client`** | **`verity-secret`** | **Avaliador Técnico Verity** | `Operator,Admin` | ⭐ **Recomendado para Avaliação do Desafio** (Acesso Total) |
+| **`operador-financeiro`** | **`verity-secret`** | **Operador Financeiro Padrão** | `Operator` | Lançamentos de rotina e listagem |
+| `consolidation-viewer` | `verity-secret` | Visualizador de Consolidação | `Viewer` | Consulta de saldos e extrato (Leitura apenas) |
+| `integration-tester` | `verity-secret` | Executor de Testes de Integração | `Admin` | Suíte de testes automatizados |
+
+#### 🛡️ Matriz de Permissões por Perfil (RBAC)
+
+Cada endpoint valida estritamente a *claim* de `role` contida no token JWT gerado:
+
+| Endpoint | Método | Descrição | Roles Permitidas | Comportamento se Sem Permissão |
+|---|:---:|---|:---:|:---:|
+| `/api/v1/transactions` | `POST` | Criar lançamento financeiro (Crédito/Débito) | `Operator`, `Admin` | `403 Forbidden` (`Viewer` não pode criar) |
+| `/api/v1/transactions` | `GET` | Listar lançamentos financeiros paginados | `Operator`, `Admin`, `Viewer` | `401 Unauthorized` se não autenticado |
+| `/api/v1/daily-balances` | `GET` | Relatório histórico de saldos diários | `Viewer`, `Operator`, `Admin` | `401 Unauthorized` se não autenticado |
+| `/api/v1/daily-balances/{date}` | `GET` | Saldo consolidado de uma data específica | `Viewer`, `Operator`, `Admin` | `401 Unauthorized` se não autenticado |
+
+---
 
 ### 1. Obter Token de Autenticação (POST `/api/v1/auth/token`)
 ```bash
 curl -X POST http://localhost:5101/api/v1/auth/token \
   -H "Content-Type: application/json" \
-  -d '{"clientId": "operador-financeiro", "clientSecret": "segredo-qualquer"}'
+  -d '{"clientId": "verity-client", "clientSecret": "verity-secret"}'
 ```
 
 ### 2. Registrar um Lançamento (POST `/api/v1/transactions`)
@@ -211,7 +245,7 @@ A solução foi submetida a rigorosos testes de unidade, integração e carga:
 
 | Tipo de Teste | Quantidade / Carga | Cobertura / SLA | Status |
 |---|:---:|:---:|:---:|
-| **Testes Unitários** (`CashFlow.UnitTests`) | **85 testes** em ~900ms | Domínio, CQRS, Validações, Paginação, Telemetria, JWT, Health Checks e Cache Redis | ✅ 100% Aprovados |
+| **Testes Unitários** (`CashFlow.UnitTests`) | **102 testes** em ~1.2s | Domínio, CQRS, Validações, Paginação, Telemetria, JWT, BCrypt, Auth, Health Checks e Cache Redis | ✅ 100% Aprovados |
 | **Testes de Integração** (`CashFlow.IntegrationTests`) | **15 testes** com Testcontainers | Dual-Write ACID, Deduplicação, 30 tasks concorrentes, DLQ e Health Checks | ✅ Aprovados |
 | **Testes de Carga K6** (`tests/load`) | **50+ req/s** contínuas por 30s | p95 < 500ms, Taxa de Erro < 1% (**Medido: p95 = 40.63ms, 0% erro**) | ✅ Aprovados |
 

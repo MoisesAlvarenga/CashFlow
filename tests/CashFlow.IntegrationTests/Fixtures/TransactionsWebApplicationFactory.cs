@@ -1,6 +1,7 @@
 namespace CashFlow.IntegrationTests.Fixtures;
 
 using CashFlow.Shared.Contracts.Messaging;
+using CashFlow.Shared.Contracts.Security;
 using CashFlow.Transactions.Api;
 using CashFlow.Transactions.Infrastructure.Data;
 using Microsoft.AspNetCore.Hosting;
@@ -61,5 +62,7 @@ public class TransactionsWebApplicationFactory : WebApplicationFactory<Program>
         using var scope = Services.CreateScope();
         var context = scope.ServiceProvider.GetRequiredService<TransactionsDbContext>();
         await context.Database.EnsureCreatedAsync();
+        var hasher = scope.ServiceProvider.GetRequiredService<ISecretHasher>();
+        await ApiClientSeeder.SeedAsync(context, hasher);
     }
 }

@@ -1,5 +1,6 @@
 namespace CashFlow.Transactions.Infrastructure.Data;
 
+using CashFlow.Shared.Contracts.Security;
 using CashFlow.Transactions.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,6 +14,7 @@ public class TransactionsDbContext : DbContext
     public DbSet<Transaction> Transactions => Set<Transaction>();
     public DbSet<OutboxMessage> OutboxMessages => Set<OutboxMessage>();
     public DbSet<IdempotencyRecord> IdempotencyRecords => Set<IdempotencyRecord>();
+    public DbSet<ApiClient> ApiClients => Set<ApiClient>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -53,6 +55,21 @@ public class TransactionsDbContext : DbContext
             builder.Property(r => r.StatusCode).IsRequired();
             builder.Property(r => r.CreatedAt).IsRequired();
             builder.HasIndex(r => r.CreatedAt).HasDatabaseName("IX_IdempotencyRecords_CreatedAt");
+        });
+
+        modelBuilder.Entity<ApiClient>(builder =>
+        {
+            builder.ToTable("ApiClients");
+            builder.HasKey(c => c.Id);
+            builder.Property(c => c.ClientId).HasMaxLength(100).IsRequired();
+            builder.HasIndex(c => c.ClientId).IsUnique().HasDatabaseName("IX_ApiClients_ClientId");
+            builder.Property(c => c.SecretHash).HasMaxLength(256).IsRequired();
+            builder.Property(c => c.Salt).HasMaxLength(128).IsRequired();
+            builder.Property(c => c.Name).HasMaxLength(150).IsRequired();
+            builder.Property(c => c.Roles).HasMaxLength(100).IsRequired();
+            builder.Property(c => c.IsActive).IsRequired();
+            builder.Property(c => c.CreatedAt).IsRequired();
+            builder.Property(c => c.UpdatedAt).IsRequired(false);
         });
     }
 }

@@ -1,4 +1,5 @@
 using System.Reflection;
+using System.Security.Claims;
 using System.Text;
 using CashFlow.Shared.Contracts.Context;
 using CashFlow.Shared.Contracts.Diagnostics;
@@ -16,6 +17,7 @@ using CashFlow.Transactions.Application.Validators;
 using CashFlow.Transactions.Domain.Repositories;
 using CashFlow.Transactions.Infrastructure.Data;
 using CashFlow.Transactions.Infrastructure.Repositories;
+using CashFlow.Transactions.Infrastructure.Services;
 using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -120,14 +122,17 @@ builder.Services.AddAuthentication(options =>
         ValidateAudience = true,
         ValidAudience = jwtOptions.Audience,
         ValidateLifetime = true,
-        ClockSkew = TimeSpan.Zero
+        ClockSkew = TimeSpan.Zero,
+        RoleClaimType = ClaimTypes.Role,
+        NameClaimType = ClaimTypes.Name
     };
 });
 
 builder.Services.AddAuthorization();
 
 // Persistence & Database: PostgreSQL Code-First via Npgsql with automatic InMemory fallback
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+var connectionString = builder.Configuration.GetConnectionString("transactionsdb")
+    ?? builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<TransactionsDbContext>(options =>
 {
     if (!string.IsNullOrEmpty(connectionString))
@@ -149,6 +154,8 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<ICancellationTokenProvider, HttpCancellationTokenProvider>();
 
 // Dependency Inversion: Register domain repositories and application handlers
+builder.Services.AddSingleton<ISecretHasher, SecretHasher>();
+builder.Services.AddScoped<IClientAuthService, TransactionsClientAuthService>();
 builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
 builder.Services.AddScoped<IOutboxRepository, OutboxRepository>();
 builder.Services.AddScoped<IIdempotencyRepository, IdempotencyRepository>();
@@ -169,7 +176,7 @@ builder.Services.AddHostedService<OutboxProcessorWorker>();
 
 var app = builder.Build();
 
-// Automatic Database Migration on startup (EF Core Code-First)
+// Automatic Database Migration and Client Seeding on startup (EF Core Code-First)
 using (var scope = app.Services.CreateScope())
 {
     var dbContext = scope.ServiceProvider.GetRequiredService<TransactionsDbContext>();
@@ -177,6 +184,8 @@ using (var scope = app.Services.CreateScope())
     {
         await dbContext.Database.MigrateAsync();
     }
+    var hasher = scope.ServiceProvider.GetRequiredService<ISecretHasher>();
+    await ApiClientSeeder.SeedAsync(dbContext, hasher);
 }
 
 // Configure the HTTP request pipeline

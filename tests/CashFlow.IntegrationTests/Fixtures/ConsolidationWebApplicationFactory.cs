@@ -2,6 +2,7 @@ namespace CashFlow.IntegrationTests.Fixtures;
 
 using CashFlow.Consolidation.Api;
 using CashFlow.Consolidation.Infrastructure.Data;
+using CashFlow.Shared.Contracts.Security;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
@@ -59,5 +60,7 @@ public class ConsolidationWebApplicationFactory : WebApplicationFactory<Program>
         using var scope = Services.CreateScope();
         var context = scope.ServiceProvider.GetRequiredService<ConsolidationDbContext>();
         await context.Database.EnsureCreatedAsync();
+        var hasher = scope.ServiceProvider.GetRequiredService<ISecretHasher>();
+        await ApiClientSeeder.SeedAsync(context, hasher);
     }
 }

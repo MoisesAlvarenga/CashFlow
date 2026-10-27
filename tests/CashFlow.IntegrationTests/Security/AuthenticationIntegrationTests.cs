@@ -25,7 +25,7 @@ public class AuthenticationIntegrationTests : IClassFixture<PostgreSqlFixture>
         await factory.InitializeDatabaseAsync();
         var client = factory.CreateClient();
 
-        var request = new TokenRequest("operator-user", "verity-pass");
+        var request = new TokenRequest("operator-user", "verity-secret");
 
         // Act
         var response = await client.PostAsJsonAsync("/api/v1/auth/token", request);
@@ -78,7 +78,7 @@ public class AuthenticationIntegrationTests : IClassFixture<PostgreSqlFixture>
         var client = factory.CreateClient();
 
         // 1. Gera token
-        var tokenRes = await client.PostAsJsonAsync("/api/v1/auth/token", new TokenRequest("consolidation-viewer", "secret"));
+        var tokenRes = await client.PostAsJsonAsync("/api/v1/auth/token", new TokenRequest("consolidation-viewer", "verity-secret"));
         tokenRes.StatusCode.Should().Be(HttpStatusCode.OK);
         var tokenObj = await tokenRes.Content.ReadFromJsonAsync<TokenResponse>();
 
@@ -89,5 +89,43 @@ public class AuthenticationIntegrationTests : IClassFixture<PostgreSqlFixture>
         // Assert: Não pode retornar 401 Unauthorized (pode retornar 404 se não houver registros ou 200)
         response.StatusCode.Should().NotBe(HttpStatusCode.Unauthorized);
         response.StatusCode.Should().BeOneOf(HttpStatusCode.OK, HttpStatusCode.NotFound);
+    }
+
+    [DockerFact]
+    public async Task TransactionsApi_PostAuthToken_WithInvalidCredentials_ShouldReturn401Unauthorized()
+    {
+        // Arrange
+        using var factory = new TransactionsWebApplicationFactory(_fixture.ConnectionString);
+        await factory.InitializeDatabaseAsync();
+        var client = factory.CreateClient();
+
+        var request = new TokenRequest("non-existent-client", "invalid-secret");
+
+        // Act
+        var response = await client.PostAsJsonAsync("/api/v1/auth/token", request);
+
+        // Assert
+        response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
+    }
+
+    [DockerFact]
+    public async Task TransactionsApi_PostAuthToken_WithVerityClient_ShouldReturnValidJwtBearerToken()
+    {
+        // Arrange
+        using var factory = new TransactionsWebApplicationFactory(_fixture.ConnectionString);
+        await factory.InitializeDatabaseAsync();
+        var client = factory.CreateClient();
+
+        var request = new TokenRequest("verity-client", "verity-secret");
+
+        // Act
+        var response = await client.PostAsJsonAsync("/api/v1/auth/token", request);
+
+        // Assert
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        var tokenObj = await response.Content.ReadFromJsonAsync<TokenResponse>();
+        tokenObj.Should().NotBeNull();
+        tokenObj!.TokenType.Should().Be("Bearer");
+        tokenObj.AccessToken.Should().NotBeNullOrWhiteSpace();
     }
 }

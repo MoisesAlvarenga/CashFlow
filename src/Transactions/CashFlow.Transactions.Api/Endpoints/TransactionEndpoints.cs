@@ -33,24 +33,33 @@ public static class TransactionEndpoints
            .ExcludeFromDescription();
 
         // POST /api/v1/auth/token - Obter token JWT para acesso autenticado
-        app.MapPost("/api/v1/auth/token", (
+        app.MapPost("/api/v1/auth/token", async (
             TokenRequest request,
-            IJwtTokenService tokenService) =>
+            IJwtTokenService tokenService,
+            IClientAuthService authService) =>
         {
             if (string.IsNullOrWhiteSpace(request.ClientId) || string.IsNullOrWhiteSpace(request.ClientSecret))
             {
                 return Results.BadRequest(new { error = "ClientId e ClientSecret são obrigatórios." });
             }
 
-            var tokenResponse = tokenService.GenerateToken(request.ClientId.Trim());
+            var client = await authService.ValidateCredentialsAsync(request.ClientId.Trim(), request.ClientSecret);
+            if (client == null)
+            {
+                return Results.Unauthorized();
+            }
+
+            var roles = client.Roles.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+            var tokenResponse = tokenService.GenerateToken(client.ClientId, roles);
             return Results.Ok(tokenResponse);
         })
         .WithName("GenerateToken")
         .WithTags("Auth")
-        .WithSummary("Gera um token JWT Bearer para autenticação nos endpoints")
-        .WithDescription("Emite um token JWT assinado válido por 60 minutos contendo as claims do cliente informado. Use o token retornado no botão 'Authorize' do Swagger ou no cabeçalho 'Authorization: Bearer {token}'.")
+        .WithSummary("Gera um token JWT Bearer autenticando ClientId e ClientSecret contra o banco de dados")
+        .WithDescription("Emite um token JWT assinado válido por 60 minutos caso as credenciais do cliente estejam cadastradas e ativas no banco de dados. Credenciais padrão para avaliação: 'verity-client' / 'verity-secret'.")
         .Produces<TokenResponse>(StatusCodes.Status200OK, contentType: "application/json")
         .ProducesProblem(StatusCodes.Status400BadRequest)
+        .Produces(StatusCodes.Status401Unauthorized)
         .AllowAnonymous();
 
         // POST /api/v1/transactions - Registrar lançamento financeiro
@@ -88,8 +97,9 @@ public static class TransactionEndpoints
         .Produces<RegisterTransactionResult>(StatusCodes.Status201Created, contentType: "application/json")
         .ProducesValidationProblem(StatusCodes.Status400BadRequest)
         .ProducesProblem(StatusCodes.Status401Unauthorized)
+        .ProducesProblem(StatusCodes.Status403Forbidden)
         .ProducesProblem(StatusCodes.Status500InternalServerError)
-        .RequireAuthorization();
+        .RequireAuthorization(policy => policy.RequireRole("Operator", "Admin"));
 
         // GET /api/v1/transactions - Consultar lançamentos paginados com filtros opcionais de data
         app.MapGet("/api/v1/transactions", async (
@@ -124,7 +134,8 @@ public static class TransactionEndpoints
         .Produces<PagedResult<TransactionDto>>(StatusCodes.Status200OK, contentType: "application/json")
         .ProducesProblem(StatusCodes.Status400BadRequest)
         .ProducesProblem(StatusCodes.Status401Unauthorized)
-        .RequireAuthorization();
+        .ProducesProblem(StatusCodes.Status403Forbidden)
+        .RequireAuthorization(policy => policy.RequireRole("Operator", "Admin", "Viewer"));
 
         // GET /health - Diagnóstico operacional
         app.MapGet("/health", () => Results.Ok(new { status = "Healthy", service = "Transactions.Api", timestamp = DateTimeOffset.UtcNow }))
